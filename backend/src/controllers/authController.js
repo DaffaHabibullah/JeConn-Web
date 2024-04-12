@@ -85,14 +85,17 @@ const authController = {
 
             const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
 
+            const userData = await userModel.findOne({ _id: user._id });
+
             return res.status(200).json({
                 success: true,
-                message: "Login successful",
+                message: "Login successfully",
                 data: {
                     token,
                     user: {
                         _id: user._id,
                         username: user.username,
+                        roles: userData.roles,
                     },
                 },
             });

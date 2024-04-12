@@ -26,6 +26,11 @@ const userSchema = new mongoose.Schema({
         type: String,
         default: process.env.BASE_URL + "public/images/default_image.png",
     },
+    roles: {
+        type: [String],
+        enum: ["user", "talent"],
+        default: "user",
+    },
     isOpen: {
         type: Boolean,
         default: false,

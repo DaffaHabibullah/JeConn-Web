@@ -21,6 +21,11 @@ app.get("/", (req, res) => {
     res.send("Server is running!");
 });
 
+app.get("/public/images/:filename", (req, res) => {
+    res.sendFile(__dirname + "/assets/images/" + req.params.filename);
+});
+
+
 app.use("/auth", authRoute);
 
 

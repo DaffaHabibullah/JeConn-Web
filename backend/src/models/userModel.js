@@ -1,3 +1,4 @@
+require("dotenv").config();
 const mongoose = require("mongoose");
 
 const userSchema = new mongoose.Schema({
@@ -23,7 +24,7 @@ const userSchema = new mongoose.Schema({
     },
     imageProfile: {
         type: String,
-        default: "https://www.repol.copl.ulaval.ca/wp-content/uploads/2019/01/default-user-icon.jpg",
+        default: process.env.BASE_URL + "public/images/default_image.png",
     },
     isOpen: {
         type: Boolean,

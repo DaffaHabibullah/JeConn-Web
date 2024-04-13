@@ -17,9 +17,12 @@ const userSchema = new mongoose.Schema({
         type: String,
     },
     gender: {
-        type: Boolean,
+        type: String,
     },
     location: {
+        type: String,
+    },
+    phoneNumber: {
         type: String,
     },
     imageProfile: {

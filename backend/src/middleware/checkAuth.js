@@ -7,8 +7,8 @@ const checkAuth = async (req, res, next) => {
         const { authorization } = req.headers;
         if (!authorization) {
             return res.status(401).json({
-                status: "error",
-                message: "You must be logged in",
+                success: false,
+                message: "Unauthorized",
             });
         }
         const token = authorization.replace("Bearer ", "");
@@ -17,17 +17,25 @@ const checkAuth = async (req, res, next) => {
             const decoded = jwt.verify(token, process.env.JWT_SECRET);
             const user = await userModel.findOne({ _id: decoded.userId });
             if (!user) {
-                throw new Error("User not found");
+                return res.status(401).json({
+                    success: false,
+                    message: "Unauthorized",
+                });
             }
             req.user = user;
             next();
         } catch (error) {
-            throw new Error("Invalid token");
+            console.error("Error verifying token", error);
+            return res.status(401).json({
+                success: false,
+                message: "Unauthorized",
+            });
         }
     } catch (error) {
-        return res.status(401).json({
-            status: "error",
-            message: error.message,
+        console.error("Error updating user profile", error);
+        return res.status(500).json({
+            success: false,
+            message: "Internal server error",
         });
     }
 };

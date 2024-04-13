@@ -27,23 +27,20 @@ const authController = {
             }
 
             const hashedPassword = await bcrypt.hash(password, 10);
-            const userPrivateData = await privateDataModel.create({
+            const userData = await privateDataModel.create({
                 _id: generateId(),
                 username: formattedUsername,
                 email: formattedEmail,
                 password: hashedPassword,
             });
-            const userData = await userModel.create({
-                _id: userPrivateData._id,
-                username: formattedUsername,
+            await userModel.create({
+                _id: userData._id,
+                username: userData.username,
             });
 
             return res.status(201).json({
                 success: true,
                 message: "User created successfully",
-                data: {
-                    userPrivateData,
-                },
             });
         } catch (error) {
             console.error("Error registering user", error);

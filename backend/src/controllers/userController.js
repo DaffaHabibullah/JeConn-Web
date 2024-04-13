@@ -6,7 +6,16 @@ const userController = {
                 success: true,
                 message: "User profile",
                 data: {
-                    user,
+                    username: user.username,
+                    imageProfile: user.imageProfile,
+                    fullName: user.fullName,
+                    phoneNumber: user.phoneNumber,
+                    dateOfBirth: user.dateOfBirth,
+                    gender: user.gender,
+                    location: user.location,
+                    roles: user.roles,
+                    isOpen: user.isOpen,
+                    entertainment_id: user.entertainment_id,
                 },
             });
         } catch (error) {
@@ -35,7 +44,16 @@ const userController = {
                 success: true,
                 message: "User profile updated successfully",
                 data: {
-                    user,
+                    username: user.username,
+                    imageProfile: user.imageProfile,
+                    fullName: user.fullName,
+                    phoneNumber: user.phoneNumber,
+                    dateOfBirth: user.dateOfBirth,
+                    gender: user.gender,
+                    location: user.location,
+                    roles: user.roles,
+                    isOpen: user.isOpen,
+                    entertainment_id: user.entertainment_id,
                 },
             });
         } catch (error) {

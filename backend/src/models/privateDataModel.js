@@ -17,9 +17,9 @@ const privateDataSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    created_at: {
-        type: String,
-        default: new Date().toISOString(),
+    createdAt: {
+        type: Date,
+        default: Date.now,
     },
 });
 

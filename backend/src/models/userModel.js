@@ -34,19 +34,12 @@ const userSchema = new mongoose.Schema({
         enum: ["user", "talent"],
         default: "user",
     },
-    isOpen: {
-        type: Boolean,
-        default: false,
-    },
-    entertainment_id: {
+    messageRoom_id: {
         type: Array,
     },
-    massageRoom_id: {
-        type: Array,
-    },
-    updated_at: {
-        type: String,
-        default: new Date().toISOString(),
+    updatedAt: {
+        type: Date,
+        default: Date.now,
     },
 });
 

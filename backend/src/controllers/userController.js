@@ -14,8 +14,7 @@ const userController = {
                     gender: user.gender,
                     location: user.location,
                     roles: user.roles,
-                    isOpen: user.isOpen,
-                    entertainment_id: user.entertainment_id,
+                    messageRoom_id: user.messageRoom_id,
                 },
             });
         } catch (error) {
@@ -37,24 +36,13 @@ const userController = {
             user.gender = gender;
             user.location = location;
             user.phoneNumber = phoneNumber;
+            user.updatedAt = new Date();
 
             await user.save();
 
             return res.status(200).json({
                 success: true,
                 message: "User profile updated successfully",
-                data: {
-                    username: user.username,
-                    imageProfile: user.imageProfile,
-                    fullName: user.fullName,
-                    phoneNumber: user.phoneNumber,
-                    dateOfBirth: user.dateOfBirth,
-                    gender: user.gender,
-                    location: user.location,
-                    roles: user.roles,
-                    isOpen: user.isOpen,
-                    entertainment_id: user.entertainment_id,
-                },
             });
         } catch (error) {
             console.error("Error updating user profile", error);

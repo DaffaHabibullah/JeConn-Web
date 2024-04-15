@@ -1,17 +1,17 @@
-version: '2'
+version: '3.8'
 
 services:
   web:
     build:
       context: ./frontend
       dockerfile: Dockerfile
-    image: jeconn/web:beta
+    image: jeconn/web:latest
     container_name: jeconn-web-container
     ports:
       - "3000:3000"
     restart: always
     volumes:
-      - .:/web/src/app
+      - ./frontend:/web/src/app
     depends_on:
       - backend
     networks:
@@ -21,13 +21,14 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
-    image: jeconn/backend:beta
+    image: jeconn/backend:latest
     container_name: jeconn-backend-container
     ports:
       - "9000:9000"
     restart: always
     volumes:
-      - .:/backend/src/app
+      - ./backend:/backend/src/app
+      - ./backend/user:/app/user
     depends_on:
       - mongodb
     networks:

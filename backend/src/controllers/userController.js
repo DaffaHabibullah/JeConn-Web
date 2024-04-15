@@ -12,7 +12,7 @@ const userController = {
                     phoneNumber: user.phoneNumber,
                     dateOfBirth: user.dateOfBirth,
                     gender: user.gender,
-                    location: user.location,
+                    address: user.address,
                     roles: user.roles,
                     messageRoom_id: user.messageRoom_id,
                 },
@@ -29,12 +29,12 @@ const userController = {
     async updateUserProfile(req, res) {
         try {
             const user = req.user;
-            const { fullName, dateOfBirth, gender, location, phoneNumber } = req.body;
+            const { fullName, dateOfBirth, gender, address, phoneNumber } = req.body;
 
             user.fullName = fullName;
             user.dateOfBirth = dateOfBirth;
             user.gender = gender;
-            user.location = location;
+            user.address = address;
             user.phoneNumber = phoneNumber;
             user.updatedAt = new Date();
 

@@ -9,6 +9,7 @@ const entertainmentCategoriesData = require("./seeds/entertainmentCategoriesData
 
 const authRoute = require("./routes/authRoute");
 const userRoute = require("./routes/userRoute");
+const talentRoute = require("./routes/talentRoute");
 
 
 app.use(cors());
@@ -29,6 +30,7 @@ app.get("/public/images/:filename", (req, res) => {
 
 app.use("/auth", authRoute);
 app.use("/user", userRoute);
+app.use("/talent", talentRoute);
 
 
 module.exports = app;

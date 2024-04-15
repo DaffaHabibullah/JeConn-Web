@@ -5,15 +5,15 @@ const talentSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    username: {
-        type: String,
-        required: true,
-    },
     nik_ktp: {
         type: String,
         required: true,
     },
-    address_ktp: {
+    biography: {
+        type: String,
+        required: true,
+    },
+    location: {
         type: String,
         required: true,
     },

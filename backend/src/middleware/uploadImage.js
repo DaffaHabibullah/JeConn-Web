@@ -48,5 +48,10 @@ const uploadProfile = multer({
     fileFilter: (req, file, cb) => checkFileType(file, cb),
 }).single("imageProfile");
 
+const uploadTalent = multer({
+    storage: createStorage("talent"),
+    fileFilter: (req, file, cb) => checkFileType(file, cb),
+}).single("imageTalent");
 
-module.exports = { uploadProfile };
+
+module.exports = { uploadProfile, uploadTalent };

@@ -1,6 +1,9 @@
+require("dotenv").config();
+const fs = require("fs");
 const talentModel = require("../models/talentModel");
 const userModel = require("../models/userModel");
 const entertainmentCategoriesModel = require("../models/entertainmentCategoriesModel");
+const { uploadTalent } = require("../middleware/uploadImage");
 
 const talentController = {
     async createTalent(req, res) {
@@ -114,6 +117,99 @@ const talentController = {
             });
         } catch (error) {
             console.error("Error updating talent", error);
+            return res.status(500).json({
+                success: false,
+                message: "Internal server error",
+            });
+        }
+    },
+
+    async uploadTalentImage(req, res) {
+        try {
+            uploadTalent(req, res, async (err) => {
+                if (err) {
+                    return res.status(400).json({
+                        success: false,
+                        message: err.message,
+                    });
+                }
+
+                if (!req.file) {
+                    return res.status(400).json({
+                        success: false,
+                        message: "No file uploaded",
+                    });
+                }
+
+                const talent = await talentModel.findById(req.user.id);
+                if (!talent) {
+                    return res.status(404).json({
+                        success: false,
+                        message: "Talent not found",
+                    });
+                }
+
+                const imageUrl = `${process.env.BASE_URL}talent/${talent.id}/image/${req.file.filename}`;
+
+                talent.images.push(imageUrl);
+                talent.updatedAt = new Date();
+
+                await talent.save();
+
+                return res.status(200).json({
+                    success: true,
+                    message: "Image uploaded successfully",
+                });
+            });
+        } catch (error) {
+            console.error("Error uploading image", error);
+            return res.status(500).json({
+                success: false,
+                message: "Internal server error",
+            });
+        }
+    },
+
+    async talentAllImages(req, res) {
+        try {
+            const { id } = req.params;
+            const talent = await talentModel.findById(id);
+
+            if (!talent) {
+                return res.status(404).json({
+                    success: false,
+                    message: "Talent not found",
+                });
+            }
+            return res.status(200).json({
+                success: true,
+                message: "Talent images",
+                data: talent.images,
+            });
+        } catch (error) {
+            console.error("Error getting talent images", error);
+            return res.status(500).json({
+                success: false,
+                message: "Internal server error",
+            });
+        }
+    },
+
+    async talentImage(req, res) {
+        try {
+            const { id, filename } = req.params;
+            const path = `/app/users/${id}/talent/${filename}`;
+
+            if (fs.existsSync(path)) {
+                return res.status(200).sendFile(path);
+            } else {
+                return res.status(404).json({
+                    success: false,
+                    message: "Image not found",
+                });
+            }
+        } catch (error) {
+            console.error("Error getting talent image", error);
             return res.status(500).json({
                 success: false,
                 message: "Internal server error",

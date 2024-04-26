@@ -26,6 +26,9 @@ const talentSchema = new mongoose.Schema({
         required: true,
         default: true,
     },
+    images: {
+        type: Array,
+    },
     createdAt: {
         type: Date,
         default: Date.now,

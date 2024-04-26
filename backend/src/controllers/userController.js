@@ -85,9 +85,6 @@ const userController = {
                 return res.status(200).json({
                     success: true,
                     message: "Profile image uploaded successfully",
-                    data: {
-                        imageUrl,
-                    },
                 });
             });
         } catch (error) {

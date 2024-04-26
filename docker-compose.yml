@@ -28,7 +28,7 @@ services:
     restart: always
     volumes:
       - ./backend:/backend/src/app
-      - ./backend/user:/app/user
+      - ./users:/app/users
     depends_on:
       - mongodb
     networks:

@@ -1,42 +1,76 @@
-import { Container, Row, Col, Image, Form, Button } from 'react-bootstrap';
-import registerImage from '../../assets/register-image.png';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Container, Row, Col, Image, Form, Button, Alert } from 'react-bootstrap';
+import { fetchRegister } from '../../services/auth';
 
 const Register = () => {
+    const [username, setUsername] = useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
+    const [error, setError] = useState(null);
+    const navigate = useNavigate();
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        if (password !== confirmPassword) {
+            setError('Passwords do not match');
+            return;
+        }
+        try {
+            const response = await fetchRegister(username, email, password);
+            console.log('Register response:', response);
+            navigate('/login');
+        } catch (error) {
+            console.error('Register error:', error);
+            setError(error.response.data.message);
+        }
+    };
+
     return (
-        <Container>
-            <Row>
-                <Col>
-                    <Image src={registerImage} width={400} height={400} alt="Logo" />
-                </Col>
-                <Col>
-                    <h1 className="mb-5" style={{ textAlign: 'center' }}>Register to <span style={{ color: '#00A47F' }}>Jeconn</span></h1>
-                    <Form>
-                        <Form.Group className="mb-3" controlId="formGroupUsername">
-                            <Form.Label>Username</Form.Label>
-                            <Form.Control type="text" placeholder="Enter username" />
-                        </Form.Group>
-                        <Form.Group className="mb-3" controlId="formGroupEmail">
-                            <Form.Label>Email</Form.Label>
-                            <Form.Control type="email" placeholder="Enter email" />
-                        </Form.Group>
-                        <Form.Group className="mb-3" controlId="formGroupPassword">
-                            <Form.Label>Password</Form.Label>
-                            <Form.Control type="password" placeholder="Enter password" />
-                        </Form.Group>
-                        <Form.Group className="mb-3" controlId="formGroupConfirmPassword">
-                            <Form.Label>Confirm Password</Form.Label>
-                            <Form.Control type="password" placeholder="Enter password again" />
-                        </Form.Group>
-                        <Form.Text style={{ textAlign: 'center' }} as="p" className="mb-0" muted>
-                            Already have an account? <a style={{ textDecoration: 'none' }} href="/login"><b>Login</b></a>
-                        </Form.Text>
-                        <div className="d-grid gap-2" style={{ marginTop: '20px' }}>
-                            <Button type="submit" variant="outline-success" size="lg" style={{ backgroundColor: '#00A47F', color: '#FFFFFF' }}>Register</Button>{' '}
+        <div className="d-flex justify-content-center align-items-center" style={{ backgroundColor: '#00A47F', minHeight: '100vh' }}>
+            <Container className="d-flex justify-content-center align-items-center" style={{ borderRadius: '5px', backgroundColor: '#FFFFFF' }}>
+                <Row className="w-100" style={{ padding: '3px', paddingTop: '20px', paddingBottom: '20px', borderRadius: '5px' }}>
+                    <Col md={6} className="d-flex justify-content-center align-items-center">
+                        <Image fluid src='/images/register-image.png' alt="Register Image" />
+                    </Col>
+                    <Col className="d-flex justify-content-center align-items-center" md={6} style={{ padding: '50px', borderLeft: '1px solid #00A47F' }}>
+                        <div className="w-100">
+                            <h1 className="mb-5 text-center">Register to <span style={{ color: '#00A47F' }}>Jeconn</span></h1>
+                            {error && (
+                                <Alert variant="danger" onClose={() => setError(null)} dismissible>
+                                    {error}
+                                </Alert>
+                            )}
+                            <Form onSubmit={handleSubmit}>
+                                <Form.Group className="mb-3" controlId="formGroupUsername">
+                                    <Form.Label>Username</Form.Label>
+                                    <Form.Control type="text" placeholder="Enter username" value={username} onChange={(e) => setUsername(e.target.value)} required />
+                                </Form.Group>
+                                <Form.Group className="mb-3" controlId="formGroupEmail">
+                                    <Form.Label>Email</Form.Label>
+                                    <Form.Control type="email" placeholder="Enter email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+                                </Form.Group>
+                                <Form.Group className="mb-3" controlId="formGroupPassword">
+                                    <Form.Label>Password</Form.Label>
+                                    <Form.Control type="password" placeholder="Enter password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+                                </Form.Group>
+                                <Form.Group className="mb-3" controlId="formGroupConfirmPassword">
+                                    <Form.Label>Confirm Password</Form.Label>
+                                    <Form.Control type="password" placeholder="Enter password again" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} required />
+                                </Form.Group>
+                                <Form.Text className="text-center d-block mb-3">
+                                    Sudah memiliki akun? <a href="/login" className="text-decoration-none"><b>Login</b></a>
+                                </Form.Text>
+                                <div className="d-grid gap-2" style={{ marginTop: '45px' }}>
+                                    <Button type="submit" variant="success" size="lg" style={{ backgroundColor: '#00A47F', color: '#FFFFFF' }}>Register</Button>
+                                </div>
+                            </Form>
                         </div>
-                    </Form>
-                </Col>
-            </Row>
-        </Container>
+                    </Col>
+                </Row>
+            </Container>
+        </div>
     );
 };
 

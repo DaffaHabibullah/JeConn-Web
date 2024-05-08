@@ -10,4 +10,10 @@ export default defineConfig({
     host: true,
     origin: "http://localhost:3000",
   },
+  preview: {
+    port: 3000,
+    strictPort: true,
+    host: true,
+    origin: "http://localhost:3000",
+  }
 })

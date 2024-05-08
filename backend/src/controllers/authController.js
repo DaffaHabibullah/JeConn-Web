@@ -80,7 +80,7 @@ const authController = {
                 });
             }
 
-            const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
+            const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET);
 
             const userData = await userModel.findOne({ _id: user._id });
 

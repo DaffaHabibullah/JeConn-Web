@@ -49,7 +49,7 @@ const NavbarComponent = () => {
                         <Nav>
                             <Nav.Link href="/home">Home</Nav.Link>
                             {roles.includes('talent') || (
-                                <Nav.Link href="/join-talent">Become a Talent</Nav.Link>
+                                <Nav.Link href="/join-talent">Become a Talent✨</Nav.Link>
                             )}
                             <Nav.Link href="/vacancies">Vacancies</Nav.Link>
                             <Nav.Link href="/talents">Talents</Nav.Link>

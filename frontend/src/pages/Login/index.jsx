@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Container, Row, Col, Image, Form, Button, Alert } from 'react-bootstrap';
-import { fetchLogin } from '../../services/auth';
+import { fetchLogin } from '../../api/Auth';
 
 const Login = () => {
     const [email, setEmail] = useState('');
@@ -13,22 +13,21 @@ const Login = () => {
         e.preventDefault();
         try {
             const response = await fetchLogin(email, password);
-            console.log('Login response:', response);
+            localStorage.setItem('token', response.data.token);
             navigate('/home');
         } catch (error) {
-            console.error('Login error:', error);
             setError(error.response.data.message);
         }
     };
 
     return (
         <div className="d-flex justify-content-center align-items-center" style={{ backgroundColor: '#00A47F', minHeight: '100vh' }}>
-            <Container className="d-flex justify-content-center align-items-center" style={{ borderRadius: '5px', backgroundColor: '#FFFFFF' }}>
-                <Row className="w-100" style={{ padding: '3px', paddingTop: '20px', paddingBottom: '20px', borderRadius: '5px' }}>
+            <Container className="d-flex justify-content-center align-items-center" style={{ borderRadius: '5px' }}>
+                <Row className="w-100" style={{ padding: '8px', paddingTop: '16px', paddingBottom: '16px', borderRadius: '5px' }}>
                     <Col md={6} className="d-flex justify-content-center align-items-center">
-                        <Image fluid src='/images/login-image.png' alt="Login Image" />
+                        <Image fluid src='/images/login-image.jpg' alt="Login Image" />
                     </Col>
-                    <Col md={6} className="d-flex justify-content-center align-items-center" style={{ padding: '50px', borderLeft: '1px solid #00A47F' }}>
+                    <Col md={6} className="d-flex justify-content-center align-items-center">
                         <div className="w-100">
                             <h1 className="mb-5 text-center">Login to <span style={{ color: '#00A47F' }}>Jeconn</span></h1>
                             {error && (
@@ -48,7 +47,7 @@ const Login = () => {
                                 <Form.Text className="text-center d-block mb-3">
                                     Belum punya akun? <a href="/register" className="text-decoration-none"><b>Register</b></a>
                                 </Form.Text>
-                                <div className="d-grid gap-2" style={{ marginTop: '45px' }}>
+                                <div className="d-grid gap-2" style={{ marginTop: '32px' }}>
                                     <Button type="submit" variant="outline-success" size="lg" style={{ backgroundColor: '#00A47F', color: '#FFFFFF' }}>Login</Button>
                                 </div>
                             </Form>

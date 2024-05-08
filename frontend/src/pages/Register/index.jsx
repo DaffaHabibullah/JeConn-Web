@@ -27,7 +27,7 @@ const Register = () => {
 
     return (
         <div className="d-flex justify-content-center align-items-center" style={{ backgroundColor: '#00A47F', minHeight: '100vh' }}>
-            <Container className="d-flex justify-content-center align-items-center" style={{ borderRadius: '5px' }}>
+            <Container className="d-flex justify-content-center align-items-center" style={{ padding: '16px', borderRadius: '5px' }}>
                 <Row className="w-100" style={{ padding: '8px', paddingTop: '16px', paddingBottom: '16px', borderRadius: '5px' }}>
                     <Col md={6} className="d-flex justify-content-center align-items-center">
                         <Image fluid src='/images/register-image.jpg' alt="Register Image" />

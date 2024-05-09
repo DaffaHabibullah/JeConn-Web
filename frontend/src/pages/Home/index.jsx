@@ -22,7 +22,7 @@ const Home = () => {
                             <h3><b>Vacancies</b></h3>
                             <Button variant="success" className="me-2 mb-2" href="/vacancies">See All</Button>
                         </div>
-                        <Card style={{ width: '18rem', marginRight: '32px', marginBottom: '32px' }}>
+                        <Card style={{ width: '18rem', marginLeft: '32px', marginBottom: '32px' }}>
                             <Card.Body>
                                 <Row className="mb-4">
                                     <Col md={3} className="d-flex justify-content-center align-items-center p-2">
@@ -45,7 +45,7 @@ const Home = () => {
                                 </Col>
                             </Card.Footer>
                         </Card>
-                        <Card style={{ width: '18rem', marginRight: '32px', marginBottom: '32px' }}>
+                        <Card style={{ width: '18rem', marginLeft: '32px', marginBottom: '32px' }}>
                             <Card.Body>
                                 <Row className="mb-4">
                                     <Col md={3} className="d-flex justify-content-center align-items-center p-2">
@@ -68,7 +68,7 @@ const Home = () => {
                                 </Col>
                             </Card.Footer>
                         </Card>
-                        <Card style={{ width: '18rem', marginRight: '32px', marginBottom: '32px' }}>
+                        <Card style={{ width: '18rem', marginLeft: '32px', marginBottom: '32px' }}>
                             <Card.Body>
                                 <Row className="mb-4">
                                     <Col md={3} className="d-flex justify-content-center align-items-center p-2">
@@ -99,7 +99,7 @@ const Home = () => {
                             <h3><b>Talents</b></h3>
                             <Button variant="success" className="me-2 mb-2" href="/talents">See All</Button>
                         </div>
-                        <Card style={{ width: '16rem', padding: "16px", marginRight: "32px", marginBottom: "32px" }}>
+                        <Card style={{ width: '16rem', padding: "16px", marginLeft: "32px", marginBottom: "32px" }}>
                             <Card.Img variant="top" style={{ height: '192px' }} src="images/example-image.jpg" alt="Profile Image" />
                             <Card.Body>
                                 <Card.Title><a href="/" style={{ textDecoration: 'none', color: '#000000' }}>Pesulap</a></Card.Title>
@@ -119,7 +119,7 @@ const Home = () => {
                                 </ListGroup.Item>
                             </ListGroup>
                         </Card>
-                        <Card style={{ width: '16rem', padding: "16px", marginRight: "32px", marginBottom: "32px" }}>
+                        <Card style={{ width: '16rem', padding: "16px", marginLeft: "32px", marginBottom: "32px" }}>
                             <Card.Img variant="top" style={{ height: '192px' }} src="images/example-image.jpg" alt="Profile Image" />
                             <Card.Body>
                                 <Card.Title><a href="/" style={{ textDecoration: 'none', color: '#000000' }}>Pesulap</a></Card.Title>
@@ -139,7 +139,7 @@ const Home = () => {
                                 </ListGroup.Item>
                             </ListGroup>
                         </Card>
-                        <Card style={{ width: '16rem', padding: "16px", marginRight: "32px", marginBottom: "32px" }}>
+                        <Card style={{ width: '16rem', padding: "16px", marginLeft: "32px", marginBottom: "32px" }}>
                             <Card.Img variant="top" style={{ height: '192px' }} src="images/example-image.jpg" alt="Profile Image" />
                             <Card.Body>
                                 <Card.Title><a href="/" style={{ textDecoration: 'none', color: '#000000' }}>Pesulap</a></Card.Title>

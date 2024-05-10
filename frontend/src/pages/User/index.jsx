@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Container, Row, Col, Card, Form, InputGroup, Badge, Button } from 'react-bootstrap';
+import { Container, Row, Col, Card, OverlayTrigger, Tooltip, InputGroup, Form, Badge, Button } from 'react-bootstrap';
 import NavbarComponent from '../../components/Navbar';
 import { fetchUserProfile, fetchUserUpdate, fetchUserUpdateImage } from '../../api/User';
 
@@ -55,6 +55,12 @@ const User = () => {
         }
     };
 
+    const handleHoverImage = (props) => (
+        <Tooltip {...props}>
+            Change Profile Image
+        </Tooltip>
+    );
+
     const handleImageChange = async (e) => {
         const selectedImage = e.target.files[0];
         if (selectedImage) {
@@ -86,13 +92,15 @@ const User = () => {
                 {userProfile && (
                     <Row md={2} className="d-flex justify-content-center align-items-center">
                         <Card className="d-flex flex-column align-items-center" style={{ padding: '16px' }}>
-                            <Card.Img
-                                variant="top"
-                                style={{ width: '192px', height: '192px', padding: '8px', borderRadius: '50%', cursor: 'pointer' }}
-                                src={userProfile.imageProfile}
-                                alt="Profile Image"
-                                onClick={handleImageClick}
-                            />
+                            <OverlayTrigger placement="bottom" delay={{ show: 240, hide: 60 }} overlay={handleHoverImage}>
+                                <Card.Img
+                                    variant="top"
+                                    style={{ width: '192px', height: '192px', padding: '8px', borderRadius: '50%', cursor: 'pointer' }}
+                                    src={userProfile.imageProfile}
+                                    alt="Profile Image"
+                                    onClick={handleImageClick}
+                                />
+                            </OverlayTrigger>
                             <input id="imageInput" type="file" accept=".jpg, .jpeg, .png" style={{ display: 'none' }} onChange={handleImageChange} />
                             <Card.Body className="d-flex flex-column align-items-center">
                                 <Card.Title><b>{userProfile.username}</b></Card.Title>

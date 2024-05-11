@@ -47,13 +47,3 @@ export const fetchUserUpdateImage = async (imageProfile) => {
         throw error;
     }
 };
-
-export const fetchProfileImage = async (id, filename) => {
-    try {
-        const response = await axios.get(`${API_URL}/user/${id}/profile/${filename}`);
-        return response.data;
-    } catch (error) {
-        console.error('Fetch profile image error:', error);
-        throw error;
-    }
-};

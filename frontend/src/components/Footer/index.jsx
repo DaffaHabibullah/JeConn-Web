@@ -2,7 +2,7 @@ import { Container, Row, Col } from 'react-bootstrap';
 
 const FooterComponent = () => {
     return (
-        <div style={{ marginTop: '64px', paddingTop: '32px', borderTop: '1px solid #00A47F' }}>
+        <div style={{ marginTop: '64px', paddingTop: '64px', borderTop: '1px solid #00A47F' }}>
             <Container>
                 <Row>
                     <Col className="text-center">

@@ -270,10 +270,10 @@ const Talent = () => {
                                 <h6 className="mt-3 mb-3 d-flex justify-content-center align-items-center text-decoration-underline">Talent Images</h6>
                                 <Row>
                                     {talentImages.map((imageUrl, index) => (
-                                        <Col key={index} xs={6} md={6} lg={3} className="mt-3">
-                                            <Card>
+                                        <Col key={index} className="mt-3">
+                                            <Card className="d-flex justify-content-center align-items-center border-0">
                                                 <a href={imageUrl} target="_blank" rel="noopener noreferrer">
-                                                    <Image variant="top" src={imageUrl} style={{ width: '100%', height: '192px', objectFit: 'cover', cursor: 'pointer' }} rounded />
+                                                    <Image variant="top" src={imageUrl} style={{ width: '128px', height: '192px', objectFit: 'cover', cursor: 'pointer' }} rounded />
                                                 </a>
                                             </Card>
                                         </Col>

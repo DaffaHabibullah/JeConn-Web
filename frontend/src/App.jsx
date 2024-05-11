@@ -6,6 +6,7 @@ import Register from './pages/Register';
 import Home from './pages/Home';
 import User from './pages/User';
 import Talent from './pages/Talent';
+import NotFound from './pages/NotFound';
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
         <Route path="/home" element={<Home />} />
         <Route path="/user-profile" element={<User />} />
         <Route path="/talent-profile" element={<Talent />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </Router>
   )

@@ -1,14 +1,16 @@
 require("dotenv").config();
 const fs = require("fs");
-const talentModel = require("../models/talentModel");
+const privateDataModel = require("../models/privateDataModel");
 const userModel = require("../models/userModel");
+const talentModel = require("../models/talentModel");
 const entertainmentCategoriesModel = require("../models/entertainmentCategoriesModel");
+const snap = require("../middleware/midtransClient");
 const { uploadTalent } = require("../middleware/uploadImage");
 
 const talentController = {
     async createTalent(req, res) {
         try {
-            const { nik_ktp, biography, location, entertainment_id } = req.body;
+            const { nik_ktp } = req.body;
 
             const nikExists = await talentModel.findOne({ nik_ktp });
             if (nikExists) {
@@ -18,33 +20,70 @@ const talentController = {
                 });
             }
 
-            const entertainmentCategory = await entertainmentCategoriesModel.findById(entertainment_id);
-            if (!entertainmentCategory) {
+            const user = await userModel.findById(req.user._id);
+            if (!user) {
+                return res.status(404).json({
+                    success: false,
+                    message: "User not found",
+                });
+            }
+
+            if (!user.fullName || !user.phoneNumber || !user.address) {
                 return res.status(400).json({
                     success: false,
-                    message: "Invalid Entertainment ID",
+                    message: "Please complete your profile",
+                });
+            }
+
+            const privateData = await privateDataModel.findById(user._id);
+            if (!privateData) {
+                return res.status(404).json({
+                    success: false,
+                    message: "Private data not found",
+                });
+            }
+
+            const transactionDetails = {
+                "transaction_details": {
+                    "order_id": `${user._id}-${new Date().getTime()}`,
+                    "gross_amount": 10000,
+                },
+                "credit_card": {
+                    "secure": true,
+                },
+                "customer_details": {
+                    "fullName": user.fullName,
+                    "email": privateData.email,
+                    "phoneNumber": user.phoneNumber,
+                },
+            };
+
+            const payment = await snap.createTransaction(transactionDetails);
+            if (!payment.token) {
+                return res.status(500).json({
+                    success: false,
+                    message: "Failed to create payment",
                 });
             }
 
             await talentModel.create({
                 _id: req.user._id,
                 nik_ktp,
-                biography,
-                location,
-                entertainment_id,
             });
 
-            const user = await userModel.findById(req.user._id);
-            user.roles = user.roles.concat("talent");
+            user.roles = [...new Set([...user.roles, "talent"])];
+            user.upgrade = payment.token;
+            user.updatedAt = new Date();
 
             await user.save();
 
             return res.status(201).json({
                 success: true,
                 message: "Talent created successfully",
+                data: payment.token,
             });
         } catch (error) {
-            console.error("Error getting user profile", error);
+            console.error("Error creating talent", error);
             return res.status(500).json({
                 success: false,
                 message: "Internal server error",

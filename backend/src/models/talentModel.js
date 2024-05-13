@@ -11,20 +11,17 @@ const talentSchema = new mongoose.Schema({
     },
     biography: {
         type: String,
-        required: true,
     },
     location: {
         type: String,
-        required: true,
     },
     entertainment_id: {
         type: Array,
-        required: true,
     },
     isOpen: {
         type: Boolean,
         required: true,
-        default: true,
+        default: false,
     },
     images: {
         type: Array,

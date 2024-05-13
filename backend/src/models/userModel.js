@@ -34,6 +34,9 @@ const userSchema = new mongoose.Schema({
         enum: ["user", "talent"],
         default: "user",
     },
+    upgrade: {
+        type: String,
+    },
     messageRoom_id: {
         type: Array,
     },

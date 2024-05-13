@@ -28,13 +28,6 @@ const talentController = {
                 });
             }
 
-            if (!user.fullName || !user.phoneNumber || !user.address) {
-                return res.status(400).json({
-                    success: false,
-                    message: "Please complete your profile",
-                });
-            }
-
             const privateData = await privateDataModel.findById(user._id);
             if (!privateData) {
                 return res.status(404).json({
@@ -52,9 +45,9 @@ const talentController = {
                     "secure": true,
                 },
                 "customer_details": {
-                    "fullName": user.fullName,
+                    "first_name": user.fullName,
                     "email": privateData.email,
-                    "phoneNumber": user.phoneNumber,
+                    "phone": user.phoneNumber,
                 },
             };
 
@@ -80,7 +73,10 @@ const talentController = {
             return res.status(201).json({
                 success: true,
                 message: "Talent created successfully",
-                data: payment.token,
+                data: {
+                    token: payment.token,
+                    redirect_url: payment.redirect_url,
+                },
             });
         } catch (error) {
             console.error("Error creating talent", error);

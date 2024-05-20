@@ -1,10 +1,8 @@
 require("dotenv").config();
 const fs = require("fs");
-const privateDataModel = require("../models/privateDataModel");
 const userModel = require("../models/userModel");
 const talentModel = require("../models/talentModel");
 const entertainmentCategoriesModel = require("../models/entertainmentCategoriesModel");
-const snap = require("../middleware/midtransClient");
 const { uploadTalent } = require("../middleware/uploadImage");
 
 const talentController = {
@@ -20,52 +18,14 @@ const talentController = {
                 });
             }
 
-            const user = await userModel.findById(req.user._id);
-            if (!user) {
-                return res.status(404).json({
-                    success: false,
-                    message: "User not found",
-                });
-            }
-
-            const privateData = await privateDataModel.findById(user._id);
-            if (!privateData) {
-                return res.status(404).json({
-                    success: false,
-                    message: "Private data not found",
-                });
-            }
-
-            const transactionDetails = {
-                "transaction_details": {
-                    "order_id": `${user._id}-${new Date().getTime()}`,
-                    "gross_amount": 10000,
-                },
-                "credit_card": {
-                    "secure": true,
-                },
-                "customer_details": {
-                    "first_name": user.fullName,
-                    "email": privateData.email,
-                    "phone": user.phoneNumber,
-                },
-            };
-
-            const payment = await snap.createTransaction(transactionDetails);
-            if (!payment.token) {
-                return res.status(500).json({
-                    success: false,
-                    message: "Failed to create payment",
-                });
-            }
-
             await talentModel.create({
                 _id: req.user._id,
                 nik_ktp,
             });
 
+            const user = await userModel.findById(req.user._id);
+
             user.roles = [...new Set([...user.roles, "talent"])];
-            user.upgrade = payment.token;
             user.updatedAt = new Date();
 
             await user.save();
@@ -73,10 +33,6 @@ const talentController = {
             return res.status(201).json({
                 success: true,
                 message: "Talent created successfully",
-                data: {
-                    token: payment.token,
-                    redirect_url: payment.redirect_url,
-                },
             });
         } catch (error) {
             console.error("Error creating talent", error);

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Container, Row, Col, Card, OverlayTrigger, Tooltip, InputGroup, Form, Button, Image } from 'react-bootstrap';
+import { Container, Row, Col, Card, OverlayTrigger, Tooltip, InputGroup, Form, Button, Image, Modal } from 'react-bootstrap';
 import NavbarComponent from '../../components/Navbar';
 import { fetchUserProfile, fetchUserUpdateImage } from '../../api/User';
 import { fetchTalentProfile, fetchTalentUpdate, fetchTalentUploadImage, fetchTalentAllImages } from '../../api/Talent';
@@ -18,6 +18,8 @@ const Talent = () => {
     const [talentImages, setTalentImages] = useState([]);
     const [entertainmentCategories, setEntertainmentCategories] = useState([]);
     const [isEditMode, setIsEditMode] = useState(false);
+    const [showModal, setShowModal] = useState(false);
+    const [selectedImage, setSelectedImage] = useState('');
     const token = localStorage.getItem('token');
 
     useEffect(() => {
@@ -156,8 +158,9 @@ const Talent = () => {
         }
     };
 
-    const handleImageClick = () => {
-        document.getElementById('imageInput').click();
+    const handleImageClick = (imageUrl) => {
+        setSelectedImage(imageUrl);
+        setShowModal(true);
     };
 
     const locationOptions = [
@@ -272,7 +275,7 @@ const Talent = () => {
                                     {talentImages.map((imageUrl, index) => (
                                         <Col key={index} className="mt-3">
                                             <Card className="d-flex justify-content-center align-items-center border-0">
-                                                <a href={imageUrl} target="_blank" rel="noopener noreferrer">
+                                                <a href={imageUrl} onClick={(e) => { e.preventDefault(); handleImageClick(imageUrl); }}>
                                                     <Image variant="top" src={imageUrl} style={{ width: '128px', height: '192px', objectFit: 'cover', cursor: 'pointer' }} rounded />
                                                 </a>
                                             </Card>
@@ -292,6 +295,11 @@ const Talent = () => {
                     </Card>
                 </Row>
             </Container>
+            <Modal show={showModal} onHide={() => setShowModal(false)} size="lg" centered>
+                <Modal.Body>
+                    <img src={selectedImage} alt="Selected Image" style={{ width: '100%', height: 'auto' }} />
+                </Modal.Body>
+            </Modal>
         </div>
     );
 };

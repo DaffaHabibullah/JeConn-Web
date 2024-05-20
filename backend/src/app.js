@@ -11,6 +11,7 @@ const authRoute = require("./routes/authRoute");
 const userRoute = require("./routes/userRoute");
 const entertainmentRoute = require("./routes/entertainmentRoute");
 const talentRoute = require("./routes/talentRoute");
+const paymentTokenRoute = require("./routes/paymentTokenRoute");
 
 
 app.use(cors());
@@ -33,6 +34,7 @@ app.use("/auth", authRoute);
 app.use("/user", userRoute);
 app.use("/entertainment-categories", entertainmentRoute);
 app.use("/talent", talentRoute);
+app.use("/payment", paymentTokenRoute);
 
 
 module.exports = app;

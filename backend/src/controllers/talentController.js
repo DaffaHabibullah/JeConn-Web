@@ -2,15 +2,16 @@ require("dotenv").config();
 const fs = require("fs");
 const userModel = require("../models/userModel");
 const talentModel = require("../models/talentModel");
+const indonesiaProvinceModel = require("../models/indonesiaProvinceModel");
 const entertainmentCategoriesModel = require("../models/entertainmentCategoriesModel");
 const { uploadTalent } = require("../middleware/uploadImage");
 
 const talentController = {
     async createTalent(req, res) {
         try {
-            const { nik_ktp } = req.body;
+            const { nikKTP, firstName, lastName, phoneNumber, address, provinceId, postalCode } = req.body;
 
-            const nikExists = await talentModel.findOne({ nik_ktp });
+            const nikExists = await talentModel.findOne({ nikKTP });
             if (nikExists) {
                 return res.status(400).json({
                     success: false,
@@ -18,9 +19,23 @@ const talentController = {
                 });
             }
 
+            const indonesiaProvince = await indonesiaProvinceModel.findById(provinceId);
+            if (!indonesiaProvince) {
+                return res.status(400).json({
+                    success: false,
+                    message: "Invalid Province ID",
+                });
+            }
+
             await talentModel.create({
                 _id: req.user._id,
-                nik_ktp,
+                nikKTP,
+                firstName,
+                lastName,
+                phoneNumber,
+                address,
+                province: indonesiaProvince.name,
+                postalCode,
             });
 
             const user = await userModel.findById(req.user._id);

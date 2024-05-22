@@ -111,6 +111,7 @@ const RegisterTalent = () => {
                 <Row className="d-flex justify-content-center align-items-center" style={{ padding: '16px' }}>
                     <Card>
                         <Row className="d-flex justify-content-center align-items-start" style={{ padding: '32px' }}>
+                            <h2 className="d-flex justify-content-center" style={{ marginBottom: '32px' }}>Plan and Price</h2>
                             <Col sm="6">
                                 <Card className="mb-3" style={{ paddingTop: '32px', border: '3px solid #6C757D', backgroundColor: '#6C757D' }}>
                                     <Card.Body>

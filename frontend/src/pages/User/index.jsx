@@ -118,6 +118,7 @@ const User = () => {
                                     <InputGroup className="mt-3">
                                         <InputGroup.Text id="gender" style={{ width: '160px', backgroundColor: '#00A47F', color: '#FFFFFF' }}>Jenis Kelamin</InputGroup.Text>
                                         <Form.Select id="gender" aria-describedby="gender" value={userProfile.gender} onChange={handleInputChange} disabled={!isEditMode}>
+                                            <option value="" disabled>Pilih jenis kelamin</option>
                                             {genderOptions.map((option) => (
                                                 <option key={option.value} value={option.value}>{option.label}</option>
                                             ))}

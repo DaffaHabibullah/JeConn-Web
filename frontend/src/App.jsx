@@ -5,6 +5,7 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import Home from './pages/Home';
 import User from './pages/User';
+import RegisterTalent from './pages/RegisterTalent';
 import Talent from './pages/Talent';
 import VaTal from './pages/VaTal';
 import NotFound from './pages/NotFound';
@@ -18,6 +19,7 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/home" element={<Home />} />
         <Route path="/user-profile" element={<User />} />
+        <Route path="/join-talent" element={<RegisterTalent />} />
         <Route path="/talent-profile" element={<Talent />} />
         <Route path="/vacancies" element={<VaTal />} />
         <Route path="/talents" element={<VaTal />} />

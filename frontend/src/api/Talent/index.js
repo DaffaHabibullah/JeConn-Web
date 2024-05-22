@@ -1,13 +1,16 @@
 import axios from 'axios';
 import { API_URL, AuthHeader } from '../Config';
 
-export const fetchTalentRegister = async (nik_ktp, biography, location, entertainment_id) => {
+export const fetchTalentRegister = async (nikKTP, firstName, lastName, phoneNumber, address, provinceId, postalCode) => {
     try {
         const response = await axios.post(`${API_URL}/talent/register`, {
-            nik_ktp,
-            biography,
-            location,
-            entertainment_id
+            nikKTP,
+            firstName,
+            lastName,
+            phoneNumber,
+            address,
+            provinceId,
+            postalCode
         }, {
             headers: AuthHeader()
         });

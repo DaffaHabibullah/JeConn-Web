@@ -3,6 +3,7 @@ import { Container, Row, Col, Card, OverlayTrigger, Tooltip, InputGroup, Form, B
 import NavbarComponent from '../../components/Navbar';
 import { fetchUserProfile, fetchUserUpdateImage } from '../../api/User';
 import { fetchTalentProfile, fetchTalentUpdate, fetchTalentUploadImage, fetchTalentAllImages } from '../../api/Talent';
+import { fetchLocations } from '../../api/Locations';
 import { fetchEntertainmentCategories } from '../../api/EntertainmentCategories';
 
 const Talent = () => {
@@ -16,6 +17,7 @@ const Talent = () => {
         entertainment_id: []
     });
     const [talentImages, setTalentImages] = useState([]);
+    const [locations, setLocations] = useState([]);
     const [entertainmentCategories, setEntertainmentCategories] = useState([]);
     const [isEditMode, setIsEditMode] = useState(false);
     const [showModal, setShowModal] = useState(false);
@@ -53,6 +55,20 @@ const Talent = () => {
             fetchTalent();
         }
     }, [token]);
+
+    useEffect(() => {
+        const fetchLocationsData = async () => {
+            try {
+                const response = await fetchLocations();
+                setLocations(response.data);
+            } catch (error) {
+                console.error('Failed to fetch locations:', error);
+                throw error;
+            }
+        };
+
+        fetchLocationsData();
+    }, []);
 
     useEffect(() => {
         const fetchEntertainment = async () => {
@@ -163,16 +179,6 @@ const Talent = () => {
         setShowModal(true);
     };
 
-    const locationOptions = [
-        { label: "Jakarta", value: "Jakarta" },
-        { label: "Bogor", value: "Bogor" },
-        { label: "Depok", value: "Depok" },
-        { label: "Tangerang", value: "Tangerang" },
-        { label: "Bekasi", value: "Bekasi" },
-        { label: "Puncak", value: "Puncak" },
-        { label: "Cianjur", value: "Cianjur" }
-    ];
-
     return (
         <div>
             <NavbarComponent />
@@ -206,8 +212,10 @@ const Talent = () => {
                                     <InputGroup className="mt-3">
                                         <InputGroup.Text id="locations" style={{ width: '160px', backgroundColor: '#00A47F', color: '#FFFFFF' }}>Lokasi</InputGroup.Text>
                                         <Form.Select id="location" aria-describedby="locations" value={talentProfile.location} onChange={handleInputChange} disabled={!isEditMode}>
-                                            {locationOptions.map((option) => (
-                                                <option key={option.value} value={option.value}>{option.label}</option>
+                                            {locations.map(location => (
+                                                <option key={location._id} value={location.name}>
+                                                    {location.name}
+                                                </option>
                                             ))}
                                         </Form.Select>
                                     </InputGroup>

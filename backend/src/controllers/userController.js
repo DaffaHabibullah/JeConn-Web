@@ -18,6 +18,7 @@ const userController = {
                     gender: user.gender,
                     address: user.address,
                     roles: user.roles,
+                    vacanciesId: user.vacanciesId,
                     messageRoom_id: user.messageRoom_id,
                 },
             });

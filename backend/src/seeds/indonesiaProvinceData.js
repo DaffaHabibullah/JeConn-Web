@@ -3,7 +3,7 @@ const indonesiaProvinceModel = require("../models/indonesiaProvinceModel");
 const indonesiaProvinceData = [
     {
         _id: "1",
-        name: "Nanggroe Aceh Darussalam",
+        name: "Aceh",
     },
     {
         _id: "2",
@@ -43,7 +43,7 @@ const indonesiaProvinceData = [
     },
     {
         _id: "11",
-        name: "DKI Jakarta",
+        name: "Jakarta",
     },
     {
         _id: "12",

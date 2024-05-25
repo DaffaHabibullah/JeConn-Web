@@ -10,9 +10,10 @@ const entertainmentCategoriesData = require("./seeds/entertainmentCategoriesData
 
 const authRoute = require("./routes/authRoute");
 const userRoute = require("./routes/userRoute");
+const talentRoute = require("./routes/talentRoute");
+const vacanciesRoute = require("./routes/vacanciesRoute");
 const indonesiaProvinceRoute = require("./routes/indonesiaProvinceRoute");
 const entertainmentRoute = require("./routes/entertainmentRoute");
-const talentRoute = require("./routes/talentRoute");
 const paymentTokenRoute = require("./routes/paymentTokenRoute");
 
 
@@ -35,9 +36,10 @@ app.get("/public/images/:filename", (req, res) => {
 
 app.use("/auth", authRoute);
 app.use("/user", userRoute);
+app.use("/talent", talentRoute);
+app.use("/vacancies", vacanciesRoute);
 app.use("/location", indonesiaProvinceRoute);
 app.use("/entertainment-categories", entertainmentRoute);
-app.use("/talent", talentRoute);
 app.use("/payment", paymentTokenRoute);
 
 

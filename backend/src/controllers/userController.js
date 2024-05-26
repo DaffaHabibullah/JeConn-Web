@@ -81,19 +81,12 @@ const userController = {
 
                 user.imageProfile = imageUrl;
                 user.updatedAt = new Date();
-
                 await user.save();
 
-                const vacancies = await vacanciesModel.findById(user.vacanciesId);
-                if (!vacancies) {
-                    return res.status(404).json({
-                        success: false,
-                        message: "Vacancies not found",
-                    });
-                }
-
-                vacancies.imageProfile = imageUrl;
-                await vacancies.save();
+                await vacanciesModel.updateMany(
+                    { _id: { $in: user.vacanciesId } },
+                    { imageProfile: imageUrl },
+                );
 
                 return res.status(200).json({
                     success: true,

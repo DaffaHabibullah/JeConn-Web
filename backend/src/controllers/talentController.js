@@ -222,6 +222,62 @@ const talentController = {
             });
         }
     },
+
+    async getAllTalent(req, res) {
+        try {
+            const talents = await talentModel.find();
+
+            return res.status(200).json({
+                success: true,
+                message: "All talent",
+                data: talents.map((talent) => ({
+                    _id: talent._id,
+                    biography: talent.biography,
+                    location: talent.location,
+                    entertainment_id: talent.entertainment_id,
+                    isOpen: talent.isOpen,
+                    images: talent.images,
+                })),
+            });
+        } catch (error) {
+            console.error("Error getting talent", error);
+            return res.status(500).json({
+                success: false,
+                message: "Internal server error",
+            });
+        }
+    },
+
+    async getTalentById(req, res) {
+        try {
+            const talent = await talentModel.findById(req.params.id);
+            if (!talent) {
+                return res.status(404).json({
+                    success: false,
+                    message: "Talent not found",
+                });
+            }
+
+            return res.status(200).json({
+                success: true,
+                message: "Talent",
+                data: {
+                    _id: talent._id,
+                    biography: talent.biography,
+                    location: talent.location,
+                    entertainment_id: talent.entertainment_id,
+                    isOpen: talent.isOpen,
+                    images: talent.images,
+                },
+            });
+        } catch (error) {
+            console.error("Error getting talent", error);
+            return res.status(500).json({
+                success: false,
+                message: "Internal server error",
+            });
+        }
+    },
 };
 
 

@@ -226,18 +226,33 @@ const talentController = {
     async getAllTalent(req, res) {
         try {
             const talents = await talentModel.find();
+            const entertainmentCategories = await entertainmentCategoriesModel.find();
+            const entertainmentMap = entertainmentCategories.reduce((map, category) => {
+                map[category._id] = category.name;
+                return map;
+            }, {});
+
+            const result = await Promise.all(
+                talents.map(async (talent) => {
+                    const user = await userModel.findById(talent._id);
+                    return {
+                        _id: talent._id,
+                        biography: talent.biography,
+                        location: talent.location,
+                        entertainment_id: talent.entertainment_id.map((id) => entertainmentMap[id] || id),
+                        isOpen: talent.isOpen,
+                        images: talent.images,
+                        username: user.username,
+                        fullName: user.fullName,
+                        imageProfile: user.imageProfile,
+                    };
+                }),
+            );
 
             return res.status(200).json({
                 success: true,
                 message: "All talent",
-                data: talents.map((talent) => ({
-                    _id: talent._id,
-                    biography: talent.biography,
-                    location: talent.location,
-                    entertainment_id: talent.entertainment_id,
-                    isOpen: talent.isOpen,
-                    images: talent.images,
-                })),
+                data: result,
             });
         } catch (error) {
             console.error("Error getting talent", error);
@@ -258,6 +273,13 @@ const talentController = {
                 });
             }
 
+            const user = await userModel.findById(talent._id);
+            const entertainmentCategories = await entertainmentCategoriesModel.find({
+                _id: { $in: talent.entertainment_id },
+            });
+
+            const entertainmentNames = entertainmentCategories.map((category) => category.name);
+
             return res.status(200).json({
                 success: true,
                 message: "Talent",
@@ -265,9 +287,12 @@ const talentController = {
                     _id: talent._id,
                     biography: talent.biography,
                     location: talent.location,
-                    entertainment_id: talent.entertainment_id,
+                    entertainment_id: entertainmentNames,
                     isOpen: talent.isOpen,
                     images: talent.images,
+                    username: user.username,
+                    fullName: user.fullName,
+                    imageProfile: user.imageProfile,
                 },
             });
         } catch (error) {

@@ -9,7 +9,7 @@ const vacanciesController = {
         try {
             const {
                 typePost, title, location, startDate, endDate, address, description,
-                candidates, salary, typeSalary, entertainment_id
+                candidates, salary, typeSalary, entertainment_id,
             } = req.body;
 
             const user = await userModel.findById(req.user._id);
@@ -114,7 +114,7 @@ const vacanciesController = {
     async updateVacancies(req, res) {
         try {
             const {
-                title, startDate, endDate, address, description, candidates, salary, typeSalary, entertainment_id
+                title, startDate, endDate, address, description, candidates, salary, typeSalary, entertainment_id,
             } = req.body;
 
             const vacancies = await vacanciesModel.findById(req.params.id);

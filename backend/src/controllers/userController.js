@@ -1,5 +1,6 @@
 require("dotenv").config();
 const fs = require("fs");
+const vacanciesModel = require("../models/vacanciesModel");
 const { uploadProfile } = require("../middleware/uploadImage");
 
 const userController = {
@@ -82,6 +83,17 @@ const userController = {
                 user.updatedAt = new Date();
 
                 await user.save();
+
+                const vacancies = await vacanciesModel.findById(user.vacanciesId);
+                if (!vacancies) {
+                    return res.status(404).json({
+                        success: false,
+                        message: "Vacancies not found",
+                    });
+                }
+
+                vacancies.imageProfile = imageUrl;
+                await vacancies.save();
 
                 return res.status(200).json({
                     success: true,

@@ -2,7 +2,7 @@ import { Container, Row, Col } from 'react-bootstrap';
 
 const FooterComponent = () => {
     return (
-        <div style={{ marginTop: '64px', paddingTop: '64px', borderTop: '1px solid #00A47F' }}>
+        <div style={{ marginTop: '64px', paddingTop: '48px', borderTop: '1px solid #00A47F' }}>
             <Container>
                 <Row>
                     <Col className="text-center">
@@ -11,7 +11,7 @@ const FooterComponent = () => {
                     </Col>
                 </Row>
                 <hr />
-                <Row className="mt-3">
+                <Row>
                     <Col className="text-center">
                         <span>&copy; 2024 JECONN. All rights reserved.</span>
                     </Col>

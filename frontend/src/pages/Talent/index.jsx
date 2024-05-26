@@ -208,8 +208,8 @@ const Talent = () => {
                                             </InputGroup>
 
                                             <InputGroup className="mt-3">
-                                                <InputGroup.Text id="biography" style={{ width: '160px', backgroundColor: '#00A47F', color: '#FFFFFF' }}>Biografi</InputGroup.Text>
-                                                <Form.Control id="biography" as="textarea" aria-describedby="biography" value={talentProfile.biography} onChange={handleInputChange} disabled={!isEditMode} />
+                                                <InputGroup.Text id="biography" style={{ width: '160px', backgroundColor: '#00A47F', color: '#FFFFFF', alignItems: 'start' }}>Biografi</InputGroup.Text>
+                                                <Form.Control id="biography" style={{ minHeight: '80px' }} as="textarea" aria-describedby="biography" value={talentProfile.biography} onChange={handleInputChange} disabled={!isEditMode} />
                                             </InputGroup>
 
                                             <InputGroup className="mt-3">

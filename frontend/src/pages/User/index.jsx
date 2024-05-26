@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Container, Row, Col, Card, OverlayTrigger, Tooltip, InputGroup, Form, Badge, Button } from 'react-bootstrap';
 import NavbarComponent from '../../components/Navbar';
 import { fetchUserProfile, fetchUserUpdate, fetchUserUpdateImage } from '../../api/User';
+import { fetchPostVacanciesById } from '../../api/Vacancies';
 
 const User = () => {
     const [userProfile, setUserProfile] = useState({
@@ -11,24 +12,31 @@ const User = () => {
         gender: '',
         address: '',
         phoneNumber: '',
-        roles: []
+        roles: [],
+        vacanciesId: [],
     });
+    const [vacancies, setVacancies] = useState([]);
     const [isEditMode, setIsEditMode] = useState(false);
     const token = localStorage.getItem('token');
 
     useEffect(() => {
-        const fetchUser = async () => {
+        const fetchUserAndVacancies = async () => {
             try {
-                const response = await fetchUserProfile();
-                setUserProfile(response.data);
+                const userResponse = await fetchUserProfile();
+                setUserProfile(userResponse.data);
+
+                const vacanciesPromises = userResponse.data.vacanciesId.map(id => fetchPostVacanciesById(id));
+                const vacanciesResults = await Promise.all(vacanciesPromises);
+                const sortedVacancies = vacanciesResults.map(result => result.data).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+                setVacancies(sortedVacancies);
             } catch (error) {
-                console.error('Failed to fetch user profile:', error);
+                console.error('Failed to fetch user profile and vacancies:', error);
                 throw error;
             }
         };
 
         if (token) {
-            fetchUser();
+            fetchUserAndVacancies();
         }
     }, [token]);
 
@@ -85,6 +93,25 @@ const User = () => {
         { label: "Perempuan", value: "Perempuan" },
     ];
 
+    const getTimeAgo = (timestamp) => {
+        const now = new Date();
+        const createdAt = new Date(timestamp);
+        const diffInSeconds = Math.floor((now - createdAt) / 1000);
+        let diffInMinutes = Math.floor(diffInSeconds / 60);
+        let diffInHours = Math.floor(diffInMinutes / 60);
+        let diffInDays = Math.floor(diffInHours / 24);
+    
+        if (diffInDays > 0) {
+            return `${diffInDays} days ago`;
+        } else if (diffInHours > 0) {
+            return `${diffInHours} hours ago`;
+        } else if (diffInMinutes > 0) {
+            return `${diffInMinutes} minutes ago`;
+        } else {
+            return `Just now`;
+        }
+    };
+
     return (
         <div>
             <NavbarComponent />
@@ -129,8 +156,8 @@ const User = () => {
                                             </InputGroup>
 
                                             <InputGroup className="mt-3">
-                                                <InputGroup.Text id="address" style={{ width: '160px', backgroundColor: '#00A47F', color: '#FFFFFF' }}>Alamat</InputGroup.Text>
-                                                <Form.Control id="address" as="textarea" aria-describedby="address" value={userProfile.address} onChange={handleInputChange} disabled={!isEditMode} />
+                                                <InputGroup.Text id="address" style={{ width: '160px', backgroundColor: '#00A47F', color: '#FFFFFF', alignItems: 'start' }}>Alamat</InputGroup.Text>
+                                                <Form.Control id="address" style={{ minHeight: '80px' }} as="textarea" aria-describedby="address" value={userProfile.address} onChange={handleInputChange} disabled={!isEditMode} />
                                             </InputGroup>
 
                                             <InputGroup className="mt-3">
@@ -165,79 +192,49 @@ const User = () => {
                                 </Card.Body>
                             </Col>
 
-                            <Col className="pt-4 d-flex flex-column align-items-center" style={{ paddingBottom: '48px', borderBottom: '1px solid #00A47F' }}>
+                            <Col className="pt-4" style={{ paddingBottom: '48px', borderBottom: '1px solid #00A47F' }}>
                                 <Col xs={12} className="mb-4 d-flex justify-content-between align-items-center">
                                     <h3>Your Vacancies Post</h3>
                                     <Button variant="success">New Post</Button>
                                 </Col>
                                 
-                                <Col>
-                                    <Card style={{ width: '85%', margin: 'auto', marginBottom: '32px' }}>
+                                {vacancies.map((vacancy, index) => (
+                                    <Card key={index} style={{ width: '90%', margin: 'auto', marginBottom: '32px' }}>
                                         <Card.Body>
                                             <Row className="mb-4">
-                                                <Col xs={8} md={8} xl={10}>
-                                                    <Card.Title>Band Musics</Card.Title>
-                                                    <Card.Text>Jakarta</Card.Text>
+                                                <Col xs={8} md={8} xl={10} style={{ maxHeight: '7rem' }}>
+                                                    <Card.Title><a href={`/vacancies/post/${vacancy._id}`} style={{ textDecoration: 'none', color: '#000000' }}>{vacancy.title}</a></Card.Title>
+                                                    <Card.Text>{vacancy.location}</Card.Text>
                                                 </Col>
                                             </Row>
-                                            <span className="text-center" style={{ position: 'absolute', right: '8px', top: '16px' }}>10 Candidats</span>
-                                            <Card.Text>
-                                                Need a band musician to play guitar and drums.
-                                                Need a band musician to play guitar and drums.
+                                            <span className="text-center" style={{ position: 'absolute', right: '8px', top: '16px' }}>
+                                                <Badge bg={
+                                                    vacancy.status ? 
+                                                    (vacancy.typePost === "Event" ? "warning" : "success") :
+                                                    "secondary"
+                                                    }>
+                                                    {vacancy.typePost}
+                                                </Badge>
+                                            </span>
+                                            <span className="text-center" style={{ position: 'absolute', right: '8px', top: '48px' }}>{vacancy.candidates} Candidates</span>
+                                            <Card.Text style={{ overflow: 'hidden', textOverflow: 'ellipsis', display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical' }}>
+                                                {vacancy.description}
                                             </Card.Text>
                                         </Card.Body>
                                         <Card.Footer style={{ backgroundColor: '#FFFFFF'}}>
                                             <Col className="d-flex justify-content-between">
-                                                <small className="text-muted">Post 3 mins ago</small>
-                                                <small className="text-muted"><a href="/" style={{ textDecoration: 'none', color: '#00A47F' }}>Detail</a></small>
+                                                <small className="text-muted">{getTimeAgo(vacancy.createdAt).toLocaleString()}</small>
+                                                <small className="text-muted"><a href={`/vacancies/post/${vacancy._id}`} style={{ textDecoration: 'none', color: '#00A47F' }}>Detail ▸</a></small>
                                             </Col>
                                         </Card.Footer>
                                     </Card>
+                                ))}
 
-                                    <Card style={{ width: '85%', margin: 'auto', marginBottom: '32px' }}>
-                                        <Card.Body>
-                                            <Row className="mb-4">
-                                                <Col xs={8} md={8} xl={10}>
-                                                    <Card.Title>Band Musics</Card.Title>
-                                                    <Card.Text>Jakarta</Card.Text>
-                                                </Col>
-                                            </Row>
-                                            <span className="text-center" style={{ position: 'absolute', right: '8px', top: '16px' }}>10 Candidats</span>
-                                            <Card.Text>
-                                                Need a band musician to play guitar and drums.
-                                                Need a band musician to play guitar and drums.
-                                            </Card.Text>
-                                        </Card.Body>
-                                        <Card.Footer style={{ backgroundColor: '#FFFFFF'}}>
-                                            <Col className="d-flex justify-content-between">
-                                                <small className="text-muted">Post 3 mins ago</small>
-                                                <small className="text-muted"><a href="/" style={{ textDecoration: 'none', color: '#00A47F' }}>Detail</a></small>
-                                            </Col>
-                                        </Card.Footer>
-                                    </Card>
-
-                                    <Card style={{ width: '85%', margin: 'auto', marginBottom: '32px' }}>
-                                        <Card.Body>
-                                            <Row className="mb-4">
-                                                <Col xs={8} md={8} xl={10}>
-                                                    <Card.Title>Band Musics</Card.Title>
-                                                    <Card.Text>Jakarta</Card.Text>
-                                                </Col>
-                                            </Row>
-                                            <span className="text-center" style={{ position: 'absolute', right: '8px', top: '16px' }}>10 Candidats</span>
-                                            <Card.Text>
-                                                Need a band musician to play guitar and drums.
-                                                Need a band musician to play guitar and drums.
-                                            </Card.Text>
-                                        </Card.Body>
-                                        <Card.Footer style={{ backgroundColor: '#FFFFFF'}}>
-                                            <Col className="d-flex justify-content-between">
-                                                <small className="text-muted">Post 3 mins ago</small>
-                                                <small className="text-muted"><a href="/" style={{ textDecoration: 'none', color: '#00A47F' }}>Detail</a></small>
-                                            </Col>
-                                        </Card.Footer>
-                                    </Card>
-                                </Col>
+                                {vacancies.length === 0 && (
+                                    <Col>
+                                        <h5 className="m-5 d-flex justify-content-center align-items-center">Tidak ada post yang dibuat.</h5>
+                                    </Col>
+                                )}
                             </Col>
                         </Row>
                     </Card>

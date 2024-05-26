@@ -1,8 +1,38 @@
+import { useState, useEffect } from 'react';
 import { Container, Row, Col, Image, Button, Card, ListGroup, Badge } from 'react-bootstrap';
 import NavbarComponent from '../../components/Navbar';
 import FooterComponent from '../../components/Footer';
+import { fetchAllPostVacancies } from '../../api/Vacancies';
 
 const Home = () => {
+    const [vacancies, setVacancies] = useState([]);
+
+    useEffect(() => {
+        fetchAllPostVacancies().then((response) => {
+            const sortedVacancies = response.data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+            setVacancies(sortedVacancies.slice(0, 5));
+        });
+    }, []);
+
+    const getTimeAgo = (timestamp) => {
+        const now = new Date();
+        const createdAt = new Date(timestamp);
+        const diffInSeconds = Math.floor((now - createdAt) / 1000);
+        let diffInMinutes = Math.floor(diffInSeconds / 60);
+        let diffInHours = Math.floor(diffInMinutes / 60);
+        let diffInDays = Math.floor(diffInHours / 24);
+    
+        if (diffInDays > 0) {
+            return `${diffInDays} days ago`;
+        } else if (diffInHours > 0) {
+            return `${diffInHours} hours ago`;
+        } else if (diffInMinutes > 0) {
+            return `${diffInMinutes} minutes ago`;
+        } else {
+            return `Just now`;
+        }
+    };
+
     return (
         <div>
             <NavbarComponent />
@@ -17,105 +47,51 @@ const Home = () => {
                     </Col>
                 </Row>
                 <Container style={{ borderTop: '1px solid #00A47F' }}>
-                    <Row className="d-flex" style={{ paddingBottom: '64px' }}>
+                    <Row style={{ paddingBottom: '64px' }}>
                         <div className="d-flex justify-content-between" style={{ padding: '16px' }}>
-                            <h3><b>Vacancies</b></h3>
+                            <h3><b>New Vacancies</b></h3>
                             <Button variant="success" className="me-2 mb-2" href="/vacancies">See All</Button>
                         </div>
-                        <Card style={{ width: '18rem', marginLeft: '32px', marginBottom: '32px' }}>
-                            <Card.Body>
-                                <Row className="mb-4">
-                                    <Col md={3} className="d-flex justify-content-center align-items-center p-2">
-                                        <Image variant="top" style={{ width: '50px', height: '50px' }} src="images/example-image.jpg" alt="Profile Image" roundedCircle />
+
+                        {vacancies.map((vacancy, index) => (
+                            <Card key={index} style={{ maxWidth: '24rem', marginRight: '32px', marginBottom: '32px' }}>
+                                <Card.Body style={{ position: 'relative', paddingLeft: '8px', paddingRight: '8px' }}>
+                                    <Row className="mb-4">
+                                        <Col xs={7} md={8} xl={10} style={{ maxHeight: '7rem' }}>
+                                            <Card.Title><a href={`/vacancies/post/${vacancy._id}`} style={{ textDecoration: 'none', color: '#000000' }}>{vacancy.title}</a></Card.Title>
+                                            <Card.Text>{vacancy.location}</Card.Text>
+                                        </Col>
+                                    </Row>
+                                    <span className="text-center" style={{ position: 'absolute', right: '8px', top: '16px' }}>
+                                        <Badge bg={ vacancy.status ? 
+                                            (vacancy.typePost === "Event" ? "warning" : "success") : 
+                                            "secondary" 
+                                            }>
+                                            {vacancy.typePost}
+                                        </Badge>
+                                    </span>
+                                    <span className="text-center" style={{ position: 'absolute', right: '8px', top: '48px' }}>{vacancy.candidates} Candidates</span>
+                                        <Card.Text style={{ overflow: 'hidden', textOverflow: 'ellipsis', display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical' }}>
+                                            {vacancy.description}
+                                        </Card.Text>
+                                </Card.Body>
+                                <Card.Footer style={{ paddingLeft: '8px', paddingRight: '8px', backgroundColor: '#FFFFFF'}}>
+                                    <Col className="d-flex justify-content-between">
+                                        <small className="text-muted">{getTimeAgo(vacancy.createdAt).toLocaleString()}</small>
+                                        <small className="text-muted"><a href={`/vacancies/post/${vacancy._id}`} style={{ textDecoration: 'none', color: '#00A47F' }}>Detail ▸</a></small>
                                     </Col>
-                                    <Col>
-                                        <Card.Title>Band Musics</Card.Title>
-                                        <Card.Text>Jakarta</Card.Text>
-                                    </Col>
-                                </Row>
-                                <Card.Text>
-                                    Need a band musician to play guitar and drums.
-                                    Need a band musician to play guitar and drums.
-                                </Card.Text>
-                            </Card.Body>
-                            <Card.Footer style={{ backgroundColor: '#FFFFFF'}}>
-                                <Col className="d-flex justify-content-between">
-                                    <small className="text-muted">Post 3 mins ago</small>
-                                    <small className="text-muted"><a href="/" style={{ textDecoration: 'none', color: '#00A47F' }}>Detail</a></small>
-                                </Col>
-                            </Card.Footer>
-                        </Card>
-                        <Card style={{ width: '18rem', marginLeft: '32px', marginBottom: '32px' }}>
-                            <Card.Body>
-                                <Row className="mb-4">
-                                    <Col md={3} className="d-flex justify-content-center align-items-center p-2">
-                                        <Image variant="top" style={{ width: '50px', height: '50px' }} src="images/example-image.jpg" alt="Profile Image" roundedCircle />
-                                    </Col>
-                                    <Col>
-                                        <Card.Title>Band Musics</Card.Title>
-                                        <Card.Text>Jakarta</Card.Text>
-                                    </Col>
-                                </Row>
-                                <Card.Text>
-                                    Need a band musician to play guitar and drums.
-                                    Need a band musician to play guitar and drums.
-                                </Card.Text>
-                            </Card.Body>
-                            <Card.Footer style={{ backgroundColor: '#FFFFFF'}}>
-                                <Col className="d-flex justify-content-between">
-                                    <small className="text-muted">Post 3 mins ago</small>
-                                    <small className="text-muted"><a href="/" style={{ textDecoration: 'none', color: '#00A47F' }}>Detail</a></small>
-                                </Col>
-                            </Card.Footer>
-                        </Card>
-                        <Card style={{ width: '18rem', marginLeft: '32px', marginBottom: '32px' }}>
-                            <Card.Body>
-                                <Row className="mb-4">
-                                    <Col md={3} className="d-flex justify-content-center align-items-center p-2">
-                                        <Image variant="top" style={{ width: '50px', height: '50px' }} src="images/example-image.jpg" alt="Profile Image" roundedCircle />
-                                    </Col>
-                                    <Col>
-                                        <Card.Title>Band Musics</Card.Title>
-                                        <Card.Text>Jakarta</Card.Text>
-                                    </Col>
-                                </Row>
-                                <Card.Text>
-                                    Need a band musician to play guitar and drums.
-                                    Need a band musician to play guitar and drums.
-                                </Card.Text>
-                            </Card.Body>
-                            <Card.Footer style={{ backgroundColor: '#FFFFFF'}}>
-                                <Col className="d-flex justify-content-between">
-                                    <small className="text-muted">Post 3 mins ago</small>
-                                    <small className="text-muted"><a href="/" style={{ textDecoration: 'none', color: '#00A47F' }}>Detail</a></small>
-                                </Col>
-                            </Card.Footer>
-                        </Card>
-                        <Card style={{ width: '18rem', marginLeft: '32px', marginBottom: '32px' }}>
-                            <Card.Body>
-                                <Row className="mb-4">
-                                    <Col md={3} className="d-flex justify-content-center align-items-center p-2">
-                                        <Image variant="top" style={{ width: '50px', height: '50px' }} src="images/example-image.jpg" alt="Profile Image" roundedCircle />
-                                    </Col>
-                                    <Col>
-                                        <Card.Title>Band Musics</Card.Title>
-                                        <Card.Text>Jakarta</Card.Text>
-                                    </Col>
-                                </Row>
-                                <Card.Text>
-                                    Need a band musician to play guitar and drums.
-                                    Need a band musician to play guitar and drums.
-                                </Card.Text>
-                            </Card.Body>
-                            <Card.Footer style={{ backgroundColor: '#FFFFFF'}}>
-                                <Col className="d-flex justify-content-between">
-                                    <small className="text-muted">Post 3 mins ago</small>
-                                    <small className="text-muted"><a href="/" style={{ textDecoration: 'none', color: '#00A47F' }}>Detail</a></small>
-                                </Col>
-                            </Card.Footer>
-                        </Card>
+                                </Card.Footer>
+                            </Card>
+                        ))}
+
+                        {vacancies.length === 0 && (
+                            <Col>
+                                <h5 className="m-5 text-center">Loading ...</h5>
+                            </Col>
+                        )}
                     </Row>
                 </Container>
+
                 <Container style={{ borderTop: '1px solid #00A47F' }}>
                     <Row className="d-flex" style={{ paddingBottom: '64px' }}>
                         <div className="d-flex justify-content-between" style={{ padding: '16px' }}>

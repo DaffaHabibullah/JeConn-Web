@@ -3,15 +3,31 @@ import { Container, Row, Col, Image, Button, Card, ListGroup, Badge } from 'reac
 import NavbarComponent from '../../components/Navbar';
 import FooterComponent from '../../components/Footer';
 import { fetchAllPostVacancies } from '../../api/Vacancies';
+import { fetchAllTalent } from '../../api/Talent';
 
 const Home = () => {
     const [vacancies, setVacancies] = useState([]);
+    const [talent, setTalent] = useState([]);
 
     useEffect(() => {
-        fetchAllPostVacancies().then((response) => {
-            const sortedVacancies = response.data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-            setVacancies(sortedVacancies.slice(0, 5));
-        });
+        const fetchVacanciesAndTalent = async () => {
+            try {
+                const responseVacancies = await fetchAllPostVacancies();
+                const responseTalent = await fetchAllTalent();
+                
+                const sortedVacancies = responseVacancies.data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+                const openTalent = responseTalent.data
+                    .filter(talent => talent.isOpen)
+                    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+                
+                setVacancies(sortedVacancies);
+                setTalent(openTalent);
+            } catch (error) {
+                console.error('Failed to fetch vacancies and talent:', error);
+            }
+        };
+
+        fetchVacanciesAndTalent();
     }, []);
 
     const getTimeAgo = (timestamp) => {
@@ -95,89 +111,39 @@ const Home = () => {
                 <Container style={{ borderTop: '1px solid #00A47F' }}>
                     <Row className="d-flex" style={{ paddingBottom: '64px' }}>
                         <div className="d-flex justify-content-between" style={{ padding: '16px' }}>
-                            <h3><b>Talents</b></h3>
+                            <h3><b>New Talents Available</b></h3>
                             <Button variant="success" className="me-2 mb-2" href="/talents">See All</Button>
                         </div>
-                        <Card style={{ width: '16rem', padding: "16px", marginLeft: "32px", marginBottom: "32px" }}>
-                            <Card.Img variant="top" style={{ height: '192px' }} src="images/example-image.jpg" alt="Profile Image" />
-                            <Card.Body>
-                                <Card.Title><a href="/" style={{ textDecoration: 'none', color: '#000000' }}>Pesulap</a></Card.Title>
-                                <Card.Text>
-                                    Saya seorang pesulap yang hebat.
-                                </Card.Text>
-                            </Card.Body>
-                            <Badge bg="success" style={{ position: 'absolute', top: '16px', right: '16px' }}>Jakarta</Badge>
-                            <ListGroup className="list-group-flush">
-                                <ListGroup.Item>
-                                    <h6>
-                                        <Badge bg="success" className="me-2 mb-2">MC</Badge>
-                                        <Badge bg="success" className="me-2 mb-2">Cosplayer</Badge>
-                                        <Badge bg="success" className="me-2 mb-2">Badut</Badge>
-                                        <Badge bg="success" className="me-2 mb-2">Pesulap</Badge>
-                                    </h6>
-                                </ListGroup.Item>
-                            </ListGroup>
-                        </Card>
-                        <Card style={{ width: '16rem', padding: "16px", marginLeft: "32px", marginBottom: "32px" }}>
-                            <Card.Img variant="top" style={{ height: '192px' }} src="images/example-image.jpg" alt="Profile Image" />
-                            <Card.Body>
-                                <Card.Title><a href="/" style={{ textDecoration: 'none', color: '#000000' }}>Pesulap</a></Card.Title>
-                                <Card.Text>
-                                    Saya seorang pesulap yang hebat.
-                                </Card.Text>
-                            </Card.Body>
-                            <Badge bg="success" style={{ position: 'absolute', top: '16px', right: '16px' }}>Jakarta</Badge>
-                            <ListGroup className="list-group-flush">
-                                <ListGroup.Item>
-                                    <h6>
-                                        <Badge bg="success" className="me-2 mb-2">MC</Badge>
-                                        <Badge bg="success" className="me-2 mb-2">Cosplayer</Badge>
-                                        <Badge bg="success" className="me-2 mb-2">Badut</Badge>
-                                        <Badge bg="success" className="me-2 mb-2">Pesulap</Badge>
-                                    </h6>
-                                </ListGroup.Item>
-                            </ListGroup>
-                        </Card>
-                        <Card style={{ width: '16rem', padding: "16px", marginLeft: "32px", marginBottom: "32px" }}>
-                            <Card.Img variant="top" style={{ height: '192px' }} src="images/example-image.jpg" alt="Profile Image" />
-                            <Card.Body>
-                                <Card.Title><a href="/" style={{ textDecoration: 'none', color: '#000000' }}>Pesulap</a></Card.Title>
-                                <Card.Text>
-                                    Saya seorang pesulap yang hebat.
-                                </Card.Text>
-                            </Card.Body>
-                            <Badge bg="success" style={{ position: 'absolute', top: '16px', right: '16px' }}>Jakarta</Badge>
-                            <ListGroup className="list-group-flush">
-                                <ListGroup.Item>
-                                    <h6>
-                                        <Badge bg="success" className="me-2 mb-2">MC</Badge>
-                                        <Badge bg="success" className="me-2 mb-2">Cosplayer</Badge>
-                                        <Badge bg="success" className="me-2 mb-2">Badut</Badge>
-                                        <Badge bg="success" className="me-2 mb-2">Pesulap</Badge>
-                                    </h6>
-                                </ListGroup.Item>
-                            </ListGroup>
-                        </Card>
-                        <Card style={{ width: '16rem', padding: "16px", marginLeft: "32px", marginBottom: "32px" }}>
-                            <Card.Img variant="top" style={{ height: '192px' }} src="images/example-image.jpg" alt="Profile Image" />
-                            <Card.Body>
-                                <Card.Title><a href="/" style={{ textDecoration: 'none', color: '#000000' }}>Pesulap</a></Card.Title>
-                                <Card.Text>
-                                    Saya seorang pesulap yang hebat.
-                                </Card.Text>
-                            </Card.Body>
-                            <Badge bg="success" style={{ position: 'absolute', top: '16px', right: '16px' }}>Jakarta</Badge>
-                            <ListGroup className="list-group-flush">
-                                <ListGroup.Item>
-                                    <h6>
-                                        <Badge bg="success" className="me-2 mb-2">MC</Badge>
-                                        <Badge bg="success" className="me-2 mb-2">Cosplayer</Badge>
-                                        <Badge bg="success" className="me-2 mb-2">Badut</Badge>
-                                        <Badge bg="success" className="me-2 mb-2">Pesulap</Badge>
-                                    </h6>
-                                </ListGroup.Item>
-                            </ListGroup>
-                        </Card>
+                        
+                        {talent.map((talent, index) => (
+                            <Card key={index} style={{ maxWidth: '16rem', marginRight: "32px", marginBottom: "32px", paddingTop: "16px" }}>
+                                <Card.Img variant="top" style={{ height: '192px' }} src={talent.imageProfile} alt="Profile Image" />
+                                <Card.Body style={{ position: 'relative', paddingLeft: '8px', paddingRight: '8px' }}>
+                                    <Card.Title><a href={`/talent/profile/${talent.username}`} style={{ textDecoration: 'none', color: '#000000' }}>{talent.username}</a></Card.Title>
+                                    <Card.Text style={{ paddingTop: '8px', overflow: 'hidden', textOverflow: 'ellipsis', display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical' }}>
+                                        {talent.biography}
+                                    </Card.Text>
+                                </Card.Body>
+                                <Badge bg="success" style={{ position: 'absolute', top: '16px', right: '12px' }}>{talent.location}</Badge>
+                                <Card.Footer style={{ paddingLeft: '8px', paddingRight: '8px', backgroundColor: '#FFFFFF'}}>
+                                    <ListGroup className="list-group-flush">
+                                        <ListGroup.Item className="p-0" style={{ overflow: 'hidden', textOverflow: 'ellipsis', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical' }}>
+                                            <h6>
+                                                {talent.entertainment_id.map(entertainment => (
+                                                    <Badge key={entertainment} bg="success" className="me-2 mb-2">{entertainment}</Badge>
+                                                ))}
+                                            </h6>
+                                        </ListGroup.Item>
+                                    </ListGroup>
+                                </Card.Footer>
+                            </Card>
+                        ))}
+
+                        {talent.length === 0 && (
+                            <Col>
+                                <h5 className="m-5 text-center">Loading ...</h5>
+                            </Col>
+                        )}
                     </Row>
                 </Container>
             </Container>

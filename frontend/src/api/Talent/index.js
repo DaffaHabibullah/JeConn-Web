@@ -76,3 +76,23 @@ export const fetchTalentAllImages = async (id) => {
         throw error;
     }
 };
+
+export const fetchAllTalent = async () => {
+    try {
+        const response = await axios.get(`${API_URL}/talent/getAll`);
+        return response.data;
+    } catch (error) {
+        console.error('Fetch talent error:', error);
+        throw error;
+    }
+};
+
+export const fetchTalentByUsername = async (username) => {
+    try {
+        const response = await axios.get(`${API_URL}/talent/get/${username}`);
+        return response.data;
+    } catch (error) {
+        console.error('Fetch talent error:', error);
+        throw error;
+    }
+};

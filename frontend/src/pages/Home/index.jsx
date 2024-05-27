@@ -117,7 +117,7 @@ const Home = () => {
                         
                         {talent.map((talent, index) => (
                             <Card key={index} style={{ maxWidth: '16rem', marginRight: "32px", marginBottom: "32px", paddingTop: "16px" }}>
-                                <Card.Img variant="top" style={{ height: '192px' }} src={talent.imageProfile} alt="Profile Image" />
+                                <Card.Img variant="top" style={{ height: '200px', objectFit: 'cover' }} src={talent.imageProfile} alt="Profile Image" />
                                 <Card.Body style={{ position: 'relative', paddingLeft: '8px', paddingRight: '8px' }}>
                                     <Card.Title><a href={`/talent/profile/${talent.username}`} style={{ textDecoration: 'none', color: '#000000' }}>{talent.username}</a></Card.Title>
                                     <Card.Text style={{ paddingTop: '8px', overflow: 'hidden', textOverflow: 'ellipsis', display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical' }}>
@@ -125,7 +125,7 @@ const Home = () => {
                                     </Card.Text>
                                 </Card.Body>
                                 <Badge bg="success" style={{ position: 'absolute', top: '16px', right: '12px' }}>{talent.location}</Badge>
-                                <Card.Footer style={{ paddingLeft: '8px', paddingRight: '8px', backgroundColor: '#FFFFFF'}}>
+                                <Card.Footer style={{ minHeight: '75px', paddingLeft: '8px', paddingRight: '8px', backgroundColor: '#FFFFFF'}}>
                                     <ListGroup className="list-group-flush">
                                         <ListGroup.Item className="p-0" style={{ overflow: 'hidden', textOverflow: 'ellipsis', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical' }}>
                                             <h6>

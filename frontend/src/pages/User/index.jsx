@@ -124,7 +124,7 @@ const User = () => {
                                 <OverlayTrigger placement="bottom" delay={{ show: 240, hide: 60 }} overlay={handleHoverImage}>
                                     <Card.Img
                                         variant="top"
-                                        style={{ width: '192px', height: '192px', padding: '8px', borderRadius: '50%', cursor: 'pointer' }}
+                                        style={{ width: '192px', height: '192px', padding: '8px', borderRadius: '50%', cursor: 'pointer', objectFit: 'cover', border: '1px solid #00A47F' }}
                                         src={userProfile.imageProfile}
                                         alt="Profile Image"
                                         onClick={handleImageClick}

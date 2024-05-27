@@ -162,6 +162,10 @@ const Talent = () => {
         }
     };
 
+    const handleImageClick = () => {
+        document.getElementById('imageInput').click();
+    };
+
     const handleImageUpload = async (e) => {
         const selectedImage = e.target.files[0];
         if (selectedImage) {
@@ -174,7 +178,7 @@ const Talent = () => {
         }
     };
 
-    const handleImageClick = (imageUrl) => {
+    const handleImageClickShowModal = (imageUrl) => {
         setSelectedImage(imageUrl);
         setShowModal(true);
     };
@@ -191,7 +195,7 @@ const Talent = () => {
                                 <OverlayTrigger placement="bottom" delay={{ show: 240, hide: 60 }} overlay={handleHoverImage}>
                                     <Card.Img
                                         variant="top"
-                                        style={{ width: '192px', height: '192px', padding: '8px', borderRadius: '50%', cursor: 'pointer' }}
+                                        style={{ width: '192px', height: '192px', padding: '8px', borderRadius: '50%', cursor: 'pointer', objectFit: 'cover', border: '1px solid #00A47F' }}
                                         src={userProfile.imageProfile}
                                         alt="Profile Image"
                                         onClick={handleImageClick}
@@ -281,7 +285,7 @@ const Talent = () => {
                                 </Card.Body>
                             </Col>
 
-                            <Col className="pt-4 d-flex flex-column align-items-center" style={{ paddingBottom: '48px', borderBottom: '1px solid #00A47F' }}>
+                            <Col className="pt-4" style={{ paddingBottom: '48px', borderBottom: '1px solid #00A47F' }}>
                                 <Col xs={12} className="mb-4 d-flex justify-content-between align-items-center">
                                     <h3>Your Talent Images</h3>
                                     <Button variant="outline-warning" onClick={() => document.getElementById('imageTalentInput').click()}>Upload Image</Button>
@@ -289,23 +293,22 @@ const Talent = () => {
                                 </Col>
 
                                 <Col>
-                                    <Row className="d-flex justify-content-center">
+                                    <Row xs={2} md={2} lg={4} className="m-0 g-2 d-flex justify-content-start">
                                         {talentImages.map((imageUrl, index) => (
-                                            <Col xs={6} md={6} xl={3} key={index} className="mt-3">
+                                            <Col key={index} className="mb-2 d-flex justify-content-center align-items-center">
                                                 <Card className="d-flex justify-content-center align-items-center border-0">
-                                                    <a href={imageUrl} onClick={(e) => { e.preventDefault(); handleImageClick(imageUrl); }}>
+                                                    <a href={imageUrl} onClick={(e) => { e.preventDefault(); handleImageClickShowModal(imageUrl); }}>
                                                         <Image variant="top" src={imageUrl} style={{ width: '128px', height: '192px', objectFit: 'cover', cursor: 'pointer' }} rounded />
                                                     </a>
                                                 </Card>
                                             </Col>
                                         ))}
-
-                                        {talentImages.length === 0 && (
-                                            <Col>
-                                                <h5 className="m-5 d-flex justify-content-center align-items-center">Tidak ada gambar yang diupload.</h5>
-                                            </Col>
-                                        )}
                                     </Row>
+                                    {talentImages.length === 0 && (
+                                        <Col>
+                                            <h5 className="m-5 d-flex justify-content-center align-items-center">Tidak ada gambar yang diupload.</h5>
+                                        </Col>
+                                    )}
                                 </Col>
                             </Col>
                         </Row>

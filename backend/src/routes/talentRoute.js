@@ -11,7 +11,7 @@ router.post("/upload-image-profile", checkAuth, talentController.uploadTalentIma
 router.get("/:id/images", talentController.talentAllImages);
 router.get("/:id/image/:filename", talentController.talentImage);
 router.get("/getAll", talentController.getAllTalent);
-router.get("/get/:id", talentController.getTalentById);
+router.get("/get/:username", talentController.getTalentByUsername);
 
 
 module.exports = router;

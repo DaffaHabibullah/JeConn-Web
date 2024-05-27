@@ -236,12 +236,12 @@ const talentController = {
                 talents.map(async (talent) => {
                     const user = await userModel.findById(talent._id);
                     return {
-                        _id: talent._id,
                         biography: talent.biography,
                         location: talent.location,
                         entertainment_id: talent.entertainment_id.map((id) => entertainmentMap[id] || id),
                         isOpen: talent.isOpen,
                         images: talent.images,
+                        createdAt: talent.createdAt,
                         username: user.username,
                         fullName: user.fullName,
                         imageProfile: user.imageProfile,
@@ -263,9 +263,17 @@ const talentController = {
         }
     },
 
-    async getTalentById(req, res) {
+    async getTalentByUsername(req, res) {
         try {
-            const talent = await talentModel.findById(req.params.id);
+            const user = await userModel.findOne({ username: req.params.username });
+            if (!user) {
+                return res.status(404).json({
+                    success: false,
+                    message: "User not found",
+                });
+            }
+
+            const talent = await talentModel.findById(user._id);
             if (!talent) {
                 return res.status(404).json({
                     success: false,
@@ -273,7 +281,6 @@ const talentController = {
                 });
             }
 
-            const user = await userModel.findById(talent._id);
             const entertainmentCategories = await entertainmentCategoriesModel.find({
                 _id: { $in: talent.entertainment_id },
             });
@@ -284,7 +291,6 @@ const talentController = {
                 success: true,
                 message: "Talent",
                 data: {
-                    _id: talent._id,
                     biography: talent.biography,
                     location: talent.location,
                     entertainment_id: entertainmentNames,

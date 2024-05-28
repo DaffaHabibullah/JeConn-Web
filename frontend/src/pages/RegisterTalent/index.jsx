@@ -108,15 +108,15 @@ const RegisterTalent = () => {
         <div>
             <NavbarComponent />
             <Container style={{ paddingTop: '32px' }}>
-                <Row className="d-flex justify-content-center align-items-center" style={{ padding: '16px' }}>
+                <Row className="d-flex justify-content-center align-items-center" style={{ paddingBottom: '64px' }}>
                     <Card>
-                        <Row className="d-flex justify-content-center align-items-start" style={{ padding: '32px' }}>
-                            <h2 className="d-flex justify-content-center" style={{ marginBottom: '32px' }}>Plan and Price</h2>
-                            <Col sm="6">
+                        <Row className="d-flex justify-content-center align-items-start" style={{ padding: '16px', paddingTop: '16px', paddingBottom: '32px' }}>
+                            <h2 className="d-flex justify-content-center" style={{ marginBottom: '48px' }}>Plan and Price</h2>
+                            <Col sm={6} className="mb-3">
                                 <Card className="mb-3" style={{ paddingTop: '32px', border: '3px solid #6C757D', backgroundColor: '#6C757D' }}>
                                     <Card.Body>
                                         <Badge bg="secondary" style={{ position: 'absolute', top: '5px', right: '8px' }}>Current</Badge>
-                                        <Row sm="2" className="d-flex justify-content-center align-items-center">
+                                        <Row className="d-flex justify-content-center align-items-center">
                                             <Card.Title>Basic user</Card.Title>
                                             <h3 className="d-flex justify-content-end">Free</h3>
                                         </Row>
@@ -132,11 +132,11 @@ const RegisterTalent = () => {
                                 </Card>
                             </Col>
 
-                            <Col sm="6" style={{ cursor: 'pointer' }}>
+                            <Col sm={6} style={{ cursor: 'pointer' }}>
                                 <Card className="mb-3" style={{ paddingTop: '32px', borderTop: '3px solid #00A47F', borderLeft: '8px solid #00A47F', borderRight: '5px solid #00A47F', borderBottom: '8px solid #00A47F', backgroundColor: '#00A47F' }}>
                                     <Card.Body>
                                         <Badge bg="success" style={{ position: 'absolute', top: '5px', right: '8px' }}>Selected</Badge>
-                                        <Row sm="2" className="d-flex justify-content-center align-items-center">
+                                        <Row className="d-flex justify-content-center align-items-center">
                                             <Card.Title>Upgrade to Become a Talent ✨</Card.Title>
                                             <h3 className="d-flex justify-content-end">IDR: 10.000</h3>
                                         </Row>
@@ -147,7 +147,6 @@ const RegisterTalent = () => {
                                                 <li> <i className="bi bi-check-circle-fill"></i> ▸ Open freelance </li>
                                                 <li> <i className="bi bi-check-circle-fill"></i> ▸ Can change work locations </li>
                                                 <li> <i className="bi bi-check-circle-fill"></i> ▸ Upload image for Talent up to 20 photos </li>
-                                                <li> <i className="bi bi-check-circle-fill"></i> ▸ Advanced Security </li>
                                                 <li> <i className="bi bi-check-circle-fill"></i> ▸ Priority support </li>
                                             </ul>
                                         </Card.Text>
@@ -155,8 +154,8 @@ const RegisterTalent = () => {
                                 </Card>
                             </Col>
                         </Row>
-                        <h2 className="text-center" style={{ paddingTop: '64px' }}>Talent Registration</h2>
 
+                        <h2 className="text-center" style={{ paddingTop: '64px' }}>Talent Registration</h2>
                         <Row className="d-flex justify-content-center align-items-center" style={{ paddingBottom: '24px' }}>
                             <Col sm="1" style={{ borderTop: '1px solid #00A47F' }}></Col>
                             <Col sm="2" style={{ borderTop: '1px solid #00A47F' }}></Col>
@@ -194,7 +193,7 @@ const RegisterTalent = () => {
 
                                 <Form.Group controlId="address" className="mb-3">
                                     <Form.Label>Alamat</Form.Label>
-                                    <Form.Control as="textarea" value={registerTalent.address} onChange={handleInputChange} required />
+                                    <Form.Control style={{ minHeight: '80px' }} as="textarea" value={registerTalent.address} onChange={handleInputChange} required />
                                 </Form.Group>
 
                                 <Row>
@@ -220,7 +219,15 @@ const RegisterTalent = () => {
                                     </Col>
                                 </Row>
 
-                                <Button variant="success" type="submit" style={{ width: '100%', marginTop: '48px' }}>
+                                <Form.Group className="mt-2">
+                                    <Form.Check
+                                    required
+                                    label="I agree to the Terms and Conditions"
+                                    feedback="You must agree before submitting."
+                                    feedbackType="invalid"
+                                    />
+                                </Form.Group>
+                                <Button variant="success" type="submit" style={{ width: '100%', marginTop: '48px', marginBottom: '16px' }}>
                                     Submit
                                 </Button>
                             </Form>

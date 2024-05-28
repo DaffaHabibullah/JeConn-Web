@@ -15,10 +15,15 @@ const Home = () => {
                 const responseVacancies = await fetchAllPostVacancies();
                 const responseTalent = await fetchAllTalent();
                 
-                const sortedVacancies = responseVacancies.data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+                const sortedVacancies = responseVacancies.data
+                    .filter(vacancy => vacancy.status)
+                    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+                    .slice(0, 5);
+                
                 const openTalent = responseTalent.data
                     .filter(talent => talent.isOpen)
-                    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+                    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+                    .slice(0, 4);
                 
                 setVacancies(sortedVacancies);
                 setTalent(openTalent);
@@ -111,7 +116,7 @@ const Home = () => {
                 <Container style={{ borderTop: '1px solid #00A47F' }}>
                     <Row className="d-flex" style={{ paddingBottom: '64px' }}>
                         <div className="d-flex justify-content-between" style={{ padding: '16px' }}>
-                            <h3><b>New Talents Available</b></h3>
+                            <h3><b>New Talents</b></h3>
                             <Button variant="success" className="me-2 mb-2" href="/talents">See All</Button>
                         </div>
                         

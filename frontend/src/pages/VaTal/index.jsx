@@ -103,8 +103,8 @@ const VaTal = () => {
                         content.map((item, index) => (
                             <Card key={index} style={{ width: '72rem', marginTop: '32px', marginBottom: '8px' }}>
                                 <Card.Body style={{ maxHeight: '512px', position: 'relative', paddingTop: '24px', paddingLeft: '4px', paddingRight: '4px' }}>
-                                    <Row className="m-0">
-                                        <Col xs={12} md={3} xl={2} className="d-block p-0 pb-3">
+                                    <Row className="me-0">
+                                        <Col xs={12} md={3} xl={2} className="d-block pb-3">
                                             <Image src={item.imageProfile} alt="Profile Image" className="d-block mx-auto" style={{ height: '144px', width: '144px', objectFit: 'cover' }} rounded />
                                             <Col className="text-center" style={{ marginTop: '8px' }}>
                                                 <span>

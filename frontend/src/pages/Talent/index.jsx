@@ -231,7 +231,7 @@ const Talent = () => {
                                                 <InputGroup.Text id="entertainment" style={{ width: '224px', backgroundColor: '#00A47F', color: '#FFFFFF' }}>Kategori Entertainment</InputGroup.Text>
                                                 <Row className="mt-2 d-flex flex-wrap align-items-center">
                                                     {entertainmentCategories.map((category) => (
-                                                        <Col key={category._id} md={5} xl={4}>
+                                                        <Col key={category._id} xs={6} md={6} xl={4}>
                                                             <Form.Check
                                                                 type="checkbox"
                                                                 label={category.name}

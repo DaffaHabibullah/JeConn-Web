@@ -17,13 +17,21 @@ const createStorage = (folderName) => multer.diskStorage({
                 const oldestFile = files.reduce((oldest, current) => {
                     const oldestTime = fs.statSync(path.join(dir, oldest)).mtime.getTime();
                     const currentTime = fs.statSync(path.join(dir, current)).mtime.getTime();
-                    if (oldestTime < currentTime) {
-                        return oldest;
-                    } else {
-                        return current;
-                    }
+                    return oldestTime < currentTime ? oldest : current;
                 });
                 fs.unlinkSync(path.join(dir, oldestFile));
+            }
+        } else if (folderName === "talent") {
+            const folders = fs.readdirSync(dir, { withFileTypes: true })
+                .filter((dirent) => dirent.isDirectory())
+                .map((dirent) => dirent.name);
+            if (folders.length >= 20) {
+                const oldestFolder = folders.reduce((oldest, current) => {
+                    const oldestTime = fs.statSync(path.join(dir, oldest)).mtime.getTime();
+                    const currentTime = fs.statSync(path.join(dir, current)).mtime.getTime();
+                    return oldestTime < currentTime ? oldest : current;
+                });
+                fs.rmdirSync(path.join(dir, oldestFolder), { recursive: true });
             }
         }
         const filename = `${Date.now()}-${file.originalname.replace(/\s/g, "-")}`;

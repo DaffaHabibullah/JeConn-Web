@@ -223,6 +223,49 @@ const talentController = {
         }
     },
 
+    async deleteTalentImage(req, res) {
+        try {
+            const { filename } = req.params;
+            const talent = await talentModel.findById(req.user.id);
+
+            if (!talent) {
+                return res.status(404).json({
+                    success: false,
+                    message: "Talent not found",
+                });
+            }
+
+            const imageIndex = talent.images.findIndex(image => image.includes(filename));
+            if (imageIndex === -1) {
+                return res.status(404).json({
+                    success: false,
+                    message: "Image not found",
+                });
+            }
+
+            const filePath = `/app/users/${req.user.id}/talent/${filename}`;
+            if (fs.existsSync(filePath)) {
+                fs.unlinkSync(filePath);
+            }
+
+            talent.images.splice(imageIndex, 1);
+            talent.updatedAt = new Date();
+
+            await talent.save();
+
+            return res.status(200).json({
+                success: true,
+                message: "Image deleted successfully",
+            });
+        } catch (error) {
+            console.error("Error deleting talent image", error);
+            return res.status(500).json({
+                success: false,
+                message: "Internal server error",
+            });
+        }
+    },
+
     async getAllTalent(req, res) {
         try {
             const talents = await talentModel.find();

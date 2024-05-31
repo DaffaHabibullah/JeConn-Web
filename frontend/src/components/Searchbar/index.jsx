@@ -1,7 +1,7 @@
 import { useLocation } from 'react-router-dom';
 import { Container, Row, Col, Form, Button } from 'react-bootstrap';
 
-const SearchbarComponent = () => {
+const SearchbarComponent = ({ searchQuery, setSearchQuery, handleSearch }) => {
     const location = useLocation();
 
     const handlePlaceholderText = () => {
@@ -19,8 +19,13 @@ const SearchbarComponent = () => {
             <Container style={{ paddingTop: '32px', paddingBottom: '8px', borderBottom: '1px solid #00A47F' }}>
                 <Row className="d-flex justify-content-center">
                     <Col md={12} className="d-flex justify-content-center" style={{ padding: '16px' }}>
-                        <Form.Control type="text" placeholder={handlePlaceholderText()} />
-                        <Button style={{ marginLeft: '16px' }} type="submit" variant="outline-success">Search</Button>
+                        <Form.Control 
+                            type="text" 
+                            placeholder={handlePlaceholderText()} 
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                        />
+                        <Button style={{ marginLeft: '16px' }} onClick={handleSearch} variant="outline-success">Search</Button>
                     </Col>
                 </Row>
                 <h5 style={{ marginTop: '48px' }}>All {location.pathname.includes("vacancies") ? "Vacancies" : "Talents"}:</h5>

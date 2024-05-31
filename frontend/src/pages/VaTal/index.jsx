@@ -9,6 +9,8 @@ import { fetchAllTalent } from '../../api/Talent';
 
 const VaTal = () => {
     const [content, setContent] = useState([]);
+    const [filteredContent, setFilteredContent] = useState([]);
+    const [searchQuery, setSearchQuery] = useState("");
     const location = useLocation();
 
     useEffect(() => {
@@ -16,6 +18,7 @@ const VaTal = () => {
             fetchAllPostVacancies().then((response) => {
                 const sortedVacancies = response.data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
                 setContent(sortedVacancies);
+                setFilteredContent(sortedVacancies);
             });
         } else if (location.pathname.includes("/talents")) {
             fetchAllTalent().then((response) => {
@@ -27,9 +30,27 @@ const VaTal = () => {
 
                 const sortedTalentAndClosedTalent = [...sortedTalent, ...sortedClosedTalent];
                 setContent(sortedTalentAndClosedTalent);
+                setFilteredContent(sortedTalentAndClosedTalent);
             });
         }
     }, [location]);
+
+    useEffect(() => {
+        handleSearch();
+    }, [searchQuery]);
+
+    const handleSearch = () => {
+        const query = searchQuery.toLowerCase();
+        const filtered = content.filter((item) => {
+            const title = item.title?.toLowerCase() || "";
+            const username = item.username?.toLowerCase() || "";
+            const location = item.location?.toLowerCase() || "";
+            const categories = item.entertainment_id?.map(id => id.toLowerCase()) || [];
+
+            return title.includes(query) || username.includes(query) || location.includes(query) || categories.some(category => category.includes(query));
+        });
+        setFilteredContent(filtered);
+    };
 
     const getTimeAgo = (timestamp) => {
         const now = new Date();
@@ -53,11 +74,11 @@ const VaTal = () => {
     return (
         <div>
             <NavbarComponent />
-            <SearchbarComponent />
+            <SearchbarComponent searchQuery={searchQuery} setSearchQuery={setSearchQuery} handleSearch={handleSearch} />
             <Container style={{ marginTop: '16px' }}>
                 <Row className="d-flex justify-content-center align-items-center" style={{ paddingBottom: '64px' }}>
                     {location.pathname.includes("/vacancies")? (
-                        content.map((item, index) => (
+                        filteredContent.map((item, index) => (
                             <Card key={index} style={{ width: '72rem', marginTop: '32px', marginBottom: '8px' }}>
                                 <Card.Body style={{ maxHeight: '512px', position: 'relative', paddingTop: '8px', paddingLeft: '4px', paddingRight: '4px' }}>
                                     <Row className="m-0 mb-4">
@@ -100,7 +121,7 @@ const VaTal = () => {
                             </Card>
                         ))
                     ) : (
-                        content.map((item, index) => (
+                        filteredContent.map((item, index) => (
                             <Card key={index} style={{ width: '72rem', marginTop: '32px', marginBottom: '8px' }}>
                                 <Card.Body style={{ maxHeight: '512px', position: 'relative', paddingTop: '24px', paddingLeft: '4px', paddingRight: '4px' }}>
                                     <Row className="me-0">
@@ -153,9 +174,9 @@ const VaTal = () => {
                         ))
                     )}
 
-                {content.length === 0 && (
+                {filteredContent.length === 0 && (
                     <Col>
-                        <h2 className="text-center" style={{ marginTop: '16px' }}>Loading ...</h2>
+                        <h5 className="text-center" style={{ marginTop: '16px' }}>No results found.</h5>
                     </Col>
                 )}
                 </Row>

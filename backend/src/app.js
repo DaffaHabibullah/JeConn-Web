@@ -25,7 +25,7 @@ indonesiaProvinceData();
 entertainmentCategoriesData();
 
 
-app.get("/", (req, res) => {
+app.get("/api", (req, res) => {
     res.send("Server is running!");
 });
 
@@ -34,13 +34,13 @@ app.get("/public/images/:filename", (req, res) => {
 });
 
 
-app.use("/auth", authRoute);
-app.use("/user", userRoute);
-app.use("/talent", talentRoute);
-app.use("/vacancies", vacanciesRoute);
-app.use("/location", indonesiaProvinceRoute);
-app.use("/entertainment-categories", entertainmentRoute);
-app.use("/payment", paymentTokenRoute);
+app.use("/api/auth", authRoute);
+app.use("/api/user", userRoute);
+app.use("/api/talent", talentRoute);
+app.use("/api/vacancies", vacanciesRoute);
+app.use("/api/location", indonesiaProvinceRoute);
+app.use("/api/entertainment-categories", entertainmentRoute);
+app.use("/api/payment", paymentTokenRoute);
 
 
 module.exports = app;

@@ -235,7 +235,7 @@ const talentController = {
                 });
             }
 
-            const imageIndex = talent.images.findIndex(image => image.includes(filename));
+            const imageIndex = talent.images.findIndex((image) => image.includes(filename));
             if (imageIndex === -1) {
                 return res.status(404).json({
                     success: false,

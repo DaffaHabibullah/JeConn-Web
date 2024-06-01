@@ -5,7 +5,7 @@ export const fetchPostVacancies = async (
     typePost, title, location, startDate, endDate, address, description, candidates, salary, typeSalary, entertainment_id
 ) => {
     try {
-        const response = await axios.get(`${API_URL}/vacancies/post`, {
+        const response = await axios.post(`${API_URL}/vacancies/post`, {
             typePost,
             title,
             location,
@@ -51,7 +51,7 @@ export const fetchUpdateVacancies = async (
     id, title, startDate, endDate, address, description, candidates, salary, typeSalary, entertainment_id
 ) => {
     try {
-        const response = await axios.get(`${API_URL}/vacancies/update/post/${id}`, {
+        const response = await axios.put(`${API_URL}/vacancies/update/post/${id}`, {
             title,
             startDate,
             endDate,
@@ -73,7 +73,7 @@ export const fetchUpdateVacancies = async (
 
 export const fetchDeleteVacancies = async (id) => {
     try {
-        const response = await axios.get(`${API_URL}/vacancies/delete/post/${id}`, {
+        const response = await axios.delete(`${API_URL}/vacancies/delete/post/${id}`, {
             headers: AuthHeader()
         });
         return response.data;

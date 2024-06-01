@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
-import { Container, Row, Col, Card, OverlayTrigger, Tooltip, InputGroup, Form, Badge, Button } from 'react-bootstrap';
+import { Container, Row, Col, Card, OverlayTrigger, Tooltip, InputGroup, Form, Badge, Button, Modal } from 'react-bootstrap';
 import NavbarComponent from '../../components/Navbar';
 import { fetchUserProfile, fetchUserUpdate, fetchUserUpdateImage } from '../../api/User';
-import { fetchPostVacanciesById } from '../../api/Vacancies';
+import { fetchPostVacancies, fetchPostVacanciesById } from '../../api/Vacancies';
+import { fetchLocations } from '../../api/Locations';
+import { fetchEntertainmentCategories } from '../../api/EntertainmentCategories';
 
 const User = () => {
     const [userProfile, setUserProfile] = useState({
@@ -17,6 +19,22 @@ const User = () => {
     });
     const [vacancies, setVacancies] = useState([]);
     const [isEditMode, setIsEditMode] = useState(false);
+    const [showModal, setShowModal] = useState(false);
+    const [newPost, setNewPost] = useState({
+        typePost: '',
+        title: '',
+        location: '',
+        startDate: '',
+        endDate: '',
+        address: '',
+        description: '',
+        candidates: '',
+        salary: '',
+        typeSalary: '',
+        entertainment_id: []
+    });
+    const [locations, setLocations] = useState([]);
+    const [entertainmentCategories, setEntertainmentCategories] = useState([]);
     const token = localStorage.getItem('token');
 
     useEffect(() => {
@@ -35,14 +53,36 @@ const User = () => {
             }
         };
 
+        const fetchData = async () => {
+            try {
+                const locationsResponse = await fetchLocations();
+                setLocations(locationsResponse.data);
+
+                const entertainmentResponse = await fetchEntertainmentCategories();
+                setEntertainmentCategories(entertainmentResponse.data);
+            } catch (error) {
+                console.error('Failed to fetch locations or entertainment categories:', error);
+                throw error;
+            }
+        };
+
         if (token) {
             fetchUserAndVacancies();
+            fetchData();
         }
     }, [token]);
 
     const handleInputChange = (e) => {
         const { id, value } = e.target;
         setUserProfile(prevState => ({
+            ...prevState,
+            [id]: value
+        }));
+    };
+
+    const handleNewPostChange = (e) => {
+        const { id, value } = e.target;
+        setNewPost(prevState => ({
             ...prevState,
             [id]: value
         }));
@@ -62,6 +102,64 @@ const User = () => {
             console.error('Failed to update user profile:', error);
         }
     };
+
+    const handleNewPostSubmit = async () => {
+        try {
+            await fetchPostVacancies(
+                newPost.typePost,
+                newPost.title,
+                newPost.location,
+                newPost.startDate,
+                newPost.endDate,
+                newPost.address,
+                newPost.description,
+                newPost.candidates,
+                newPost.salary,
+                newPost.typeSalary,
+                newPost.entertainment_id
+            );
+            setShowModal(false);
+            
+            setNewPost({
+                typePost: '',
+                title: '',
+                location: '',
+                startDate: '',
+                endDate: '',
+                address: '',
+                description: '',
+                candidates: '',
+                salary: '',
+                typeSalary: '',
+                entertainment_id: []
+            });
+    
+            const userResponse = await fetchUserProfile();
+            const vacanciesPromises = userResponse.data.vacanciesId.map(id => fetchPostVacanciesById(id));
+            const vacanciesResults = await Promise.all(vacanciesPromises);
+            const sortedVacancies = vacanciesResults.map(result => result.data).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+            setVacancies(sortedVacancies);
+        } catch (error) {
+            console.error('Failed to create new post:', error);
+        }
+    };
+
+    const handleEntertainmentChange = (e) => {
+        const { value, checked } = e.target;
+        setNewPost(prevState => {
+            let entertainment_id = [...prevState.entertainment_id];
+            if (checked) {
+                entertainment_id.push(value);
+            } else {
+                entertainment_id = entertainment_id.filter(id => id!== value);
+            }
+            return {
+                ...prevState,
+                entertainment_id
+            };
+        });
+    };
+    
 
     const handleHoverImage = (props) => (
         <Tooltip {...props}>
@@ -195,7 +293,7 @@ const User = () => {
                             <Col className="pt-4" style={{ paddingBottom: '48px', borderBottom: '1px solid #00A47F' }}>
                                 <Col xs={12} className="mb-4 d-flex justify-content-between align-items-center">
                                     <h3>Your Vacancies Post</h3>
-                                    <Button variant="success">New Post</Button>
+                                    <Button variant="success" onClick={() => setShowModal(true)}>New Post</Button>
                                 </Col>
                                 
                                 {vacancies.map((vacancy, index) => (
@@ -240,6 +338,100 @@ const User = () => {
                     </Card>
                 </Row>
             </Container>
+
+            <Modal show={showModal} onHide={() => setShowModal(false)} centered>
+                <Modal.Header closeButton>
+                    <Modal.Title>New Vacancy Post</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Form>
+                        <Form.Group className="mb-3">
+                            <Form.Label>Tipe Post</Form.Label>
+                            <Form.Select id="typePost" value={newPost.typePost} onChange={handleNewPostChange}>
+                                <option value="" disabled>Pilih tipe post</option>
+                                <option value="Offer">Offer</option>
+                                <option value="Event">Event</option>
+                            </Form.Select>
+                        </Form.Group>
+
+                        <Form.Group className="mb-3">
+                            <Form.Label>Judul</Form.Label>
+                            <Form.Control id="title" type="text" value={newPost.title} onChange={handleNewPostChange} />
+                        </Form.Group>
+
+                        <Form.Group className="mb-3">
+                            <Form.Label>Lokasi</Form.Label>
+                            <Form.Select id="location" value={newPost.location} onChange={handleNewPostChange}>
+                                <option value="" disabled>Pilih lokasi</option>
+                                {locations.map((location) => (
+                                    <option key={location._id} value={location._id}>{location.name}</option>
+                                ))}
+                            </Form.Select>
+                        </Form.Group>
+
+                        <Form.Group className="mb-3">
+                            <Form.Label>Tanggal Mulai</Form.Label>
+                            <Form.Control id="startDate" type="date" value={newPost.startDate} onChange={handleNewPostChange} />
+                        </Form.Group>
+
+                        <Form.Group className="mb-3">
+                            <Form.Label>Tanggal Selesai</Form.Label>
+                            <Form.Control id="endDate" type="date" value={newPost.endDate} onChange={handleNewPostChange} />
+                        </Form.Group>
+
+                        <Form.Group className="mb-3">
+                            <Form.Label>Alamat Lengkap</Form.Label>
+                            <Form.Control id="address" as="textarea" rows={3} value={newPost.address} onChange={handleNewPostChange} />
+                        </Form.Group>
+
+                        <Form.Group className="mb-3">
+                            <Form.Label>Keterangan</Form.Label>
+                            <Form.Control id="description" as="textarea" rows={3} value={newPost.description} onChange={handleNewPostChange} />
+                        </Form.Group>
+
+                        <Form.Group className="mb-3">
+                            <Form.Label>Kandidat</Form.Label>
+                            <Form.Control id="candidates" type="number" value={newPost.candidates} onChange={handleNewPostChange} />
+                        </Form.Group>
+
+                        <Form.Group className="mb-3">
+                            <Form.Label>Bayaran</Form.Label>
+                            
+                            <Form.Control id="salary" type="number" value={newPost.salary} onChange={handleNewPostChange} />
+                        </Form.Group>
+
+                        <Form.Group className="mb-3">
+                            <Form.Label>Tipe Bayaran</Form.Label>
+                            <Form.Select id="typeSalary" value={newPost.typeSalary} onChange={handleNewPostChange}>
+                                <option value="" disabled>Pilih tipe bayaran</option>
+                                <option value="hour">Hour</option>
+                                <option value="day">Day</option>
+                            </Form.Select>
+                        </Form.Group>
+
+                        <Form.Group className="mb-3">
+                            <Form.Label>Kategori Entertainment</Form.Label>
+                            <Row className="mt-2 d-flex flex-wrap align-items-start">
+                                {entertainmentCategories.map((category) => (
+                                    <Col key={category._id} xs={6} md={4} xl={4}>
+                                        <Form.Check
+                                            type="checkbox"
+                                            label={category.name}
+                                            value={category._id}
+                                            checked={newPost.entertainment_id.includes(category._id)}
+                                            onChange={handleEntertainmentChange}
+                                        />
+                                    </Col>
+                                ))}
+                            </Row>
+                        </Form.Group>
+                    </Form>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={() => setShowModal(false)}>Cancel</Button>
+                    <Button variant="success" onClick={handleNewPostSubmit}>Create Post</Button>
+                </Modal.Footer>
+            </Modal>
         </div>
     );
 };

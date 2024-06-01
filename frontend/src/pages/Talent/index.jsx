@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Container, Row, Col, Card, OverlayTrigger, Tooltip, InputGroup, Form, Button, Image, Modal } from 'react-bootstrap';
 import NavbarComponent from '../../components/Navbar';
 import { fetchUserProfile, fetchUserUpdateImage } from '../../api/User';
-import { fetchTalentProfile, fetchTalentUpdate, fetchTalentUploadImage, fetchTalentAllImages } from '../../api/Talent';
+import { fetchTalentProfile, fetchTalentUpdate, fetchTalentUploadImage, fetchTalentAllImages, fetchDeleteTalentImage } from '../../api/Talent';
 import { fetchLocations } from '../../api/Locations';
 import { fetchEntertainmentCategories } from '../../api/EntertainmentCategories';
 
@@ -17,6 +17,7 @@ const Talent = () => {
         entertainment_id: []
     });
     const [talentImages, setTalentImages] = useState([]);
+    const [hoveredImage, setHoveredImage] = useState(null);
     const [locations, setLocations] = useState([]);
     const [entertainmentCategories, setEntertainmentCategories] = useState([]);
     const [isEditMode, setIsEditMode] = useState(false);
@@ -183,6 +184,16 @@ const Talent = () => {
         setShowModal(true);
     };
 
+    const handleDeleteImage = async (imageUrl) => {
+        try {
+            const filename = imageUrl.split('/').pop();
+            await fetchDeleteTalentImage(filename);
+            setTalentImages(talentImages.filter(img => img !== imageUrl));
+        } catch (error) {
+            console.error('Failed to delete image:', error);
+        }
+    };
+
     return (
         <div>
             <NavbarComponent />
@@ -296,10 +307,22 @@ const Talent = () => {
                                     <Row xs={2} md={2} lg={4} className="m-0 g-2 d-flex justify-content-start">
                                         {talentImages.map((imageUrl, index) => (
                                             <Col key={index} className="mb-2 d-flex justify-content-center align-items-center">
-                                                <Card className="d-flex justify-content-center align-items-center border-0">
+                                                <Card className="position-relative border-0" onMouseEnter={() => setHoveredImage(index)} onMouseLeave={() => setHoveredImage(null)}>
                                                     <a href={imageUrl} onClick={(e) => { e.preventDefault(); handleImageClickShowModal(imageUrl); }}>
                                                         <Image variant="top" src={imageUrl} style={{ width: '128px', height: '192px', objectFit: 'cover', cursor: 'pointer' }} rounded />
                                                     </a>
+
+                                                    <img src="/icon/delete-icon.png" style={{
+                                                            position: 'absolute',
+                                                            top: '4px',
+                                                            right: '4px',
+                                                            cursor: 'pointer',
+                                                            backgroundColor: '#FFC107',
+                                                            padding: '4px',
+                                                            borderRadius: '50%',
+                                                        }}
+                                                        onClick={() => handleDeleteImage(imageUrl)}
+                                                    />
                                                 </Card>
                                             </Col>
                                         ))}

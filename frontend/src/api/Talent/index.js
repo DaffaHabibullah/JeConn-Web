@@ -77,6 +77,18 @@ export const fetchTalentAllImages = async (id) => {
     }
 };
 
+export const fetchDeleteTalentImage = async (filename) => {
+    try {
+        const response = await axios.delete(`${API_URL}/talent/delete-image/image/${filename}`, {
+            headers: AuthHeader()
+        });
+        return response.data;
+    } catch (error) {
+        console.error('Delete talent image error:', error);
+        throw error;
+    }
+};
+
 export const fetchAllTalent = async () => {
     try {
         const response = await axios.get(`${API_URL}/talent/getAll`);

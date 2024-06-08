@@ -29,7 +29,7 @@ app.get("/api", (req, res) => {
     res.send("Server is running!");
 });
 
-app.get("/public/images/:filename", (req, res) => {
+app.get("/api/public/images/:filename", (req, res) => {
     res.sendFile(__dirname + "/assets/images/" + req.params.filename);
 });
 

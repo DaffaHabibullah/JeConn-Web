@@ -86,7 +86,7 @@ const VaTal = () => {
                                             <Image src={item.imageProfile} style={{ width: '72px', height: '72px', objectFit: 'cover' }} roundedCircle />
                                         </Col>
                                         <Col xs={12} md={7} xl={9} className="d-block p-0 pt-3" style={{ maxHeight: '7rem' }}>
-                                            <Card.Title><a href={`/vacancies/post/${item._id}`} style={{ textDecoration: 'none', color: '#000000' }}>{item.title}</a></Card.Title>
+                                            <Card.Title><a href={`/vacancies/post/${item._id}`} style={{ textDecoration: 'none', color: '#000000', overflow: 'hidden', textOverflow: 'ellipsis', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical' }}>{item.title}</a></Card.Title>
                                             <Card.Text>{item.location}</Card.Text>
                                         </Col>
                                     </Row>
@@ -147,8 +147,8 @@ const VaTal = () => {
                                         </Col>
 
                                         <Col xs={12} md={9} xl={10} className="d-flex flex-column">
-                                            <Card.Title><a href={`/talent/profile/${item.username}`} style={{ textDecoration: 'none', color: '#000000' }}>{item.username}</a></Card.Title>
-                                            <Card.Text style={{ paddingTop: '8px', overflow: 'hidden', textOverflow: 'ellipsis', display: '-webkit-box', WebkitLineClamp: 4, WebkitBoxOrient: 'vertical' }}>
+                                            <Card.Title><a href={`/talent/profile/${item.username}`} style={{ textDecoration: 'none', color: '#000000', overflow: 'hidden', textOverflow: 'ellipsis', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical' }}>{item.username}</a></Card.Title>
+                                            <Card.Text style={{ paddingTop: '8px', overflow: 'hidden', textOverflow: 'ellipsis', display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical' }}>
                                                 {item.biography}
                                             </Card.Text>
                                             <ListGroup className="list-group-flush mt-auto pt-2">

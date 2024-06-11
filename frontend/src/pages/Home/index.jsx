@@ -78,8 +78,8 @@ const Home = () => {
                             <Card key={index} style={{ maxWidth: '24rem', marginRight: '32px', marginBottom: '32px' }}>
                                 <Card.Body style={{ position: 'relative', paddingLeft: '8px', paddingRight: '8px' }}>
                                     <Row className="mb-4">
-                                        <Col xs={7} md={8} xl={10} style={{ maxHeight: '7rem' }}>
-                                            <Card.Title><a href={`/vacancies/post/${vacancy._id}`} style={{ textDecoration: 'none', color: '#000000' }}>{vacancy.title}</a></Card.Title>
+                                        <Col xs={7} md={8} xl={8} style={{ maxHeight: '7rem' }}>
+                                            <Card.Title style={{ overflow: 'hidden', textOverflow: 'ellipsis', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical' }}><a href={`/vacancies/post/${vacancy._id}`} style={{ textDecoration: 'none', color: '#000000' }}>{vacancy.title}</a></Card.Title>
                                             <Card.Text>{vacancy.location}</Card.Text>
                                         </Col>
                                     </Row>
@@ -124,7 +124,7 @@ const Home = () => {
                             <Card key={index} style={{ maxWidth: '16rem', marginRight: "32px", marginBottom: "32px", paddingTop: "16px" }}>
                                 <Card.Img variant="top" style={{ height: '200px', objectFit: 'cover' }} src={talent.imageProfile} alt="Profile Image" />
                                 <Card.Body style={{ position: 'relative', paddingLeft: '8px', paddingRight: '8px' }}>
-                                    <Card.Title><a href={`/talent/profile/${talent.username}`} style={{ textDecoration: 'none', color: '#000000' }}>{talent.username}</a></Card.Title>
+                                    <Card.Title><a href={`/talent/profile/${talent.username}`} style={{ textDecoration: 'none', color: '#000000', overflow: 'hidden', textOverflow: 'ellipsis', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical' }}>{talent.username}</a></Card.Title>
                                     <Card.Text style={{ paddingTop: '8px', overflow: 'hidden', textOverflow: 'ellipsis', display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical' }}>
                                         {talent.biography}
                                     </Card.Text>

@@ -290,18 +290,18 @@ const User = () => {
                                 </Card.Body>
                             </Col>
 
-                            <Col className="pt-4" style={{ paddingBottom: '48px', borderBottom: '1px solid #00A47F' }}>
+                            <Col md={6} className="pt-4" style={{ paddingBottom: '48px', borderBottom: '1px solid #00A47F' }}>
                                 <Col xs={12} className="mb-4 d-flex justify-content-between align-items-center">
                                     <h3>Your Vacancies Post</h3>
                                     <Button variant="success" onClick={() => setShowModal(true)}>New Post</Button>
                                 </Col>
                                 
                                 {vacancies.map((vacancy, index) => (
-                                    <Card key={index} style={{ width: '90%', margin: 'auto', marginBottom: '32px' }}>
+                                    <Card key={index} style={{ width: '95%', margin: 'auto', marginBottom: '32px' }}>
                                         <Card.Body>
                                             <Row className="mb-4">
                                                 <Col xs={8} md={8} xl={10} style={{ maxHeight: '7rem' }}>
-                                                    <Card.Title><a href={`/vacancies/post/${vacancy._id}`} style={{ textDecoration: 'none', color: '#000000' }}>{vacancy.title}</a></Card.Title>
+                                                    <Card.Title><a href={`/vacancies/post/${vacancy._id}`} style={{ textDecoration: 'none', color: '#000000', overflow: 'hidden', textOverflow: 'ellipsis', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical' }}>{vacancy.title}</a></Card.Title>
                                                     <Card.Text>{vacancy.location}</Card.Text>
                                                 </Col>
                                             </Row>
@@ -314,8 +314,8 @@ const User = () => {
                                                     {vacancy.typePost}
                                                 </Badge>
                                             </span>
-                                            <span className="text-center" style={{ position: 'absolute', right: '8px', top: '48px' }}>{vacancy.candidates} Candidates</span>
-                                            <Card.Text style={{ overflow: 'hidden', textOverflow: 'ellipsis', display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical' }}>
+                                            <span className="text-end" style={{ position: 'absolute', right: '8px', top: '48px' }}>{vacancy.candidates} <br /> Candidates</span>
+                                            <Card.Text style={{ whiteSpace: 'pre-wrap', overflow: 'hidden', textOverflow: 'ellipsis', display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical' }}>
                                                 {vacancy.description}
                                             </Card.Text>
                                         </Card.Body>

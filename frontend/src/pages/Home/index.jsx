@@ -91,8 +91,8 @@ const Home = () => {
                                             {vacancy.typePost}
                                         </Badge>
                                     </span>
-                                    <span className="text-center" style={{ position: 'absolute', right: '8px', top: '48px' }}>{vacancy.candidates} Candidates</span>
-                                        <Card.Text style={{ overflow: 'hidden', textOverflow: 'ellipsis', display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical' }}>
+                                    <span className="text-end" style={{ position: 'absolute', right: '8px', top: '48px' }}>{vacancy.candidates} <br /> Candidates</span>
+                                        <Card.Text style={{ overflow: 'hidden', whiteSpace: 'pre-wrap', textOverflow: 'ellipsis', display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical' }}>
                                             {vacancy.description}
                                         </Card.Text>
                                 </Card.Body>
@@ -125,7 +125,7 @@ const Home = () => {
                                 <Card.Img variant="top" style={{ height: '200px', objectFit: 'cover' }} src={talent.imageProfile} alt="Profile Image" />
                                 <Card.Body style={{ position: 'relative', paddingLeft: '8px', paddingRight: '8px' }}>
                                     <Card.Title><a href={`/talent/profile/${talent.username}`} style={{ textDecoration: 'none', color: '#000000', overflow: 'hidden', textOverflow: 'ellipsis', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical' }}>{talent.username}</a></Card.Title>
-                                    <Card.Text style={{ paddingTop: '8px', overflow: 'hidden', textOverflow: 'ellipsis', display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical' }}>
+                                    <Card.Text style={{ paddingTop: '8px', whiteSpace: 'pre-wrap', overflow: 'hidden', textOverflow: 'ellipsis', display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical' }}>
                                         {talent.biography}
                                     </Card.Text>
                                 </Card.Body>

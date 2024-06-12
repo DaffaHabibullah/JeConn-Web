@@ -108,7 +108,7 @@ const VaTal = () => {
                                         {item.startDate} | {item.endDate}
                                         <img src="/icon/date-icon.png" style={{ marginLeft: '8px' }} />
                                     </span>
-                                    <Card.Text style={{ paddingTop: '4px', overflow: 'hidden', textOverflow: 'ellipsis', display: '-webkit-box', WebkitLineClamp: 4, WebkitBoxOrient: 'vertical' }}>
+                                    <Card.Text style={{ paddingTop: '4px', whiteSpace: 'pre-wrap', overflow: 'hidden', textOverflow: 'ellipsis', display: '-webkit-box', WebkitLineClamp: 4, WebkitBoxOrient: 'vertical' }}>
                                         {item.description}
                                     </Card.Text>
                                 </Card.Body>
@@ -148,7 +148,7 @@ const VaTal = () => {
 
                                         <Col xs={12} md={9} xl={10} className="d-flex flex-column">
                                             <Card.Title><a href={`/talent/profile/${item.username}`} style={{ textDecoration: 'none', color: '#000000', overflow: 'hidden', textOverflow: 'ellipsis', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical' }}>{item.username}</a></Card.Title>
-                                            <Card.Text style={{ paddingTop: '8px', overflow: 'hidden', textOverflow: 'ellipsis', display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical' }}>
+                                            <Card.Text style={{ paddingTop: '8px', whiteSpace: 'pre-wrap', overflow: 'hidden', textOverflow: 'ellipsis', display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical' }}>
                                                 {item.biography}
                                             </Card.Text>
                                             <ListGroup className="list-group-flush mt-auto pt-2">

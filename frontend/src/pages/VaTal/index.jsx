@@ -46,8 +46,10 @@ const VaTal = () => {
             const username = item.username?.toLowerCase() || "";
             const location = item.location?.toLowerCase() || "";
             const categories = item.entertainment_id?.map(id => id.toLowerCase()) || [];
+            const typePost = item.typePost?.toLowerCase() || "";
+            const status = item.isOpen ? "open" : "closed";
 
-            return title.includes(query) || username.includes(query) || location.includes(query) || categories.some(category => category.includes(query));
+            return title.includes(query) || username.includes(query) || location.includes(query) || categories.some(category => category.includes(query)) || typePost.includes(query) || status.includes(query);
         });
         setFilteredContent(filtered);
     };

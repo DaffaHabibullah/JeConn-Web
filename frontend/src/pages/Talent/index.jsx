@@ -230,6 +230,7 @@ const Talent = () => {
                                             <InputGroup className="mt-3">
                                                 <InputGroup.Text id="locations" style={{ width: '160px', backgroundColor: '#00A47F', color: '#FFFFFF' }}>Lokasi</InputGroup.Text>
                                                 <Form.Select id="location" aria-describedby="locations" value={talentProfile.location} onChange={handleInputChange} disabled={!isEditMode}>
+                                                    <option value="" disabled>Pilih lokasi anda</option>
                                                     {locations.map(location => (
                                                         <option key={location._id} value={location.name}>
                                                             {location.name}

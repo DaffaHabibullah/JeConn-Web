@@ -30,7 +30,7 @@ const User = () => {
         description: '',
         candidates: '',
         salary: '',
-        typeSalary: '',
+        typeSalary: 'hour',
         entertainment_id: []
     });
     const [locations, setLocations] = useState([]);
@@ -339,7 +339,7 @@ const User = () => {
                 </Row>
             </Container>
 
-            <Modal show={showModal} onHide={() => setShowModal(false)} centered>
+            <Modal size="lg" show={showModal} onHide={() => setShowModal(false)} backdrop="static" centered>
                 <Modal.Header closeButton>
                     <Modal.Title>New Vacancy Post</Modal.Title>
                 </Modal.Header>
@@ -370,13 +370,39 @@ const User = () => {
                         </Form.Group>
 
                         <Form.Group className="mb-3">
-                            <Form.Label>Tanggal Mulai</Form.Label>
-                            <Form.Control id="startDate" type="date" value={newPost.startDate} onChange={handleNewPostChange} />
+                            <Form.Label>Kandidat</Form.Label>
+                            <InputGroup>
+                                <Form.Control id="candidates" type="number" value={newPost.candidates} onChange={handleNewPostChange} />
+                                <InputGroup.Text>kandidat</InputGroup.Text>
+                            </InputGroup>
                         </Form.Group>
 
                         <Form.Group className="mb-3">
-                            <Form.Label>Tanggal Selesai</Form.Label>
-                            <Form.Control id="endDate" type="date" value={newPost.endDate} onChange={handleNewPostChange} />
+                            <Form.Label>Bayaran</Form.Label>
+                            <InputGroup>
+                                <InputGroup.Text>IDR.</InputGroup.Text>
+                                <Col xs={6} md={8} xl={9}>
+                                    <Form.Control id="salary" type="number" value={newPost.salary} onChange={handleNewPostChange} />
+                                </Col>
+
+                                <Col>
+                                    <Form.Select id="typeSalary" value={newPost.typeSalary} onChange={handleNewPostChange}>
+                                        <option value="hour">hour</option>
+                                        <option value="day">day</option>
+                                    </Form.Select>
+                                </Col>
+                            </InputGroup>
+                        </Form.Group>
+
+                        <Form.Group className="mb-3">
+                            <Form.Label>Tanggal Mulai</Form.Label>
+                            <InputGroup>
+                                <Form.Control id="startDate" type="date" value={newPost.startDate} onChange={handleNewPostChange} />
+                                <Col xs={2} xl={1} className="text-center d-flex justify-content-center align-items-center">
+                                    <span>s/d</span>
+                                </Col>
+                                <Form.Control id="endDate" type="date" value={newPost.endDate} onChange={handleNewPostChange} />
+                            </InputGroup>
                         </Form.Group>
 
                         <Form.Group className="mb-3">
@@ -387,26 +413,6 @@ const User = () => {
                         <Form.Group className="mb-3">
                             <Form.Label>Keterangan</Form.Label>
                             <Form.Control id="description" as="textarea" rows={3} value={newPost.description} onChange={handleNewPostChange} />
-                        </Form.Group>
-
-                        <Form.Group className="mb-3">
-                            <Form.Label>Kandidat</Form.Label>
-                            <Form.Control id="candidates" type="number" value={newPost.candidates} onChange={handleNewPostChange} />
-                        </Form.Group>
-
-                        <Form.Group className="mb-3">
-                            <Form.Label>Bayaran</Form.Label>
-                            
-                            <Form.Control id="salary" type="number" value={newPost.salary} onChange={handleNewPostChange} />
-                        </Form.Group>
-
-                        <Form.Group className="mb-3">
-                            <Form.Label>Tipe Bayaran</Form.Label>
-                            <Form.Select id="typeSalary" value={newPost.typeSalary} onChange={handleNewPostChange}>
-                                <option value="" disabled>Pilih tipe bayaran</option>
-                                <option value="hour">Hour</option>
-                                <option value="day">Day</option>
-                            </Form.Select>
                         </Form.Group>
 
                         <Form.Group className="mb-3">

@@ -1,5 +1,24 @@
 const mongoose = require("mongoose");
 
+const submitVacanciesSchema = new mongoose.Schema({
+    _id: {
+        type: String,
+        required: true,
+    },
+    username: {
+        type: String,
+        required: true,
+    },
+    imageProfile: {
+        type: String,
+        required: true,
+    },
+    timestamp: {
+        type: Date,
+        default: Date.now,
+    },
+});
+
 const vacanciesSchema = new mongoose.Schema({
     _id: {
         type: String,
@@ -46,7 +65,7 @@ const vacanciesSchema = new mongoose.Schema({
         required: true,
     },
     allCandidates: {
-        type: Array,
+        type: [submitVacanciesSchema],
     },
     salary: {
         type: String,

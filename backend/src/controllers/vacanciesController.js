@@ -201,6 +201,54 @@ const vacanciesController = {
             });
         }
     },
+
+    async submitVacancies(req, res) {
+        try {
+            const { id } = req.params;
+            const user = await userModel.findById(req.user._id);
+
+            const vacancies = await vacanciesModel.findById(id);
+            if (!vacancies) {
+                return res.status(404).json({
+                    success: false,
+                    message: "Vacancies not found",
+                });
+            }
+
+            if (vacancies.username === user.username) {
+                return res.status(400).json({
+                    success: false,
+                    message: "You can't submit your own vacancies",
+                });
+            }
+
+            if (vacancies.allCandidates.find((candidate) => candidate._id.toString() === user._id.toString())) {
+                return res.status(400).json({
+                    success: false,
+                    message: "You already submitted to this vacancies",
+                });
+            }
+
+            vacancies.allCandidates.push({
+                _id: user._id,
+                username: user.username,
+                imageProfile: user.imageProfile,
+            });
+
+            await vacancies.save();
+
+            return res.status(200).json({
+                success: true,
+                message: "Submitted to vacancies successfully",
+            });
+        } catch (error) {
+            console.error("Error submitted vacancies", error);
+            return res.status(500).json({
+                success: false,
+                message: "Internal server error",
+            });
+        }
+    },
 };
 
 

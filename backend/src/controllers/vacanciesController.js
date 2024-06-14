@@ -183,6 +183,10 @@ const vacanciesController = {
                 });
             }
 
+            await userModel.updateOne(
+                { _id: req.user._id },
+                { $pull: { vacanciesId: req.params.id } },
+            );
             await vacanciesModel.findByIdAndDelete(req.params.id);
 
             return res.status(200).json({

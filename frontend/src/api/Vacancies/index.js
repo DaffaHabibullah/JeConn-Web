@@ -82,3 +82,15 @@ export const fetchDeleteVacancies = async (id) => {
         throw error;
     }
 };
+
+export const fetchSubmitVacancies = async (id) => {
+    try {
+        const response = await axios.post(`${API_URL}/vacancies/submit-candidate/post/${id}`, {}, {
+            headers: AuthHeader()
+        });
+        return response.data;
+    } catch (error) {
+        console.error('Fetch user error:', error);
+        throw error;
+    }
+};

@@ -13,7 +13,17 @@ const submitVacanciesSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    status: {
+        type: String,
+        enum: ["pending", "approved", "rejected"],
+        required: true,
+        default: "pending",
+    },
     timestamp: {
+        type: Date,
+        default: Date.now,
+    },
+    updatedAt: {
         type: Date,
         default: Date.now,
     },

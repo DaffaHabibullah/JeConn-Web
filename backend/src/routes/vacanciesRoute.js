@@ -10,6 +10,7 @@ router.get("/get/post/:id", vacanciesController.getVacanciesById);
 router.put("/update/post/:id", checkAuth, vacanciesController.updateVacancies);
 router.delete("/delete/post/:id", checkAuth, vacanciesController.deleteVacancies);
 router.post("/submit-candidate/post/:id", checkAuth, vacanciesController.submitVacancies);
+router.post("/update-status/post/:id/candidate/:username", checkAuth, vacanciesController.updateStatusCandidate);
 
 
 module.exports = router;

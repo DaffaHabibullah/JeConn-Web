@@ -249,6 +249,51 @@ const vacanciesController = {
             });
         }
     },
+
+    async updateStatusCandidate(req, res) {
+        try {
+            const { id, username } = req.params;
+            const { status } = req.body;
+
+            const vacancies = await vacanciesModel.findById(id);
+            if (!vacancies) {
+                return res.status(404).json({
+                    success: false,
+                    message: "Vacancies not found",
+                });
+            }
+
+            if (vacancies.username !== req.user.username) {
+                return res.status(401).json({
+                    success: false,
+                    message: "Unauthorized",
+                });
+            }
+
+            const candidate = vacancies.allCandidates.find((candidate) => candidate.username === username);
+            if (!candidate) {
+                return res.status(404).json({
+                    success: false,
+                    message: "Candidate not found",
+                });
+            }
+
+            candidate.status = status;
+            candidate.updatedAt = new Date();
+            await vacancies.save();
+
+            return res.status(200).json({
+                success: true,
+                message: "Candidate status updated successfully",
+            });
+        } catch (error) {
+            console.error("Error updating candidate status", error);
+            return res.status(500).json({
+                success: false,
+                message: "Internal server error",
+            });
+        }
+    },
 };
 
 

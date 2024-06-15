@@ -340,6 +340,8 @@ const Talent = () => {
                 </Row>
             </Container>
             <Modal show={showModal} onHide={() => setShowModal(false)} size="lg" centered>
+                <Modal.Header closeButton>
+                </Modal.Header>
                 <Modal.Body>
                     <img src={selectedImage} alt="Selected Image" style={{ width: '100%', height: 'auto' }} />
                 </Modal.Body>

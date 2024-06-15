@@ -485,6 +485,8 @@ const DetailVaTal = () => {
             </Modal>
             
             <Modal show={showModalImage} onHide={() => setShowModalImage(false)} size="lg" centered>
+                <Modal.Header closeButton>
+                </Modal.Header>
                 <Modal.Body>
                     <img src={selectedImage} alt="Selected Image" style={{ width: '100%', height: 'auto' }} />
                 </Modal.Body>

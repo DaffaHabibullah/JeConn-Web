@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { Container, Row, Col, Card, Image, Button, Form, InputGroup, OverlayTrigger, Tooltip, Modal, Badge } from "react-bootstrap";
 import NavbarComponent from "../../components/Navbar";
 import { fetchUserProfile } from '../../api/User';
-import { fetchPostVacanciesById, fetchUpdateVacancies, fetchDeleteVacancies, fetchSubmitVacancies } from '../../api/Vacancies';
+import { fetchPostVacanciesById, fetchUpdateVacancies, fetchDeleteVacancies, fetchSubmitVacancies, fetchUpdateStatusCandidate } from '../../api/Vacancies';
 import { fetchTalentByUsername } from '../../api/Talent';
 import { fetchEntertainmentCategories } from '../../api/EntertainmentCategories';
 
@@ -23,6 +23,7 @@ const DetailVaTal = () => {
         typeSalary: '',
         entertainment_id: [],
         });
+    const [showModalAllCandidates, setShowModalAllCandidates] = useState(false);
     const [showModalImage, setShowModalImage] = useState(false);
     const [selectedImage, setSelectedImage] = useState('');
     const location = useLocation();
@@ -156,6 +157,22 @@ const DetailVaTal = () => {
         }
     };
 
+    const handleClickShowModalAllCandidates = () => {
+        setShowModalAllCandidates(true);
+    };
+
+    const handleUpdateStatus = async (username, status) => {
+        try {
+            await fetchUpdateStatusCandidate(data._id, username, status);
+
+            fetchPostVacanciesById(location.pathname.split("/")[3]).then((response) => {
+                setData(response.data);
+            });
+        } catch (error) {
+            console.error('Failed to update candidate status:', error);
+        }
+    };
+
     const handleHoverImage = (candidate) => (
         <Tooltip>
             {candidate.username === userProfile.username ? (
@@ -215,7 +232,7 @@ const DetailVaTal = () => {
                                     <Card.Text>{data.location}</Card.Text>
                                 </Col>
                             </Row>
-                            <Card.Body style={{ borderBottom: '1px solid #00A47F' }}>
+                            <Card.Body style={{ marginBottom: '8px' }}>
                                 <Row style={{ paddingBottom: '16px', borderBottom: '1px solid #00A47F' }}>
                                     <span className="d-flex align-items-center mb-1"><img src="/icon/people-icon.png" style={{ marginRight: '4px' }} /><span style={{ paddingRight: '4px' }}>Candidates</span> : {data.candidates} candidate</span>
                                     <span className="d-flex align-items-center mb-1"><img src="/icon/dollar-icon.png" style={{ marginRight: '4px' }} /><span style={{ paddingRight: '41px' }}>Salary</span> : IDR {data.salary} /{data.typeSalary}</span>
@@ -247,7 +264,13 @@ const DetailVaTal = () => {
                                 </Card.Text>
                                 
                                 <Card.Text style={{ paddingTop: '4px' }}>
-                                    <h6>All Candidates :</h6>
+                                    {isAuthor ? (
+                                        <h6>
+                                            <a href="#" onClick={handleClickShowModalAllCandidates} style={{ color: '#000000' }}>All Candidates &#11208;</a>
+                                        </h6>
+                                    ) : (
+                                        <h6>All Candidates :</h6>
+                                    )}
                                     
                                     <Row className="m-0" style={{ position: 'relative', paddingBottom: '48px' }}>
                                         {data.allCandidates && data.allCandidates.length > 0 ? (
@@ -280,7 +303,7 @@ const DetailVaTal = () => {
                                     </Row>
                                 </Card.Text>
 
-                                <small style={{ position: 'absolute', left: '18px', bottom: '80px' }}>
+                                <small style={{ position: 'absolute', left: '18px' }}>
                                     Posted at: {getTimeAgo(data.createdAt).toLocaleString()}
                                 </small>
 
@@ -288,28 +311,35 @@ const DetailVaTal = () => {
                                     {data.createdAt!== data.updatedAt? `*Updated: ${getTimeAgo(data.updatedAt).toLocaleString()}` : ''}
                                 </small>
                             </Card.Body>
-                            <Card.Footer className="d-flex justify-content-end align-items-center m-0 p-0" style={{ backgroundColor: '#FFFFFF' }}>
-                                {isAuthor ? (
+                            <Card.Footer className="d-flex justify-content-end align-items-center m-0 p-0" style={{ borderColor: '#00A47F', backgroundColor: '#FFFFFF' }}>
+                                {isAuthor && (
                                     <>
-                                        <Button variant="success" onClick={() => {setShowModal(true); fillUpdatePostData();}} style={{ marginTop: '16px', padding: '6px 16px' }}>Edit</Button>
+                                        <Button variant="success" onClick={() => { setShowModal(true); fillUpdatePostData(); }} style={{ marginTop: '16px', padding: '6px 16px' }}>Edit</Button>
                                         <Button variant="danger" onClick={handleDeleteVacancy} style={{ marginTop: '16px', marginLeft: '16px', padding: '6px 16px' }}>Delete</Button>
                                     </>
-                                ) : isTalent && !hasSubmitted && data.status ? (
+                                )}
+
+                                {isTalent && !hasSubmitted && data.status && (
                                     <>
                                         <Button
-                                            variant={hasSubmitted? "secondary" : "warning"}
+                                            variant={hasSubmitted ? "secondary" : "warning"}
                                             onClick={handleSubmitVacancy}
                                             style={{ width: '100%', marginTop: '16px', padding: '6px 16px' }}
                                             disabled={hasSubmitted}
                                         >
-                                            {hasSubmitted? "Submitted" : "Submit as a candidate"}
+                                            {hasSubmitted ? "Submitted" : "Submit as a candidate"}
                                         </Button>
                                         <Button href="" variant="success" style={{ marginTop: '16px', marginLeft: '16px', padding: '6px 32px' }}>Chat</Button>
                                     </>
-                                ) : null}
-                                {!hasSubmitted && !data.status && isTalent ? (
+                                )}
+
+                                {isTalent && hasSubmitted && data.status && (
                                     <Button href="" variant="success" style={{ width: '100%', marginTop: '16px', padding: '6px 16px' }}>Chat</Button>
-                                ) : null}
+                                )}
+
+                                {isTalent && hasSubmitted && !data.status && (
+                                    <Button href="" variant="success" style={{ width: '100%', marginTop: '16px', padding: '6px 16px' }}>Chat</Button>
+                                )}
                             </Card.Footer>
                         </Card>
                     ) : (
@@ -482,6 +512,47 @@ const DetailVaTal = () => {
                     <Button variant="secondary" onClick={() => setShowModal(false)}>Cancel</Button>
                     <Button variant="success" onClick={handleUpdatePostSubmit}>Update Post</Button>
                 </Modal.Footer>
+            </Modal>
+
+            <Modal show={showModalAllCandidates} onHide={() => setShowModalAllCandidates(false)} centered>
+                <Modal.Header closeButton>
+                    <Modal.Title>All Candidates :</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    {data.allCandidates && data.allCandidates.length > 0? (
+                        data.allCandidates.map((candidate, index) => (
+                            <div key={index} className="position-relative mb-3 p-2 border rounded">
+                                <Row className="m-0">
+                                    <Col xs={3} md={2} xl={2} className="d-flex justify-content-center align-items-center p-2">
+                                        <Image src={candidate.imageProfile} style={{ width: '64px', height: '64px', objectFit: 'cover' }} roundedCircle />
+                                    </Col>
+                                    <Col xs={5} md={7} xl={7} className="d-block p-0 pt-3" style={{ maxHeight: '7rem' }}>
+                                        <Card.Title className="pb-1">
+                                            <a href={`/talent/profile/${candidate.username}`} style={{ textDecoration: 'none', color: '#000000' }}>
+                                                {candidate.username}
+                                            </a>
+                                        </Card.Title>
+                                        <Card.Text>Submitted at: {getTimeAgo(candidate.timestamp).toLocaleString()}</Card.Text>
+                                    </Col>
+                                </Row>
+                                <div style={{ position: 'absolute', right: '14px', top: '32px' }}>
+                                    {candidate.status === 'pending' ? (
+                                        <>
+                                            <Button variant="success" size="sm" onClick={() => handleUpdateStatus(candidate.username, 'approved')}>&#10004;</Button>
+                                            <Button variant="danger" size="sm" onClick={() => handleUpdateStatus(candidate.username, 'rejected')} style={{ marginLeft: '8px' }}>&#10006;</Button>
+                                        </>
+                                    ) : (
+                                        <span style={{ color: candidate.status === 'approved' ? '#198754' : candidate.status === 'rejected' ? '#DC3545' : '#FFC107' }}>
+                                            {candidate.status === 'approved' ? '[Approved]' : candidate.status === 'rejected' ? '[Rejected]' : '[Pending]'}
+                                        </span>
+                                    )}
+                                </div>
+                            </div>
+                        ))
+                    ) : (
+                        <p>No candidates found.</p>
+                    )}
+                </Modal.Body>
             </Modal>
             
             <Modal show={showModalImage} onHide={() => setShowModalImage(false)} size="lg" centered>

@@ -6,6 +6,7 @@ import { fetchUserProfile } from '../../api/User';
 import { fetchPostVacanciesById, fetchUpdateVacancies, fetchDeleteVacancies, fetchSubmitVacancies, fetchUpdateStatusCandidate } from '../../api/Vacancies';
 import { fetchTalentByUsername } from '../../api/Talent';
 import { fetchEntertainmentCategories } from '../../api/EntertainmentCategories';
+import { fetchCreateMessageRoom } from '../../api/Messages';
 
 const DetailVaTal = () => {
     const [data, setData] = useState({});
@@ -188,6 +189,20 @@ const DetailVaTal = () => {
         setShowModalImage(true);
     };
 
+    const handleChatClick = async (username) => {
+        try {
+            const response = await fetchCreateMessageRoom(username);
+    
+            if (response.success) {
+                navigate(`/chat/${response.data._id}`);
+            } else {
+                console.error('Failed to create or find message room:', response.message);
+            }
+        } catch (error) {
+            console.error('Failed to create message room and navigate:', error);
+        }
+    };
+
     const getTimeAgo = (timestamp) => {
         const now = new Date();
         const createdAt = new Date(timestamp);
@@ -329,16 +344,16 @@ const DetailVaTal = () => {
                                         >
                                             {hasSubmitted ? "Submitted" : "Submit as a candidate"}
                                         </Button>
-                                        <Button href="" variant="success" style={{ marginTop: '16px', marginLeft: '16px', padding: '6px 32px' }}>Chat</Button>
+                                        <Button variant="success" onClick={() => handleChatClick(data.username)} style={{ marginTop: '16px', marginLeft: '16px', padding: '6px 32px' }}>Chat</Button>
                                     </>
                                 )}
 
                                 {isTalent && hasSubmitted && data.status && (
-                                    <Button href="" variant="success" style={{ width: '100%', marginTop: '16px', padding: '6px 16px' }}>Chat</Button>
+                                    <Button variant="success" onClick={() => handleChatClick(data.username)} style={{ width: '100%', marginTop: '16px', padding: '6px 16px' }}>Chat</Button>
                                 )}
 
                                 {isTalent && hasSubmitted && !data.status && (
-                                    <Button href="" variant="success" style={{ width: '100%', marginTop: '16px', padding: '6px 16px' }}>Chat</Button>
+                                    <Button variant="success" onClick={() => handleChatClick(data.username)} style={{ width: '100%', marginTop: '16px', padding: '6px 16px' }}>Chat</Button>
                                 )}
                             </Card.Footer>
                         </Card>
@@ -416,7 +431,7 @@ const DetailVaTal = () => {
                                 {isAuthor ? (
                                     <Button href="/talent-profile" variant="warning" style={{ marginTop: '16px', padding: '6px 16px' }}>Update</Button>
                                 ) : (
-                                    <Button href="" variant="success" style={{ width: '100%', marginTop: '16px', padding: '6px 16px' }}>Chat</Button>
+                                    <Button variant="success" onClick={() => handleChatClick(data.username)} style={{ width: '100%', marginTop: '16px', padding: '6px 16px' }}>Chat</Button>
                                 )}
                             </Card.Footer>
                         </Card>

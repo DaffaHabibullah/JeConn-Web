@@ -337,25 +337,22 @@ const DetailVaTal = () => {
                                     </>
                                 )}
 
-                                {!isAuthor && isTalent && !hasSubmitted && data.status && (
+                                {!isAuthor && isTalent && data.status && (
                                     <>
-                                        <Button
-                                            variant={hasSubmitted ? "secondary" : "warning"}
-                                            onClick={handleSubmitVacancy}
-                                            style={{ width: '100%', marginTop: '16px', padding: '6px 16px' }}
-                                            disabled={hasSubmitted}
-                                        >
-                                            {hasSubmitted ? "Submitted" : "Submit as a candidate"}
-                                        </Button>
+                                        {!hasSubmitted ? (
+                                            <Button variant="warning" onClick={handleSubmitVacancy} style={{ width: '100%', marginTop: '16px', padding: '6px 16px' }}>
+                                                Submit as a candidate
+                                            </Button>
+                                        ) : (
+                                            <Button variant="secondary" style={{ width: '100%', marginTop: '16px', padding: '6px 16px' }} disabled>
+                                                Submitted
+                                            </Button>
+                                        )}
                                         <Button variant="success" onClick={() => handleChatClick(data.username)} style={{ marginTop: '16px', marginLeft: '16px', padding: '6px 32px' }}>Chat</Button>
                                     </>
                                 )}
 
-                                {isTalent && hasSubmitted && data.status && (
-                                    <Button variant="success" onClick={() => handleChatClick(data.username)} style={{ width: '100%', marginTop: '16px', padding: '6px 16px' }}>Chat</Button>
-                                )}
-
-                                {isTalent && hasSubmitted && !data.status && (
+                                {!isAuthor && isTalent && hasSubmitted && !data.status && (
                                     <Button variant="success" onClick={() => handleChatClick(data.username)} style={{ width: '100%', marginTop: '16px', padding: '6px 16px' }}>Chat</Button>
                                 )}
                             </Card.Footer>

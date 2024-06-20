@@ -81,7 +81,7 @@ const VaTal = () => {
                 <Row className="d-flex justify-content-center align-items-center" style={{ paddingBottom: '64px' }}>
                     {location.pathname.includes("/vacancies")? (
                         filteredContent.map((item, index) => (
-                            <Card key={index} style={{ width: '72rem', marginTop: '32px', marginBottom: '8px' }}>
+                            <Card key={index} style={{ width: '72rem', marginTop: '18px', marginBottom: '8px' }}>
                                 <Card.Body style={{ maxHeight: '512px', position: 'relative', paddingTop: '8px', paddingLeft: '4px', paddingRight: '4px' }}>
                                     <Row className="m-0 mb-4">
                                         <Col xs={4} md={2} xl={1} className="d-flex justify-content-start align-items-center p-2">

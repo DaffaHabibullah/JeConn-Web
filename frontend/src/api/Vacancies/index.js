@@ -48,7 +48,7 @@ export const fetchPostVacanciesById = async (id) => {
 };
 
 export const fetchUpdateVacancies = async (
-    id, title, startDate, endDate, address, description, candidates, salary, typeSalary, entertainment_id
+    id, title, startDate, endDate, address, description, candidates, salary, typeSalary, entertainment_id, status
 ) => {
     try {
         const response = await axios.put(`${API_URL}/vacancies/update/post/${id}`, {
@@ -60,7 +60,8 @@ export const fetchUpdateVacancies = async (
             candidates,
             salary,
             typeSalary,
-            entertainment_id
+            entertainment_id,
+            status
         }, {
             headers: AuthHeader()
         });

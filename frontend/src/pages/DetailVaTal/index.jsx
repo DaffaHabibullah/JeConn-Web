@@ -23,6 +23,7 @@ const DetailVaTal = () => {
         salary: '',
         typeSalary: '',
         entertainment_id: [],
+        status: '',
         });
     const [showModalAllCandidates, setShowModalAllCandidates] = useState(false);
     const [showModalImage, setShowModalImage] = useState(false);
@@ -105,6 +106,7 @@ const DetailVaTal = () => {
             salary: data.salary,
             typeSalary: data.typeSalary,
             entertainment_id: data.entertainment_id || [],
+            status: data.status
         });
     };
 
@@ -120,7 +122,8 @@ const DetailVaTal = () => {
                 updatePost.candidates,
                 updatePost.salary,
                 updatePost.typeSalary,
-                updatePost.entertainment_id
+                updatePost.entertainment_id,
+                updatePost.status
             );            
             setShowModal(false);
 
@@ -334,7 +337,7 @@ const DetailVaTal = () => {
                                     </>
                                 )}
 
-                                {isTalent && !hasSubmitted && data.status && (
+                                {!isAuthor && isTalent && !hasSubmitted && data.status && (
                                     <>
                                         <Button
                                             variant={hasSubmitted ? "secondary" : "warning"}
@@ -520,6 +523,27 @@ const DetailVaTal = () => {
                                     </Col>
                                 ))}
                             </Row>
+                        </Form.Group>
+
+                        <Form.Group className="mb-3">
+                            <Form.Label>Status Post</Form.Label>
+                            <InputGroup className="d-flex align-items-center">
+                                <InputGroup.Text 
+                                    id="status" 
+                                    style={{ 
+                                        marginRight: '16px',
+                                        backgroundColor: updatePost.status ? '#198754' : '#6C757D',
+                                        color: '#FFFFFF', }}>
+                                    {updatePost.status ? 'Opened' : 'Closed'}
+                                </InputGroup.Text>
+                                <Form.Check
+                                    id="status"
+                                    type="switch"
+                                    checked={updatePost.status}
+                                    onChange={(e) => setUpdatePost(prevState => ({ ...prevState, status: e.target.checked }))}
+                                    style={{ transform: 'scale(1.5)' }}
+                                />
+                            </InputGroup>
                         </Form.Group>
                     </Form>
                 </Modal.Body>

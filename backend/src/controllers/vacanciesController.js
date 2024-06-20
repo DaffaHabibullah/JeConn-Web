@@ -114,7 +114,8 @@ const vacanciesController = {
     async updateVacancies(req, res) {
         try {
             const {
-                title, startDate, endDate, address, description, candidates, salary, typeSalary, entertainment_id,
+                title, startDate, endDate, address, description,
+                candidates, salary, typeSalary, entertainment_id, status,
             } = req.body;
 
             const vacancies = await vacanciesModel.findById(req.params.id);
@@ -150,6 +151,7 @@ const vacanciesController = {
                 salary,
                 typeSalary,
                 entertainment_id,
+                status,
                 updatedAt: new Date(),
             });
 

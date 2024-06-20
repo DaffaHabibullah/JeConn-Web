@@ -1,6 +1,7 @@
 require("dotenv").config();
 const fs = require("fs");
 const vacanciesModel = require("../models/vacanciesModel");
+const messageRoomsModel = require("../models/messageRoomsModel");
 const { uploadProfile } = require("../middleware/uploadImage");
 
 const userController = {
@@ -86,6 +87,17 @@ const userController = {
                 await vacanciesModel.updateMany(
                     { _id: { $in: user.vacanciesId } },
                     { imageProfile: imageUrl },
+                );
+
+                await messageRoomsModel.updateMany(
+                    { "members.username": user.username },
+                    {
+                        $set: {
+                            "members.$.imageProfile": imageUrl,
+                            "messages.$[elem].imageProfile": imageUrl,
+                        },
+                    },
+                    { arrayFilters: [{ "elem.username": user.username }] },
                 );
 
                 return res.status(200).json({

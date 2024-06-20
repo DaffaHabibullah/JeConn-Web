@@ -22,7 +22,7 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/home" element={<Home />} />
         <Route path="/messages" element={<Messages />} />
-        <Route path="/chat" element={<Chat />} />
+        <Route path="/chat/:id" element={<Chat />} />
         <Route path="/user-profile" element={<User />} />
         <Route path="/join-talent" element={<RegisterTalent />} />
         <Route path="/talent-profile" element={<Talent />} />

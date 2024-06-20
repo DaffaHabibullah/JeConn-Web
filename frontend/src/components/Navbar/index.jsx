@@ -39,11 +39,11 @@ const NavbarComponent = () => {
                         <img className="d-inline-block align-top" src="/jeconn.png" alt="Logo Image" width="30" height="30" />
                         JeConn
                     </Navbar.Brand>
-                    {/* <Nav style={{ marginLeft: 'auto', marginRight: '12px' }}>
+                    <Nav style={{ marginLeft: 'auto', marginRight: '12px' }}>
                         <Nav.Link className="p-0" href="/messages">
                             <img className="d-inline-block align-top" src="/icon/message-icon.png" alt="Message Icon" width="30" height="30" />
                         </Nav.Link>
-                    </Nav> */}
+                    </Nav>
                     <Navbar.Toggle aria-controls="basic-navbar-nav" />
                     <Navbar.Collapse className="justify-content-end">
                         <Nav>
@@ -53,7 +53,9 @@ const NavbarComponent = () => {
                             )}
                             <Nav.Link href="/vacancies">Vacancies</Nav.Link>
                             <Nav.Link href="/talents">Talents</Nav.Link>
-                            <Nav.Link href="/status">Status</Nav.Link>
+                            {roles.includes('talent') && (
+                                <Nav.Link href="/status">Status</Nav.Link>
+                            )}
                             <NavDropdown title={`Username: ${username}`}>
                                 <NavDropdown.Item href="/user-profile">Profile</NavDropdown.Item>
                                 {roles.includes('talent') && (

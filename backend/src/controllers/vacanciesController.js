@@ -252,6 +252,32 @@ const vacanciesController = {
         }
     },
 
+    async submittedVacancies(req, res) {
+        try {
+            const user = await userModel.findById(req.user._id);
+            if (!user) {
+                return res.status(404).json({
+                    success: false,
+                    message: "User not found",
+                });
+            }
+
+            const vacancies = await vacanciesModel.find({ allCandidates: { $elemMatch: { username: user.username } } });
+
+            return res.status(200).json({
+                success: true,
+                message: "Submitted vacancies",
+                data: vacancies,
+            });
+        } catch (error) {
+            console.error("Error getting submitted vacancies", error);
+            return res.status(500).json({
+                success: false,
+                message: "Internal server error",
+            });
+        }
+    },
+
     async updateStatusCandidate(req, res) {
         try {
             const { id, username } = req.params;

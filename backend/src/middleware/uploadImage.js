@@ -61,5 +61,10 @@ const uploadTalent = multer({
     fileFilter: (req, file, cb) => checkFileType(file, cb),
 }).single("imageTalent");
 
+const uploadMessages = multer({
+    storage: createStorage("messages"),
+    fileFilter: (req, file, cb) => checkFileType(file, cb),
+}).single("imageMessage");
 
-module.exports = { uploadProfile, uploadTalent };
+
+module.exports = { uploadProfile, uploadTalent, uploadMessages };

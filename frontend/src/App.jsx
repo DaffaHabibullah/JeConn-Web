@@ -11,6 +11,7 @@ import RegisterTalent from './pages/RegisterTalent';
 import Talent from './pages/Talent';
 import VaTal from './pages/VaTal';
 import DetailVaTal from './pages/DetailVaTal';
+import Status from './pages/Status';
 import NotFound from './pages/NotFound';
 
 function App() {
@@ -30,6 +31,7 @@ function App() {
         <Route path="/talents" element={<VaTal />} />
         <Route path="/vacancies/post/:id" element={<DetailVaTal />} />
         <Route path="/talent/profile/:username" element={<DetailVaTal />} />
+        <Route path="/status" element={<Status />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </Router>

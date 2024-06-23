@@ -3,10 +3,12 @@ import { Container, Row, Col, Image, Card, ListGroup, Badge } from 'react-bootst
 import NavbarComponent from '../../components/Navbar';
 import { fetchUserProfile } from '../../api/User';
 import { fetchAllMessagesByRoomId } from '../../api/Messages';
+import { useNotification } from '../../components/Notification';
 
 const Messages = () => {
     const [user, setUser] = useState({});
     const [messageRooms, setMessageRooms] = useState([]);
+    const { showNotification } = useNotification();
 
     useEffect(() => {
         const fetchUserProfileData = async () => {
@@ -14,7 +16,7 @@ const Messages = () => {
                 const response = await fetchUserProfile();
                 setUser(response.data);
             } catch (error) {
-                console.error('Error fetching user profile:', error);
+                showNotification('Failed to fetch data', false);
             }
         };
 
@@ -36,7 +38,7 @@ const Messages = () => {
                             otherMembers
                         };
                     } catch (error) {
-                        console.error('Error fetching messages:', error);
+                        showNotification('Failed to fetch data', false);
                         return null;
                     }
                 }));

@@ -5,6 +5,7 @@ import { fetchUserProfile, fetchUserUpdateImage } from '../../api/User';
 import { fetchTalentProfile, fetchTalentUpdate, fetchTalentUploadImage, fetchTalentAllImages, fetchDeleteTalentImage } from '../../api/Talent';
 import { fetchLocations } from '../../api/Locations';
 import { fetchEntertainmentCategories } from '../../api/EntertainmentCategories';
+import { useNotification } from '../../components/Notification';
 
 const Talent = () => {
     const [userProfile, setUserProfile] = useState({
@@ -23,6 +24,7 @@ const Talent = () => {
     const [isEditMode, setIsEditMode] = useState(false);
     const [showModal, setShowModal] = useState(false);
     const [selectedImage, setSelectedImage] = useState('');
+    const { showNotification } = useNotification();
     const token = localStorage.getItem('token');
 
     useEffect(() => {
@@ -31,8 +33,7 @@ const Talent = () => {
                 const response = await fetchUserProfile();
                 setUserProfile(response.data);
             } catch (error) {
-                console.error('Failed to fetch user profile:', error);
-                throw error;
+                showNotification('Failed to fetch data', false);
             }
         };
 
@@ -47,8 +48,7 @@ const Talent = () => {
                 const response = await fetchTalentProfile();
                 setTalentProfile(response.data);
             } catch (error) {
-                console.error('Failed to fetch talent profile:', error);
-                throw error;
+                showNotification('Failed to fetch data', false);
             }
         };
 
@@ -63,8 +63,7 @@ const Talent = () => {
                 const response = await fetchLocations();
                 setLocations(response.data);
             } catch (error) {
-                console.error('Failed to fetch locations:', error);
-                throw error;
+                showNotification('Failed to fetch data', false);
             }
         };
 
@@ -77,8 +76,7 @@ const Talent = () => {
                 const response = await fetchEntertainmentCategories();
                 setEntertainmentCategories(response.data);
             } catch (error) {
-                console.error('Failed to fetch entertainment categories:', error);
-                throw error;
+                showNotification('Failed to fetch data', false);
             }
         };
     
@@ -94,8 +92,7 @@ const Talent = () => {
                 const response = await fetchTalentAllImages(talentId);
                 setTalentImages(response.data);
             } catch (error) {
-                console.error('Failed to fetch talent images:', error);
-                throw error;
+                showNotification('Failed to fetch data', false);
             }
         };
     
@@ -130,15 +127,16 @@ const Talent = () => {
 
     const handleConfirmClick = async () => {
         try {
-            await fetchTalentUpdate(
+            const response = await fetchTalentUpdate(
                 talentProfile.biography,
                 talentProfile.location,
                 talentProfile.entertainment_id,
                 talentProfile.isOpen
             );
             setIsEditMode(false);
+            showNotification(response.message);
         } catch (error) {
-            console.error('Failed to update user profile:', error);
+            showNotification(error.response.data.message, false);
         }
     };
 
@@ -152,13 +150,14 @@ const Talent = () => {
         const selectedImage = e.target.files[0];
         if (selectedImage) {
             try {
-                await fetchUserUpdateImage(selectedImage);
+                const response = await fetchUserUpdateImage(selectedImage);
                 setUserProfile(prevState => ({
                     ...prevState,
                     imageProfile: URL.createObjectURL(selectedImage)
                 }));
+                showNotification(response.message);
             } catch (error) {
-                console.error('Failed to update profile image:', error);
+                showNotification(error.response.data.message, false);
             }
         }
     };
@@ -173,8 +172,9 @@ const Talent = () => {
             try {
                 const response = await fetchTalentUploadImage(selectedImage);
                 setTalentImages(prevImages => [...prevImages, response.data]);
+                showNotification(response.message);
             } catch (error) {
-                console.error('Failed to upload image:', error);
+                showNotification(error.response.data.message, false);
             }
         }
     };
@@ -187,10 +187,11 @@ const Talent = () => {
     const handleDeleteImage = async (imageUrl) => {
         try {
             const filename = imageUrl.split('/').pop();
-            await fetchDeleteTalentImage(filename);
+            const response = await fetchDeleteTalentImage(filename);
             setTalentImages(talentImages.filter(img => img !== imageUrl));
+            showNotification(response.message);
         } catch (error) {
-            console.error('Failed to delete image:', error);
+            showNotification(error.response.data.message, false);
         }
     };
 

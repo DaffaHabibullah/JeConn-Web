@@ -5,6 +5,7 @@ import { fetchUserProfile, fetchUserUpdate, fetchUserUpdateImage } from '../../a
 import { fetchPostVacancies, fetchPostVacanciesById } from '../../api/Vacancies';
 import { fetchLocations } from '../../api/Locations';
 import { fetchEntertainmentCategories } from '../../api/EntertainmentCategories';
+import { useNotification } from '../../components/Notification';
 
 const User = () => {
     const [userProfile, setUserProfile] = useState({
@@ -35,6 +36,7 @@ const User = () => {
     });
     const [locations, setLocations] = useState([]);
     const [entertainmentCategories, setEntertainmentCategories] = useState([]);
+    const { showNotification } = useNotification();
     const token = localStorage.getItem('token');
 
     useEffect(() => {
@@ -48,8 +50,7 @@ const User = () => {
                 const sortedVacancies = vacanciesResults.map(result => result.data).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
                 setVacancies(sortedVacancies);
             } catch (error) {
-                console.error('Failed to fetch user profile and vacancies:', error);
-                throw error;
+                showNotification('Failed to fetch data', false);
             }
         };
 
@@ -61,8 +62,7 @@ const User = () => {
                 const entertainmentResponse = await fetchEntertainmentCategories();
                 setEntertainmentCategories(entertainmentResponse.data);
             } catch (error) {
-                console.error('Failed to fetch locations or entertainment categories:', error);
-                throw error;
+                showNotification('Failed to fetch data', false);
             }
         };
 
@@ -90,7 +90,7 @@ const User = () => {
 
     const handleConfirmClick = async () => {
         try {
-            await fetchUserUpdate(
+            const response = await fetchUserUpdate(
                 userProfile.fullName,
                 userProfile.dateOfBirth,
                 userProfile.gender,
@@ -98,14 +98,15 @@ const User = () => {
                 userProfile.phoneNumber
             );
             setIsEditMode(false);
+            showNotification(response.message);
         } catch (error) {
-            console.error('Failed to update user profile:', error);
+            showNotification(error.response.data.message, false);
         }
     };
 
     const handleNewPostSubmit = async () => {
         try {
-            await fetchPostVacancies(
+            const response = await fetchPostVacancies(
                 newPost.typePost,
                 newPost.title,
                 newPost.location,
@@ -139,8 +140,9 @@ const User = () => {
             const vacanciesResults = await Promise.all(vacanciesPromises);
             const sortedVacancies = vacanciesResults.map(result => result.data).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
             setVacancies(sortedVacancies);
+            showNotification(response.message);
         } catch (error) {
-            console.error('Failed to create new post:', error);
+            showNotification(error.response.data.message, false);
         }
     };
 
@@ -171,13 +173,14 @@ const User = () => {
         const selectedImage = e.target.files[0];
         if (selectedImage) {
             try {
-                await fetchUserUpdateImage(selectedImage);
+                const response = await fetchUserUpdateImage(selectedImage);
                 setUserProfile(prevState => ({
                     ...prevState,
                     imageProfile: URL.createObjectURL(selectedImage)
                 }));
+                showNotification(response.message);
             } catch (error) {
-                console.error('Failed to update profile image:', error);
+                showNotification(error.response.data.message, false);
             }
         }
     };

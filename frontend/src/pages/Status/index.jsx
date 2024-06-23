@@ -2,9 +2,11 @@ import { useEffect, useState } from 'react';
 import { Container, Row, Col, Card, Badge, Tabs, Tab } from 'react-bootstrap';
 import NavbarComponent from '../../components/Navbar';
 import { fetchSubmittedVacancies } from '../../api/Vacancies';
+import { useNotification } from '../../components/Notification';
 
 const Status = () => {
     const [vacancies, setVacancies] = useState([]);
+    const { showNotification } = useNotification();
 
     useEffect(() => {
         const fetchVacancies = async () => {
@@ -22,7 +24,7 @@ const Status = () => {
 
                 setVacancies(sortedVacancies);
             } catch (error) {
-                console.error('Fetch vacancies error:', error);
+                showNotification('Failed to fetch data', false);
             }
         };
 

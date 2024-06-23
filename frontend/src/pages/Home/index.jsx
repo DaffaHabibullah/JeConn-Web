@@ -4,10 +4,12 @@ import NavbarComponent from '../../components/Navbar';
 import FooterComponent from '../../components/Footer';
 import { fetchAllPostVacancies } from '../../api/Vacancies';
 import { fetchAllTalent } from '../../api/Talent';
+import { useNotification } from '../../components/Notification';
 
 const Home = () => {
     const [vacancies, setVacancies] = useState([]);
     const [talent, setTalent] = useState([]);
+    const { showNotification } = useNotification();
 
     useEffect(() => {
         const fetchVacanciesAndTalent = async () => {
@@ -28,7 +30,7 @@ const Home = () => {
                 setVacancies(sortedVacancies);
                 setTalent(openTalent);
             } catch (error) {
-                console.error('Failed to fetch vacancies and talent:', error);
+                showNotification('Failed to fetch data', false);
             }
         };
 

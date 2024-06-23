@@ -7,6 +7,7 @@ import { fetchUserProfile } from '../../api/User';
 import { fetchAllMessagesByRoomId, fetchSendMessage, fetchSendImageMessage } from '../../api/Messages';
 import { socketIo } from '../../middleware/socket';
 import { getLinkPreview } from 'link-preview-js';
+import { useNotification } from '../../components/Notification';
 
 const Chat = () => {
     const [user, setUser] = useState({});
@@ -19,6 +20,7 @@ const Chat = () => {
     const messagesEndRef = useRef(null);
     const cardBodyRef = useRef(null);
     const [showScrollButton, setShowScrollButton] = useState(false);
+    const { showNotification } = useNotification();
     const location = useLocation();
     const id = location.pathname.split('/')[2];
     const navigate = useNavigate();
@@ -29,7 +31,7 @@ const Chat = () => {
                 const response = await fetchUserProfile();
                 setUser(response.data);
             } catch (error) {
-                console.error('Error fetching user profile:', error);
+                showNotification('Failed to fetch data', false);
             }
         };
 
@@ -44,7 +46,7 @@ const Chat = () => {
                 setMessages(response.data.messages);
                 scrollToBottom();
             } catch (error) {
-                console.error('Error fetching messages:', error);
+                showNotification('Failed to fetch data', false);
             }
         };
 
@@ -117,11 +119,12 @@ const Chat = () => {
 
     const handleSendMessage = async () => {
         try {
-            await fetchSendMessage(id, newMessage);
+            const response = await fetchSendMessage(id, newMessage);
             setNewMessage('');
+            showNotification(response.message);
             scrollToBottom();
         } catch (error) {
-            console.error('Error sending message:', error);
+            showNotification(error.response.data.message, false);
         }
     };
 
@@ -139,9 +142,10 @@ const Chat = () => {
         formData.append('imageMessage', e.target.files[0]);
 
         try {
-            await fetchSendImageMessage(id, formData);
+            const response = await fetchSendImageMessage(id, formData);
+            showNotification(response.message);
         } catch (error) {
-            console.error('Error sending image message:', error);
+            showNotification(error.response.data.message, false);
         }
     };
 

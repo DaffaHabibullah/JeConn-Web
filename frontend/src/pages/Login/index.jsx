@@ -1,12 +1,13 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Container, Row, Col, Image, Form, Button, Alert } from 'react-bootstrap';
+import { Container, Row, Col, Image, Form, Button } from 'react-bootstrap';
 import { fetchLogin } from '../../api/Auth';
+import { useNotification } from '../../components/Notification';
 
 const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [error, setError] = useState(null);
+    const { showNotification } = useNotification();
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
@@ -14,9 +15,10 @@ const Login = () => {
         try {
             const response = await fetchLogin(email, password);
             localStorage.setItem('token', response.data.token);
+            showNotification(response.message);
             navigate('/home');
         } catch (error) {
-            setError(error.response.data.message);
+            showNotification(error.response.data.message, false);
         }
     };
 
@@ -30,11 +32,6 @@ const Login = () => {
                     <Col md={6} className="d-flex justify-content-center align-items-center">
                         <div className="w-100">
                             <h1 className="mb-5 text-center">Login to <span style={{ color: '#00A47F' }}>Jeconn</span></h1>
-                            {error && (
-                                <Alert variant="danger" onClose={() => setError(null)} dismissible>
-                                    {error}
-                                </Alert>
-                            )}
                             <Form onSubmit={handleSubmit}>
                                 <Form.Group className="mb-3" controlId="formGroupEmail">
                                     <Form.Label>Email</Form.Label>

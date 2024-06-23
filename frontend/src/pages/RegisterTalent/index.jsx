@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Container, Row, Col, Card, Form, Button, Alert, Badge } from 'react-bootstrap';
+import { Container, Row, Col, Card, Form, Button, Badge } from 'react-bootstrap';
 import NavbarComponent from '../../components/Navbar';
 import FooterComponent from '../../components/Footer';
 import { fetchTalentRegister } from '../../api/Talent';
 import { fetchLocations } from '../../api/Locations';
 import { fetchPaymentToken } from '../../api/PaymentToken';
+import { useNotification } from '../../components/Notification';
 
 const RegisterTalent = () => {
     const [registerTalent, setRegisterTalent] = useState({
@@ -18,8 +19,7 @@ const RegisterTalent = () => {
         postalCode: ''
     });
     const [locations, setLocations] = useState([]);
-    const [success, setSuccess] = useState(null);
-    const [error, setError] = useState(null);
+    const { showNotification } = useNotification();
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -28,7 +28,7 @@ const RegisterTalent = () => {
                 const response = await fetchLocations();
                 setLocations(response.data);
             } catch (error) {
-                console.error('Failed to fetch locations:', error);
+                showNotification('Failed to fetch data', false);
                 throw error;
             }
         };
@@ -57,7 +57,7 @@ const RegisterTalent = () => {
                         console.log('Payment success:', result);
     
                         try {
-                            await fetchTalentRegister(
+                            const response = await fetchTalentRegister(
                                 registerTalent.nikKTP,
                                 registerTalent.firstName,
                                 registerTalent.lastName,
@@ -67,40 +67,30 @@ const RegisterTalent = () => {
                                 registerTalent.postalCode
                             );
     
-                            setSuccess('Registration successful');
-                            setError(null);
+                            showNotification(response.message);
     
                             navigate('/talent-profile');
                         } catch (error) {
-                            console.error('Failed to register talent:', error);
-                            setError('Failed to register talent');
-                            setSuccess(null);
+                            showNotification(error.response.data.message, false);
                         }
                     },
                     onPending: function(result) {
                         console.log('Payment pending:', result);
-                        setError('Payment is pending. Please complete the payment.');
-                        setSuccess(null);
+                        showNotification('Payment cancled.', false);
                     },
                     onError: function(result) {
                         console.error('Payment error:', result);
-                        setError('Payment failed. Please try again.');
-                        setSuccess(null);
+                        showNotification('Payment failed.', false);
                     },
                     onClose: function() {
-                        console.log('Payment popup closed');
-                        setError('Payment was cancelled.');
-                        setSuccess(null);
+                        showNotification('Payment popup closed.', false);
                     }
                 });
             } else {
-                setError('Failed to create payment token');
-                setSuccess(null);
+                showNotification('Failed to create payment token', false);
             }
         } catch (error) {
-            console.error('Failed to fetch payment token:', error);
-            setError('Failed to fetch payment token');
-            setSuccess(null);
+            showNotification(error.response.data.message, false);
         }
     };
 
@@ -162,8 +152,6 @@ const RegisterTalent = () => {
                         </Row>
 
                         <Card.Body style={{ padding: '16px' }}>
-                            {error && <Alert variant="danger">{error}</Alert>}
-                            {success && <Alert variant="success">{success}</Alert>}
                             <Form onSubmit={handleSubmit}>
                                 <Form.Group controlId="nikKTP" className="mb-3">
                                     <Form.Label>NIK KTP</Form.Label>

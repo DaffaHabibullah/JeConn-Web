@@ -2,10 +2,12 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Container, Navbar, Nav, NavDropdown } from 'react-bootstrap';
 import { fetchUserProfile } from '../../api/User';
+import { useNotification } from '../Notification';
 
 const NavbarComponent = () => {
     const [username, setUsername] = useState('');
     const [roles, setRoles] = useState([]);
+    const { showNotification } = useNotification();
     const token = localStorage.getItem('token');
     const navigate = useNavigate();
 
@@ -16,8 +18,7 @@ const NavbarComponent = () => {
                 setUsername(response.data.username);
                 setRoles(response.data.roles);
             } catch (error) {
-                console.error('Failed to fetch user profile:', error);
-                throw error;
+                showNotification('Failed to fetch data', false);
             }
         };
 
@@ -29,6 +30,7 @@ const NavbarComponent = () => {
     const handleLogout = () => {
         localStorage.removeItem('token');
         navigate('/login');
+        showNotification('Logout success');
     };
 
     return (

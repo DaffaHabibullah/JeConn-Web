@@ -1,27 +1,29 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Container, Row, Col, Image, Form, Button, Alert } from 'react-bootstrap';
+import { Container, Row, Col, Image, Form, Button } from 'react-bootstrap';
 import { fetchRegister } from '../../api/Auth';
+import { useNotification } from '../../components/Notification';
 
 const Register = () => {
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
-    const [error, setError] = useState(null);
+    const { showNotification } = useNotification();
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (password !== confirmPassword) {
-            setError('Passwords do not match');
+            showNotification('Passwords do not match', false);
             return;
         }
         try {
-            await fetchRegister(username, email, password);
+            const response = await fetchRegister(username, email, password);
+            showNotification(response.message);
             navigate('/login');
         } catch (error) {
-            setError(error.response.data.message);
+            showNotification(error.response.data.message, false);
         }
     };
 
@@ -35,11 +37,6 @@ const Register = () => {
                     <Col md={6} className="d-flex justify-content-center align-items-center">
                         <div className="w-100">
                             <h1 className="mb-5 text-center">Register to <span style={{ color: '#00A47F' }}>Jeconn</span></h1>
-                            {error && (
-                                <Alert variant="danger" onClose={() => setError(null)} dismissible>
-                                    {error}
-                                </Alert>
-                            )}
                             <Form onSubmit={handleSubmit}>
                                 <Form.Group className="mb-3" controlId="formGroupUsername">
                                     <Form.Label>Username</Form.Label>

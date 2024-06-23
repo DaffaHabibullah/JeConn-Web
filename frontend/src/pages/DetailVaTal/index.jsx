@@ -7,6 +7,7 @@ import { fetchPostVacanciesById, fetchUpdateVacancies, fetchDeleteVacancies, fet
 import { fetchTalentByUsername } from '../../api/Talent';
 import { fetchEntertainmentCategories } from '../../api/EntertainmentCategories';
 import { fetchCreateMessageRoom } from '../../api/Messages';
+import { useNotification } from '../../components/Notification';
 
 const DetailVaTal = () => {
     const [data, setData] = useState({});
@@ -28,6 +29,7 @@ const DetailVaTal = () => {
     const [showModalAllCandidates, setShowModalAllCandidates] = useState(false);
     const [showModalImage, setShowModalImage] = useState(false);
     const [selectedImage, setSelectedImage] = useState('');
+    const { showNotification } = useNotification();
     const location = useLocation();
     const navigate = useNavigate();
 
@@ -56,8 +58,7 @@ const DetailVaTal = () => {
                 const response = await fetchEntertainmentCategories();
                 setEntertainmentCategories(response.data);
             } catch (error) {
-                console.error('Failed to fetch entertainment categories:', error);
-                throw error;
+                showNotification('Failed to fetch data', false);
             }
         };
     
@@ -112,7 +113,7 @@ const DetailVaTal = () => {
 
     const handleUpdatePostSubmit = async () => {
         try {
-            await fetchUpdateVacancies(
+            const response = await fetchUpdateVacancies(
                 data._id,
                 updatePost.title,
                 updatePost.startDate,
@@ -125,31 +126,34 @@ const DetailVaTal = () => {
                 updatePost.entertainment_id,
                 updatePost.status
             );            
+            showNotification(response.message);
             setShowModal(false);
 
             fetchPostVacanciesById(location.pathname.split("/")[3]).then((response) => {
                 setData(response.data);
             });
         } catch (error) {
-            console.error('Failed to update post:', error);
+            showNotification(error.response.data.message, false);
         }
     };
 
     const handleSubmitVacancy = async () => {
         try {
-            await fetchSubmitVacancies(data._id);
+            const response = await fetchSubmitVacancies(data._id);
+            showNotification(response.message);
 
             fetchPostVacanciesById(location.pathname.split("/")[3]).then((response) => {
                 setData(response.data);
             });
         } catch (error) {
-            console.error('Failed to submit post:', error);
+            showNotification(error.response.data.message, false);
         }
     };
 
     const handleDeleteVacancy = async () => {
         try {
-            await fetchDeleteVacancies(data._id);
+            const response = await fetchDeleteVacancies(data._id);
+            showNotification(response.message);
 
             navigate(-1);
 
@@ -157,7 +161,7 @@ const DetailVaTal = () => {
                 setData(response.data);
             });
         } catch (error) {
-            console.error('Failed to delete post:', error);
+            showNotification(error.response.data.message, false);
         }
     };
 
@@ -167,13 +171,14 @@ const DetailVaTal = () => {
 
     const handleUpdateStatus = async (username, status) => {
         try {
-            await fetchUpdateStatusCandidate(data._id, username, status);
+            const response = await fetchUpdateStatusCandidate(data._id, username, status);
+            showNotification(response.message);
 
             fetchPostVacanciesById(location.pathname.split("/")[3]).then((response) => {
                 setData(response.data);
             });
         } catch (error) {
-            console.error('Failed to update candidate status:', error);
+            showNotification(error.response.data.message, false);
         }
     };
 

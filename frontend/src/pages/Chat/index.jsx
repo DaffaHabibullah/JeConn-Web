@@ -118,13 +118,23 @@ const Chat = () => {
     };
 
     const handleSendMessage = async () => {
-        try {
-            const response = await fetchSendMessage(id, newMessage);
-            setNewMessage('');
-            showNotification(response.message);
-            scrollToBottom();
-        } catch (error) {
-            showNotification(error.response.data.message, false);
+        const trimmedMessage = newMessage.trim();
+        if (trimmedMessage) {
+            try {
+                const response = await fetchSendMessage(id, trimmedMessage);
+                setNewMessage('');
+                showNotification(response.message);
+                scrollToBottom();
+            } catch (error) {
+                showNotification(error.response.data.message, false);
+            }
+        }
+    };
+
+    const handleNewMessageChange = (e) => {
+        const inputValue = e.target.value;
+        if (!/^\s+$/.test(inputValue)) {
+            setNewMessage(inputValue.trimStart());
         }
     };
 
@@ -253,7 +263,7 @@ const Chat = () => {
                                     as="textarea"
                                     placeholder="Type a message..."
                                     value={newMessage}
-                                    onChange={(e) => setNewMessage(e.target.value)}
+                                    onChange={handleNewMessageChange}
                                     style={{ width: '100%', padding: '8px', borderRadius: '8px', overflowY: 'auto', resize: 'none' }}
                                     rows={1}
                                 />

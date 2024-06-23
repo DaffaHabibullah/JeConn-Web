@@ -89,6 +89,12 @@ const userController = {
                     { imageProfile: imageUrl },
                 );
 
+                await vacanciesModel.updateMany(
+                    { "allCandidates.username": user.username },
+                    { $set: { "allCandidates.$[elem].imageProfile": imageUrl } },
+                    { arrayFilters: [{ "elem.username": user.username }] },
+                );
+
                 await messageRoomsModel.updateMany(
                     { "members.username": user.username },
                     {

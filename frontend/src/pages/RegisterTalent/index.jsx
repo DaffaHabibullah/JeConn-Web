@@ -46,6 +46,19 @@ const RegisterTalent = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        if (registerTalent.nikKTP.length !== 16) {
+            showNotification('NIK KTP must be 16 characters', false);
+            return;
+        }
+        if (registerTalent.phoneNumber.length < 11 || registerTalent.phoneNumber.length > 13) {
+            showNotification('Phone number must be 11 characters and at most 13 characters', false);
+            return;
+        }
+        if (registerTalent.postalCode.length !== 5) {
+            showNotification('Postal code must be 5 characters', false);
+            return;
+        }
     
         try {
             const paymentTokenResponse = await fetchPaymentToken();
@@ -181,7 +194,7 @@ const RegisterTalent = () => {
 
                                 <Form.Group controlId="address" className="mb-3">
                                     <Form.Label>Alamat</Form.Label>
-                                    <Form.Control style={{ minHeight: '80px' }} as="textarea" value={registerTalent.address} onChange={handleInputChange} required />
+                                    <Form.Control style={{ minHeight: '80px' }} as="textarea" value={registerTalent.address} minLength={16} maxLength={256} onChange={handleInputChange} required />
                                 </Form.Group>
 
                                 <Row>

@@ -90,6 +90,15 @@ const User = () => {
 
     const handleConfirmClick = async () => {
         try {
+            if (userProfile.address.length < 16 || userProfile.address.length < 256) {
+                showNotification('Address must be at least 16 characters and at most 256 characters', false);
+                return;
+            }
+            if (userProfile.phoneNumber.length < 11 || userProfile.phoneNumber.length > 13) {
+                showNotification('Phone number must be at least 11 characters and at most 13 characters', false);
+                return;
+            }
+
             const response = await fetchUserUpdate(
                 userProfile.fullName,
                 userProfile.dateOfBirth,

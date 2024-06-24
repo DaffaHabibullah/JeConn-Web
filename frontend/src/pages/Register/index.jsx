@@ -40,15 +40,15 @@ const Register = () => {
                             <Form onSubmit={handleSubmit}>
                                 <Form.Group className="mb-3" controlId="formGroupUsername">
                                     <Form.Label>Username</Form.Label>
-                                    <Form.Control type="text" placeholder="Enter username" value={username} onChange={(e) => setUsername(e.target.value)} required />
+                                    <Form.Control type="text" placeholder="Enter username" value={username} minLength={4} maxLength={16} onChange={(e) => setUsername(e.target.value)} required />
                                 </Form.Group>
                                 <Form.Group className="mb-3" controlId="formGroupEmail">
                                     <Form.Label>Email</Form.Label>
-                                    <Form.Control type="email" placeholder="Enter email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+                                    <Form.Control type="email" placeholder="Enter email" value={email} maxLength={36} onChange={(e) => setEmail(e.target.value)} required />
                                 </Form.Group>
                                 <Form.Group className="mb-3" controlId="formGroupPassword">
                                     <Form.Label>Password</Form.Label>
-                                    <Form.Control type="password" placeholder="Enter password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+                                    <Form.Control type="password" placeholder="Enter password" value={password} minLength={8} maxLength={64} onChange={(e) => setPassword(e.target.value)} required />
                                 </Form.Group>
                                 <Form.Group className="mb-3" controlId="formGroupConfirmPassword">
                                     <Form.Label>Confirm Password</Form.Label>

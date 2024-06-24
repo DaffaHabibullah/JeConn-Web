@@ -127,6 +127,11 @@ const Talent = () => {
 
     const handleConfirmClick = async () => {
         try {
+            if (talentProfile.biography.length < 16 || talentProfile.biography.length > 256) {
+                showNotification('Biography must be between 16 characters and at most 256 characters', false);
+                return;
+            }
+
             const response = await fetchTalentUpdate(
                 talentProfile.biography,
                 talentProfile.location,

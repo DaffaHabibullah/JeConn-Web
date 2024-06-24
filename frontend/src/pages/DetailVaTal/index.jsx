@@ -113,6 +113,15 @@ const DetailVaTal = () => {
 
     const handleUpdatePostSubmit = async () => {
         try {
+            if (updatePost.candidates < 1 || updatePost.salary < 1) {
+                showNotification('Candidates and salary must be greater than 0.', false);
+                return;
+            }
+            if (updatePost.endDate < updatePost.startDate || updatePost.endDate < new Date().toISOString().split('T')[0]) {
+                showNotification('End date must be greater than start date and today.', false);
+                return;
+            }
+
             const response = await fetchUpdateVacancies(
                 data._id,
                 updatePost.title,
@@ -456,7 +465,7 @@ const DetailVaTal = () => {
 
                         <Form.Group className="mb-3">
                             <Form.Label>Judul</Form.Label>
-                            <Form.Control id="title" type="text" value={updatePost.title} onChange={handleUpdatePostChange} />
+                            <Form.Control id="title" type="text" value={updatePost.title} minLength={8} maxLength={36} onChange={handleUpdatePostChange} />
                         </Form.Group>
 
                         <Form.Group className="mb-3">
@@ -502,12 +511,12 @@ const DetailVaTal = () => {
 
                         <Form.Group className="mb-3">
                             <Form.Label>Alamat Lengkap</Form.Label>
-                            <Form.Control id="address" as="textarea" rows={3} value={updatePost.address} onChange={handleUpdatePostChange} />
+                            <Form.Control id="address" as="textarea" rows={3} value={updatePost.address} minLength={16} maxLength={256} onChange={handleUpdatePostChange} />
                         </Form.Group>
 
                         <Form.Group className="mb-3">
                             <Form.Label>Keterangan</Form.Label>
-                            <Form.Control id="description" as="textarea" rows={3} value={updatePost.description} onChange={handleUpdatePostChange} />
+                            <Form.Control id="description" as="textarea" rows={3} value={updatePost.description} minLength={16} maxLength={256} onChange={handleUpdatePostChange} />
                         </Form.Group>
 
                         <Form.Group className="mb-3">

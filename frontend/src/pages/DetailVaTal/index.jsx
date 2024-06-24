@@ -121,10 +121,6 @@ const DetailVaTal = () => {
                 return;
             }
 
-            if (updatePost.title.length < 8 || updatePost.title.length > 36) {
-                showNotification('Title must be at least 8 characters and at most 36 characters.', false);
-                return;
-            }
             if (updatePost.candidates < 1 || updatePost.candidates > 999) {
                 showNotification('Candidates must be at least 1 and at most 999.', false);
                 return;
@@ -275,7 +271,7 @@ const DetailVaTal = () => {
                     {location.pathname.includes("vacancies") ? (
                         <Card className="d-flex flex-column" style={{ padding: '16px' }}>
                             <h3 style={{ marginBottom: '32px', borderBottom: '1px solid #00A47F' }}>
-                                <a href="#" onClick={() => navigate(-1)} style={{ textDecoration: 'none', color: '#00A47F' }}>&#129136; </a>
+                                <a href="#" onClick={() => navigate(-1)} style={{ textDecoration: 'none' }}><i className="fa-solid fa-arrow-left" style={{ color: '#00A47F' }}></i> </a>
                                 Back
                             </h3>
                             <h4 className="mb-3">{data.title}</h4>
@@ -322,7 +318,7 @@ const DetailVaTal = () => {
                                 <Card.Text style={{ paddingTop: '4px' }}>
                                     {isAuthor ? (
                                         <h6>
-                                            <a href="#" onClick={handleClickShowModalAllCandidates} style={{ color: '#000000' }}>All Candidates &#11208;</a>
+                                            <a href="#" onClick={handleClickShowModalAllCandidates} style={{ color: '#000000' }}>All Candidates <i className="fa-solid fa-caret-right"></i></a>
                                         </h6>
                                     ) : (
                                         <h6>All Candidates :</h6>
@@ -398,7 +394,7 @@ const DetailVaTal = () => {
                     ) : (
                         <Card className="d-flex flex-column" style={{ padding: '16px' }}>
                             <h3 style={{ marginBottom: '32px', borderBottom: '1px solid #00A47F' }}>
-                                <a href="#" onClick={() => navigate(-1)} style={{ textDecoration: 'none', color: '#00A47F' }}>&#129136; </a>
+                                <a href="#" onClick={() => navigate(-1)} style={{ textDecoration: 'none' }}><i className="fa-solid fa-arrow-left" style={{ color: '#00A47F' }}></i> </a>
                                 Back
                             </h3>
                             <Row>
@@ -612,8 +608,8 @@ const DetailVaTal = () => {
                                 <div style={{ position: 'absolute', right: '14px', top: '32px' }}>
                                     {candidate.status === 'pending' ? (
                                         <>
-                                            <Button variant="success" size="sm" onClick={() => handleUpdateStatus(candidate.username, 'approved')}>&#10004;</Button>
-                                            <Button variant="danger" size="sm" onClick={() => handleUpdateStatus(candidate.username, 'rejected')} style={{ marginLeft: '8px' }}>&#10006;</Button>
+                                            <Button variant="success" size="sm" onClick={() => handleUpdateStatus(candidate.username, 'approved')}><i className="fa-solid fa-check" style={{ backgroundColor: '#198754', color: '#FFFFFF' }}></i></Button>
+                                            <Button variant="danger" size="sm" onClick={() => handleUpdateStatus(candidate.username, 'rejected')} style={{ marginLeft: '8px' }}><i className="fa-solid fa-xmark" style={{ backgroundColor: '#DC3545', color: '#FFFFFF' }}></i></Button>
                                         </>
                                     ) : (
                                         <span style={{ color: candidate.status === 'approved' ? '#198754' : candidate.status === 'rejected' ? '#DC3545' : '#FFC107' }}>

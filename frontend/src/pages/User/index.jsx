@@ -94,7 +94,7 @@ const User = () => {
                 showNotification('Full name cannot be empty', false);
                 return;
             }
-            if (userProfile.address.length < 16 || userProfile.address.length < 256) {
+            if (userProfile.address.length < 16 || userProfile.address.length > 256) {
                 showNotification('Address must be at least 16 characters and at most 256 characters', false);
                 return;
             }

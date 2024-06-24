@@ -113,12 +113,32 @@ const DetailVaTal = () => {
 
     const handleUpdatePostSubmit = async () => {
         try {
+            if (updatePost.title === '' || updatePost.startDate === '' || updatePost.endDate === '' || 
+                updatePost.address === '' || updatePost.description === '' || updatePost.candidates === '' || 
+                updatePost.salary === '' || updatePost.typeSalary === '' || updatePost.entertainment_id.length < 1 || updatePost.status === ''
+            ) {
+                showNotification('All fields must be filled.', false);
+                return;
+            }
+
+            if (updatePost.title.length < 8 || updatePost.title.length > 36) {
+                showNotification('Title must be at least 8 characters and at most 36 characters.', false);
+                return;
+            }
             if (updatePost.candidates < 1 || updatePost.salary < 1) {
                 showNotification('Candidates and salary must be greater than 0.', false);
                 return;
             }
             if (updatePost.endDate < updatePost.startDate || updatePost.endDate < new Date().toISOString().split('T')[0]) {
                 showNotification('End date must be greater than start date and today.', false);
+                return;
+            }
+            if (updatePost.address.length < 16 || updatePost.address.length > 256) {
+                showNotification('Address must be at least 16 characters and at most 256 characters.', false);
+                return;
+            }
+            if (updatePost.description.length < 16 || updatePost.description.length > 256) {
+                showNotification('Description must be at least 16 characters and at most 256 characters.', false);
                 return;
             }
 

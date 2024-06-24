@@ -90,6 +90,14 @@ const User = () => {
 
     const handleConfirmClick = async () => {
         try {
+            if (
+                userProfile.fullName === '' || userProfile.dateOfBirth === '' || userProfile.gender === '' || 
+                userProfile.address === '' || userProfile.phoneNumber === ''
+            ) {
+                showNotification('Please fill all the fields', false);
+                return;
+            }
+
             if (userProfile.fullName.length === 0) {
                 showNotification('Full name cannot be empty', false);
                 return;
@@ -119,6 +127,37 @@ const User = () => {
 
     const handleNewPostSubmit = async () => {
         try {
+            if (
+                newPost.typePost === '' || newPost.title === '' || newPost.location === '' || 
+                newPost.candidates === '' || newPost.salary === '' || newPost.typeSalary === '' || 
+                newPost.startDate === '' || newPost.endDate === '' || newPost.address === '' || 
+                newPost.description === '' || newPost.entertainment_id.length === 0
+            ) {
+                showNotification('All fields must be filled.', false);
+                return;
+            }
+
+            if (newPost.title.length < 8 || newPost.title.length > 36) {
+                showNotification('Title must be at least 8 characters and at most 36 characters.', false);
+                return;
+            }
+            if (newPost.candidates < 1 || newPost.salary < 1) {
+                showNotification('Candidates and salary must be at least 1.', false);
+                return;
+            }
+            if (newPost.endDate < newPost.startDate || newPost.endDate < new Date().toISOString().split('T')[0]) {
+                showNotification('End date must be greater than start date and today.', false);
+                return;
+            }
+            if (newPost.address.length < 16 || newPost.address.length > 256) {
+                showNotification('Address must be at least 16 characters and at most 256 characters.', false);
+                return;
+            }
+            if (newPost.description.length < 16 || newPost.description.length > 256) {
+                showNotification('Description must be at least 16 characters and at most 256 characters.', false);
+                return;
+            }
+
             const response = await fetchPostVacancies(
                 newPost.typePost,
                 newPost.title,

@@ -127,6 +127,11 @@ const Talent = () => {
 
     const handleConfirmClick = async () => {
         try {
+            if (talentProfile.biography === '' || talentProfile.location === '' || talentProfile.entertainment_id.length === 0) {
+                showNotification('Please fill all the fields', false);
+                return;
+            }
+
             if (talentProfile.biography.length < 16 || talentProfile.biography.length > 256) {
                 showNotification('Biography must be between 16 characters and at most 256 characters', false);
                 return;

@@ -121,7 +121,7 @@ const User = () => {
             setIsEditMode(false);
             showNotification(response.message);
         } catch (error) {
-            showNotification(error.response.data.message, false);
+            showNotification('Please fill all the fields', false);
         }
     };
 
@@ -141,8 +141,12 @@ const User = () => {
                 showNotification('Title must be at least 8 characters and at most 36 characters.', false);
                 return;
             }
-            if (newPost.candidates < 1 || newPost.salary < 1) {
-                showNotification('Candidates and salary must be at least 1.', false);
+            if (newPost.candidates < 1 || newPost.candidates > 999) {
+                showNotification('Candidates must be at least 1 and at most 999.', false);
+                return;
+            }
+            if (newPost.salary < 1) {
+                showNotification('Salary must be at least 1.', false);
                 return;
             }
             if (newPost.endDate < newPost.startDate || newPost.endDate < new Date().toISOString().split('T')[0]) {

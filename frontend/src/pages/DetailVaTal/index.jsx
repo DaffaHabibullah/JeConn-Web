@@ -125,8 +125,12 @@ const DetailVaTal = () => {
                 showNotification('Title must be at least 8 characters and at most 36 characters.', false);
                 return;
             }
-            if (updatePost.candidates < 1 || updatePost.salary < 1) {
-                showNotification('Candidates and salary must be greater than 0.', false);
+            if (updatePost.candidates < 1 || updatePost.candidates > 999) {
+                showNotification('Candidates must be at least 1 and at most 999.', false);
+                return;
+            }
+            if (updatePost.salary < 1) {
+                showNotification('Salary must be at least 1.', false);
                 return;
             }
             if (updatePost.endDate < updatePost.startDate || updatePost.endDate < new Date().toISOString().split('T')[0]) {

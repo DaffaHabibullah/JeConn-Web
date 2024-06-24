@@ -137,10 +137,6 @@ const User = () => {
                 return;
             }
 
-            if (newPost.title.length < 8 || newPost.title.length > 36) {
-                showNotification('Title must be at least 8 characters and at most 36 characters.', false);
-                return;
-            }
             if (newPost.candidates < 1 || newPost.candidates > 999) {
                 showNotification('Candidates must be at least 1 and at most 999.', false);
                 return;

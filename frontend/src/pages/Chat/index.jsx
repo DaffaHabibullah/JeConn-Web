@@ -179,7 +179,7 @@ const Chat = () => {
                 <Row xl={2} className="d-flex justify-content-center align-items-center">
                     <Card className="d-flex flex-column" style={{ padding: '16px' }}>
                         <h3 style={{ marginBottom: '24px', borderBottom: '1px solid #00A47F' }}>
-                            <a href="#" onClick={() => navigate(-1)} style={{ textDecoration: 'none', color: '#00A47F' }}>&#129136; </a>
+                            <a href="#" onClick={() => navigate(-1)} style={{ textDecoration: 'none' }}><i className="fa-solid fa-arrow-left" style={{ color: '#00A47F' }}></i> </a>
                             {chatMember?.username}
                         </h3>
                         <Row>
@@ -278,7 +278,7 @@ const Chat = () => {
                                 style={{ position: 'absolute', bottom: '96px', right: '32px', borderRadius: '50%' }}
                                 onClick={scrollToBottom}
                             >
-                                &#129139;
+                                <i className="fa-solid fa-arrow-down" style={{ backgroundColor: '#198754', color: '#FFFFFF' }}></i>
                             </Button>
                         )}
                     </Card>

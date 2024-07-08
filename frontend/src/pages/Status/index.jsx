@@ -1,14 +1,25 @@
 import { useEffect, useState } from 'react';
 import { Container, Row, Col, Card, Badge, Tabs, Tab } from 'react-bootstrap';
 import NavbarComponent from '../../components/Navbar';
+import { fetchTalentProfile } from '../../api/Talent';
 import { fetchSubmittedVacancies } from '../../api/Vacancies';
 import { useNotification } from '../../components/Notification';
 
 const Status = () => {
+    const [talent, setTalent] = useState({});
     const [vacancies, setVacancies] = useState([]);
     const { showNotification } = useNotification();
 
     useEffect(() => {
+        const fetchTalent = async () => {
+            try {
+                const response = await fetchTalentProfile();
+                setTalent(response.data);
+            } catch (error) {
+                showNotification('Failed to fetch data', false);
+            }
+        };
+
         const fetchVacancies = async () => {
             try {
                 const response = await fetchSubmittedVacancies();
@@ -28,6 +39,7 @@ const Status = () => {
             }
         };
 
+        fetchTalent();
         fetchVacancies();
     }, []);
 
@@ -52,7 +64,7 @@ const Status = () => {
 
     const filterVacanciesByStatus = (status) => {
         return vacancies.filter(vacancy => 
-            vacancy.allCandidates.some(candidate => candidate.status === status)
+            vacancy.allCandidates.some(candidate => candidate.status === status && candidate._id === talent._id)
         );
     };
 
@@ -91,15 +103,17 @@ const Status = () => {
                     <Card.Text>
                         <h6 className="m-0"><b>Status:</b></h6>
                         {vacancy.allCandidates.map(candidate => (
-                            <Badge key={candidate._id} bg={
-                                candidate.status === 'approved' ? 'success' :
-                                candidate.status === 'pending' ? 'warning' :
-                                'danger'
-                            }>
-                                {candidate.status === 'approved' ? 'Approved' :
-                                candidate.status === 'pending' ? 'Pending' :
-                                'Rejected'}
-                            </Badge>
+                            candidate._id === talent._id && (
+                                <Badge key={candidate._id} bg={
+                                    candidate.status === 'approved' ? 'success' :
+                                    candidate.status === 'pending' ? 'warning' :
+                                    'danger'
+                                }>
+                                    {candidate.status === 'approved' ? 'Approved' :
+                                    candidate.status === 'pending' ? 'Pending' :
+                                    'Rejected'}
+                                </Badge>
+                            )
                         ))}
                     </Card.Text>
 
@@ -122,9 +136,11 @@ const Status = () => {
                     <Col className="d-flex justify-content-between">
                         <small className="text-muted">
                             {vacancy.allCandidates.map(candidate => (
-                                <span key={candidate._id}>
-                                    Submitted at: {getTimeAgo(candidate.timestamp).toLocaleString()}
-                                </span>
+                                candidate._id === talent._id && (
+                                    <span key={candidate._id}>
+                                        Submitted at: {getTimeAgo(candidate.timestamp).toLocaleString()}
+                                    </span>
+                                )
                             ))}
                         </small>
                         

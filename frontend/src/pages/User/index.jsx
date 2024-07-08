@@ -102,10 +102,6 @@ const User = () => {
                 showNotification('Full name cannot be empty', false);
                 return;
             }
-            if (userProfile.address.length < 16 || userProfile.address.length > 256) {
-                showNotification('Address must be at least 16 characters and at most 256 characters', false);
-                return;
-            }
             if (userProfile.phoneNumber.length < 11 || userProfile.phoneNumber.length > 13) {
                 showNotification('Phone number must be at least 11 characters and at most 13 characters', false);
                 return;
@@ -147,14 +143,6 @@ const User = () => {
             }
             if (newPost.endDate < newPost.startDate || newPost.endDate < new Date().toISOString().split('T')[0]) {
                 showNotification('End date must be greater than start date and today.', false);
-                return;
-            }
-            if (newPost.address.length < 16 || newPost.address.length > 256) {
-                showNotification('Address must be at least 16 characters and at most 256 characters.', false);
-                return;
-            }
-            if (newPost.description.length < 16 || newPost.description.length > 256) {
-                showNotification('Description must be at least 16 characters and at most 256 characters.', false);
                 return;
             }
 

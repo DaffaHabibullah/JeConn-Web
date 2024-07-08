@@ -129,18 +129,6 @@ const DetailVaTal = () => {
                 showNotification('Salary must be at least 1.', false);
                 return;
             }
-            if (updatePost.endDate < updatePost.startDate || updatePost.endDate < new Date().toISOString().split('T')[0]) {
-                showNotification('End date must be greater than start date and today.', false);
-                return;
-            }
-            if (updatePost.address.length < 16 || updatePost.address.length > 256) {
-                showNotification('Address must be at least 16 characters and at most 256 characters.', false);
-                return;
-            }
-            if (updatePost.description.length < 16 || updatePost.description.length > 256) {
-                showNotification('Description must be at least 16 characters and at most 256 characters.', false);
-                return;
-            }
 
             const response = await fetchUpdateVacancies(
                 data._id,

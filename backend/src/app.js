@@ -5,6 +5,7 @@ const bodyParser = require("body-parser");
 const app = express();
 
 const db = require("./config");
+const adminAccountData = require("./seeds/adminData");
 const indonesiaProvinceData = require("./seeds/indonesiaProvinceData");
 const entertainmentCategoriesData = require("./seeds/entertainmentCategoriesData");
 
@@ -22,6 +23,7 @@ app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
+adminAccountData();
 indonesiaProvinceData();
 entertainmentCategoriesData();
 

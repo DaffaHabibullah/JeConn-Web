@@ -5,6 +5,12 @@ const talentSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    id_talent: {
+        type: String,
+        default: function() {
+            return this._id;
+        },
+    },
     nikKTP: {
         type: String,
         required: true,

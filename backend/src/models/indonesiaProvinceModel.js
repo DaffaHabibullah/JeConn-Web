@@ -5,6 +5,12 @@ const indonesiaProvinceSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    id_province: {
+        type: String,
+        default: function() {
+            return this._id;
+        },
+    },
     name: {
         type: String,
         required: true,

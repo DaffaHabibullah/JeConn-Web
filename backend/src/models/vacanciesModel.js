@@ -5,6 +5,12 @@ const submitVacanciesSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    id_submitVacancies: {
+        type: String,
+        default: function() {
+            return this._id;
+        },
+    },
     username: {
         type: String,
         required: true,
@@ -33,6 +39,12 @@ const vacanciesSchema = new mongoose.Schema({
     _id: {
         type: String,
         required: true,
+    },
+    id_vacancies: {
+        type: String,
+        default: function() {
+            return this._id;
+        },
     },
     username: {
         type: String,

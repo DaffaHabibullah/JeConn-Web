@@ -5,6 +5,12 @@ const privateDataSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    id_privateData: {
+        type: String,
+        default: function() {
+            return this._id;
+        },
+    },
     username: {
         type: String,
         required: true,

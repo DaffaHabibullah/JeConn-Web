@@ -6,6 +6,12 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    id_user: {
+        type: String,
+        default: function() {
+            return this._id;
+        },
+    },
     username: {
         type: String,
         required: true,

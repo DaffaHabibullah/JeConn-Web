@@ -5,6 +5,12 @@ const entertainmentCategoriesSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    id_entertainmentCategories: {
+        type: String,
+        default: function() {
+            return this._id;
+        },
+    },
     name: {
         type: String,
         required: true,

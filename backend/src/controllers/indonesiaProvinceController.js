@@ -52,6 +52,108 @@ const indonesiaProvinceController = {
             });
         }
     },
+
+    async createIndonesiaProvince(req, res) {
+        try {
+            const { name } = req.body;
+
+            if (req.role !== "admin") {
+                return res.status(403).json({
+                    success: "false",
+                    message: "Unauthorized to create Indonesia province",
+                });
+            }
+
+            const totalProvinces = await indonesiaProvinceModel.countDocuments();
+            const newId = totalProvinces + 1;
+
+            await indonesiaProvinceModel.create({
+                _id: newId,
+                name,
+            });
+
+            return res.status(201).json({
+                success: "true",
+                message: "Indonesia province created successfully",
+            });
+        } catch (error) {
+            console.error("Error creating Indonesia province", error);
+            return res.status(500).json({
+                success: "false",
+                message: "Error creating Indonesia province",
+                error: error.message,
+            });
+        }
+    },
+
+    async updateIndonesiaProvince(req, res) {
+        try {
+            const { id } = req.params;
+            const { name } = req.body;
+            const indonesiaProvince = await indonesiaProvinceModel.findByIdAndUpdate(id, {
+                name,
+            });
+
+            if (!indonesiaProvince) {
+                return res.status(404).json({
+                    success: "false",
+                    message: "Indonesia province not found",
+                });
+            }
+
+            if (req.role !== "admin") {
+                return res.status(403).json({
+                    success: "false",
+                    message: "Unauthorized to update Indonesia province",
+                });
+            }
+
+            return res.status(200).json({
+                success: "true",
+                message: "Indonesia province updated successfully",
+            });
+        } catch (error) {
+            console.error("Error updating Indonesia province", error);
+            return res.status(500).json({
+                success: "false",
+                message: "Error updating Indonesia province",
+                error: error.message,
+            });
+        }
+    },
+
+    async deleteIndonesiaProvince(req, res) {
+        try {
+            const { id } = req.params;
+            const indonesiaProvince = await indonesiaProvinceModel.findByIdAndDelete(id);
+
+            if (!indonesiaProvince) {
+                return res.status(404).json({
+                    success: "false",
+                    message: "Indonesia province not found",
+                });
+            }
+
+            if (req.role !== "admin") {
+                return res.status(403).json({
+                    success: "false",
+                    message: "Unauthorized to delete Indonesia province",
+                });
+            }
+
+            return res.status(200).json({
+                success: "true",
+                message: "Indonesia province deleted successfully",
+            });
+        } catch (error) {
+            console.error("Error deleting Indonesia province", error);
+            return res.status(500).json({
+                success: "false",
+                message: "Error deleting Indonesia province",
+                error: error.message,
+            });
+        }
+    },
 };
 
 

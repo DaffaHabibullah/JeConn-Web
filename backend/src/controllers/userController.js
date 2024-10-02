@@ -1,10 +1,58 @@
 require("dotenv").config();
 const fs = require("fs");
+const privateDataModel = require("../models/privateDataModel");
+const userModel = require("../models/userModel");
 const vacanciesModel = require("../models/vacanciesModel");
 const messageRoomsModel = require("../models/messageRoomsModel");
 const { uploadProfile } = require("../middleware/uploadImage");
 
 const userController = {
+    async allUsers(req, res) {
+        try {
+            if (req.role !== "admin") {
+                return res.status(403).json({
+                    success: false,
+                    message: "Unauthorized",
+                });
+            }
+
+            const privateData = await privateDataModel.find();
+            const users = await userModel.find();
+
+            const allUsers = privateData.map((data) => {
+                const user = users.find((user) => user.username === data.username);
+                return {
+                    _id: data._id,
+                    username: data.username,
+                    email: data.email,
+                    fullName: user.fullName,
+                    phoneNumber: user.phoneNumber,
+                    dateOfBirth: user.dateOfBirth,
+                    gender: user.gender,
+                    address: user.address,
+                    roles: user.roles,
+                    vacanciesId: user.vacanciesId,
+                    messageRoom_id: user.messageRoom_id,
+                    imageProfile: user.imageProfile,
+                    updatedAt: user.updatedAt,
+                    createdAt: data.createdAt,
+                };
+            });
+
+            return res.status(200).json({
+                success: true,
+                message: "All users",
+                data: allUsers,
+            });
+        } catch (error) {
+            console.error("Error getting all users", error);
+            return res.status(500).json({
+                success: false,
+                message: "Internal server error",
+            });
+        }
+    },
+
     async userProfile(req, res) {
         try {
             const user = req.user;

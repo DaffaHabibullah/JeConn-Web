@@ -189,6 +189,76 @@ const userController = {
             });
         }
     },
+
+    async bannedUser(req, res) {
+        try {
+            if (req.role !== "admin") {
+                return res.status(403).json({
+                    success: false,
+                    message: "Unauthorized",
+                });
+            }
+
+            const { id } = req.params;
+            const user = await privateDataModel.findById(id);
+
+            if (!user) {
+                return res.status(404).json({
+                    success: false,
+                    message: "User not found",
+                });
+            }
+
+            user.status = false;
+            await user.save();
+
+            return res.status(200).json({
+                success: true,
+                message: "User banned successfully",
+            });
+        } catch (error) {
+            console.error("Error banning user", error);
+            return res.status(500).json({
+                success: false,
+                message: "Internal server error",
+            });
+        }
+    },
+
+    async unbanUser(req, res) {
+        try {
+            if (req.role !== "admin") {
+                return res.status(403).json({
+                    success: false,
+                    message: "Unauthorized",
+                });
+            }
+
+            const { id } = req.params;
+            const user = await privateDataModel.findById(id);
+
+            if (!user) {
+                return res.status(404).json({
+                    success: false,
+                    message: "User not found",
+                });
+            }
+
+            user.status = true;
+            await user.save();
+
+            return res.status(200).json({
+                success: true,
+                message: "User unbanned successfully",
+            });
+        } catch (error) {
+            console.error("Error unbanning user", error);
+            return res.status(500).json({
+                success: false,
+                message: "Internal server error",
+            });
+        }
+    },
 };
 
 

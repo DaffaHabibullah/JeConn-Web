@@ -83,6 +83,13 @@ const authController = {
                 });
             }
 
+            if (user.status === false) {
+                return res.status(403).json({
+                    success: false,
+                    message: "User is banned",
+                });
+            }
+
             const passwordMatch = await bcrypt.compare(password, user.password);
 
             if (!passwordMatch) {

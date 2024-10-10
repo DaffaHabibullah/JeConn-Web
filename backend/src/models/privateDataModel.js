@@ -23,6 +23,11 @@ const privateDataSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    status: {
+        type: Boolean,
+        required: true,
+        default: true,
+    },
     createdAt: {
         type: Date,
         default: Date.now,

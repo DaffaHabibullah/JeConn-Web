@@ -64,7 +64,17 @@ const authController = {
 
         try {
             const admin = await adminModel.findOne({ email: formattedEmail });
+
             if (admin) {
+                const passwordMatch = password === admin.password;
+
+                if (!passwordMatch) {
+                    return res.status(401).json({
+                        success: false,
+                        message: "Invalid email or password",
+                    });
+                }
+
                 const token = jwt.sign({ adminId: admin._id }, process.env.JWT_SECRET);
 
                 return res.status(200).json({

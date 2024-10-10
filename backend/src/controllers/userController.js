@@ -34,6 +34,7 @@ const userController = {
                     vacanciesId: user.vacanciesId,
                     messageRoom_id: user.messageRoom_id,
                     imageProfile: user.imageProfile,
+                    status: data.status,
                     updatedAt: user.updatedAt,
                     createdAt: data.createdAt,
                 };

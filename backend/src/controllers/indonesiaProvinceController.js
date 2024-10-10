@@ -1,4 +1,5 @@
 const indonesiaProvinceModel = require("../models/indonesiaProvinceModel");
+const counterModel = require("../models/counterId");
 
 const indonesiaProvinceController = {
     async getIndonesiaProvinces(req, res) {
@@ -64,8 +65,13 @@ const indonesiaProvinceController = {
                 });
             }
 
-            const totalProvinces = await indonesiaProvinceModel.countDocuments();
-            const newId = totalProvinces + 1;
+            const counter = await counterModel.findByIdAndUpdate(
+                { _id: "provinceId" },
+                { $inc: { seq: 1 } },
+                { new: true, upsert: true }
+            );
+
+            const newId = counter.seq;
 
             await indonesiaProvinceModel.create({
                 _id: newId,

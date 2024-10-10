@@ -1,4 +1,5 @@
 const entertainmentCategoriesModel = require("../models/entertainmentCategoriesModel");
+const counterModel = require("../models/counterId");
 
 const entertainmentController = {
     async getEntertainmentCategories(req, res) {
@@ -64,8 +65,13 @@ const entertainmentController = {
                 });
             }
 
-            const totalCategories = await entertainmentCategoriesModel.countDocuments();
-            const newId = totalCategories + 1;
+            const counter = await counterModel.findByIdAndUpdate(
+                { _id: "categoryId" },
+                { $inc: { seq: 1 } },
+                { new: true, upsert: true }
+            );
+
+            const newId = counter.seq;
 
             await entertainmentCategoriesModel.create({
                 _id: newId,

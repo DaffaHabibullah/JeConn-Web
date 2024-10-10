@@ -1,6 +1,18 @@
 import axios from 'axios';
 import { API_URL, AuthHeader } from '../Config';
 
+export const fetchAllTalents = async () => {
+    try {
+        const response = await axios.get(`${API_URL}/talent/all-talents`, {
+            headers: AuthHeader()
+        });
+        return response.data;
+    } catch (error) {
+        console.error('Fetch talents error:', error);
+        throw error;
+    }
+};
+
 export const fetchTalentRegister = async (nikKTP, firstName, lastName, phoneNumber, address, provinceId, postalCode) => {
     try {
         const response = await axios.post(`${API_URL}/talent/register`, {

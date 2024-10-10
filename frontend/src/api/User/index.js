@@ -1,6 +1,18 @@
 import axios from 'axios';
 import { API_URL, AuthHeader } from '../Config';
 
+export const fetchAllUsers = async () => {
+    try {
+        const response = await axios.get(`${API_URL}/user/all-users`, {
+            headers: AuthHeader()
+        });
+        return response.data;
+    } catch (error) {
+        console.error('Fetch users error:', error);
+        throw error;
+    }
+};
+
 export const fetchUserProfile = async () => {
     try {
         const response = await axios.get(`${API_URL}/user/profile`, {

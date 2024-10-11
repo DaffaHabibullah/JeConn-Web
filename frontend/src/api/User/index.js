@@ -59,3 +59,27 @@ export const fetchUserUpdateImage = async (imageProfile) => {
         throw error;
     }
 };
+
+export const fetchBanUser = async (id) => {
+    try {
+        const response = await axios.put(`${API_URL}/user/ban-user/${id}`, {}, {
+            headers: AuthHeader()
+        });
+        return response.data;
+    } catch (error) {
+        console.error('Ban user error:', error);
+        throw error;
+    }
+};
+
+export const fetchUnbanUser = async (id) => {
+    try {
+        const response = await axios.put(`${API_URL}/user/unban-user/${id}`, {}, {
+            headers: AuthHeader()
+        });
+        return response.data;
+    } catch (error) {
+        console.error('Unban user error:', error);
+        throw error;
+    }
+};

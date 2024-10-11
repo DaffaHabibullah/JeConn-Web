@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Container, Row, Col, Image, Form, Button } from 'react-bootstrap';
 import { fetchLogin } from '../../api/Auth';
+import { checkAuth } from '../../middleware/checkAuth';
 import { useNotification } from '../../components/Notification';
 
 const Login = () => {
@@ -10,13 +11,35 @@ const Login = () => {
     const { showNotification } = useNotification();
     const navigate = useNavigate();
 
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+        if (token) {
+            const role = checkAuth(token);
+
+            if (role === 'admin') {
+                navigate('/admin');
+            } else if (role === 'user') {
+                navigate('/home');
+            }
+        }
+    }, [navigate]);
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
             const response = await fetchLogin(email, password);
-            localStorage.setItem('token', response.data.token);
+            const token = response.data.token;
+            localStorage.setItem('token', token);
+
+            const role = checkAuth(token);
+
+            if (role === 'admin') {
+                navigate('/admin');
+            } else if (role === 'user') {
+                navigate('/home');
+            }
+
             showNotification(response.message);
-            navigate('/home');
         } catch (error) {
             showNotification(error.response.data.message, false);
         }

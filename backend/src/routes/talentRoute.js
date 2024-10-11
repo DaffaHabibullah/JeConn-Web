@@ -4,6 +4,7 @@ const router = express.Router();
 const talentController = require("../controllers/talentController");
 const checkAuth = require("../middleware/checkAuth");
 
+router.get("/all-talents", checkAuth, talentController.allTalents);
 router.post("/register", checkAuth, talentController.createTalent);
 router.get("/profile", checkAuth, talentController.talentProfile);
 router.put("/update-profile", checkAuth, talentController.updateTalentProfile);

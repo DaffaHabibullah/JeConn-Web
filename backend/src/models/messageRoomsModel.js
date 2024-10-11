@@ -5,6 +5,12 @@ const messageSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    id_message: {
+        type: String,
+        default: function() {
+            return this._id;
+        },
+    },
     imageProfile: {
         type: String,
         required: true,
@@ -27,6 +33,12 @@ const messageRoomsSchema = new mongoose.Schema({
     _id: {
         type: String,
         required: true,
+    },
+    id_messageRoom: {
+        type: String,
+        default: function() {
+            return this._id;
+        },
     },
     members: {
         type: Array,

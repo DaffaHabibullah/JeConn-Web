@@ -7,6 +7,54 @@ const entertainmentCategoriesModel = require("../models/entertainmentCategoriesM
 const { uploadTalent } = require("../middleware/uploadImage");
 
 const talentController = {
+    async allTalents(req, res) {
+        try {
+            if (req.role !== "admin") {
+                return res.status(403).json({
+                    success: false,
+                    message: "Unauthorized",
+                });
+            }
+
+            const users = await userModel.find();
+            const talents = await talentModel.find();
+
+            const allTalents = talents.map((talent) => {
+                const user = users.find((user) => user._id.toString() === talent._id.toString());
+                return {
+                    _id: talent._id,
+                    nikKTP: talent.nikKTP,
+                    firstName: talent.firstName,
+                    lastName: talent.lastName,
+                    phoneNumber: talent.phoneNumber,
+                    address: talent.address,
+                    province: talent.province,
+                    postalCode: talent.postalCode,
+                    username: user.username,
+                    biography: talent.biography,
+                    location: talent.location,
+                    entertainment_id: talent.entertainment_id,
+                    isOpen: talent.isOpen,
+                    images: talent.images,
+                    updatedAt: talent.updatedAt,
+                    createdAt: talent.createdAt,
+                };
+            });
+
+            return res.status(200).json({
+                success: true,
+                message: "All talents",
+                data: allTalents,
+            });
+        } catch (error) {
+            console.error("Error getting all talents", error);
+            return res.status(500).json({
+                success: false,
+                message: "Internal server error",
+            });
+        }
+    },
+
     async createTalent(req, res) {
         try {
             const { nikKTP, firstName, lastName, phoneNumber, address, provinceId, postalCode } = req.body;

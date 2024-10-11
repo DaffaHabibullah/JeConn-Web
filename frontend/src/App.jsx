@@ -12,8 +12,10 @@ import Talent from './pages/Talent';
 import VaTal from './pages/VaTal';
 import DetailVaTal from './pages/DetailVaTal';
 import Status from './pages/Status';
+import Admin from './pages/Admin';
 import NotFound from './pages/NotFound';
 import NotificationProvider from './components/Notification';
+import { ProtectedRoute } from './middleware/checkAuth';
 
 function App() {
   return (
@@ -23,17 +25,21 @@ function App() {
           <Route path="/" element={<Login />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/home" element={<Home />} />
-          <Route path="/messages" element={<Messages />} />
-          <Route path="/chat/:id" element={<Chat />} />
-          <Route path="/user-profile" element={<User />} />
-          <Route path="/join-talent" element={<RegisterTalent />} />
-          <Route path="/talent-profile" element={<Talent />} />
-          <Route path="/vacancies" element={<VaTal />} />
-          <Route path="/talents" element={<VaTal />} />
-          <Route path="/vacancies/post/:id" element={<DetailVaTal />} />
-          <Route path="/talent/profile/:username" element={<DetailVaTal />} />
-          <Route path="/status" element={<Status />} />
+
+          <Route path="/home" element={<ProtectedRoute roleRequired="user"><Home /></ProtectedRoute>} />
+          <Route path="/messages" element={<ProtectedRoute roleRequired="user"><Messages /></ProtectedRoute>} />
+          <Route path="/chat/:id" element={<ProtectedRoute roleRequired="user"><Chat /></ProtectedRoute>} />
+          <Route path="/user-profile" element={<ProtectedRoute roleRequired="user"><User /></ProtectedRoute>} />
+          <Route path="/join-talent" element={<ProtectedRoute roleRequired="user"><RegisterTalent /></ProtectedRoute>} />
+          <Route path="/talent-profile" element={<ProtectedRoute roleRequired="user"><Talent /></ProtectedRoute>} />
+          <Route path="/vacancies" element={<ProtectedRoute roleRequired="user"><VaTal /></ProtectedRoute>} />
+          <Route path="/talents" element={<ProtectedRoute roleRequired="user"><VaTal /></ProtectedRoute>} />
+          <Route path="/vacancies/post/:id" element={<ProtectedRoute roleRequired="user"><DetailVaTal /></ProtectedRoute>} />
+          <Route path="/talent/profile/:username" element={<ProtectedRoute roleRequired="user"><DetailVaTal /></ProtectedRoute>} />
+          <Route path="/status" element={<ProtectedRoute roleRequired="user"><Status /></ProtectedRoute>} />
+
+          <Route path="/admin/*" element={<ProtectedRoute roleRequired="admin"><Admin /></ProtectedRoute>} />
+
           <Route path="*" element={<NotFound />} />
         </Routes>
       </NotificationProvider>

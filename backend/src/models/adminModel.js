@@ -1,19 +1,16 @@
+require("dotenv").config();
 const mongoose = require("mongoose");
 
-const privateDataSchema = new mongoose.Schema({
+const adminSchema = new mongoose.Schema({
     _id: {
         type: String,
         required: true,
     },
-    id_privateData: {
+    id_admin: {
         type: String,
         default: function() {
             return this._id;
         },
-    },
-    username: {
-        type: String,
-        required: true,
     },
     email: {
         type: String,
@@ -23,11 +20,6 @@ const privateDataSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    status: {
-        type: Boolean,
-        required: true,
-        default: true,
-    },
     createdAt: {
         type: Date,
         default: Date.now,
@@ -35,4 +27,4 @@ const privateDataSchema = new mongoose.Schema({
 });
 
 
-module.exports = mongoose.model("PrivateData", privateDataSchema);
+module.exports = mongoose.model("Admin", adminSchema);

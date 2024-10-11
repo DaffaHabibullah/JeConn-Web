@@ -178,7 +178,15 @@ const vacanciesController = {
                 });
             }
 
-            if (vacancies.username !== req.user.username) {
+            const user = await userModel.findOne({ username: vacancies.username });
+            if (!user) {
+                return res.status(404).json({
+                    success: false,
+                    message: "User not found",
+                });
+            }
+
+            if (req.role === "user" && vacancies.username !== req.user.username) {
                 return res.status(401).json({
                     success: false,
                     message: "Unauthorized",
@@ -186,7 +194,7 @@ const vacanciesController = {
             }
 
             await userModel.updateOne(
-                { _id: req.user._id },
+                { _id: user._id },
                 { $pull: { vacanciesId: req.params.id } },
             );
             await vacanciesModel.findByIdAndDelete(req.params.id);

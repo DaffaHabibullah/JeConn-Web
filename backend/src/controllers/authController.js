@@ -3,6 +3,7 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const privateDataModel = require("../models/privateDataModel");
 const userModel = require("../models/userModel");
+const adminModel = require("../models/adminModel");
 const generateId = require("../utils/generateId");
 
 const authController = {
@@ -62,12 +63,40 @@ const authController = {
         const formattedEmail = email.toLowerCase().replace(/\s/g, "");
 
         try {
+            const admin = await adminModel.findOne({ email: formattedEmail });
+
+            if (admin) {
+                const passwordMatch = password === admin.password;
+
+                if (!passwordMatch) {
+                    return res.status(401).json({
+                        success: false,
+                        message: "Invalid email or password",
+                    });
+                }
+
+                const token = jwt.sign({ adminId: admin._id }, process.env.JWT_SECRET);
+
+                return res.status(200).json({
+                    success: true,
+                    message: "Admin login successfully",
+                    data: { token },
+                });
+            }
+
             const user = await privateDataModel.findOne({ email: formattedEmail });
 
             if (!user) {
                 return res.status(404).json({
                     success: false,
                     message: "User not found",
+                });
+            }
+
+            if (user.status === false) {
+                return res.status(403).json({
+                    success: false,
+                    message: "User is banned",
                 });
             }
 
@@ -82,22 +111,13 @@ const authController = {
 
             const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET);
 
-            const userData = await userModel.findOne({ _id: user._id });
-
             return res.status(200).json({
                 success: true,
                 message: "Login successfully",
-                data: {
-                    token,
-                    user: {
-                        _id: user._id,
-                        username: user.username,
-                        roles: userData.roles,
-                    },
-                },
+                data: { token },
             });
         } catch (error) {
-            console.error("Error logging in user", error);
+            console.error("Error logging in", error);
             return res.status(500).json({
                 success: false,
                 message: "Internal server error",

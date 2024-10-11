@@ -1,13 +1,25 @@
 import { useNavigate } from "react-router-dom";
 import { Container, Row, Image } from "react-bootstrap";
+import { checkAuth } from "../../middleware/checkAuth";
 
 const NotFound = () => {
     const navigate = useNavigate();
 
     const handleClick = () => {
         const token = localStorage.getItem("token");
+
         if (token) {
-            navigate("/home");
+            try {
+                const role = checkAuth(token);
+
+                if (role === 'admin') {
+                    navigate("/admin");
+                } else {
+                    navigate("/home");
+                }
+            } catch (error) {
+                navigate("/login");
+            }
         } else {
             navigate("/login");
         }
